@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository {
 
-    Long createUser(User user);
+    boolean existsByEmail(String email);
 
+    User save(User user);
 }
