@@ -5,15 +5,4 @@ import com.energytracker.userservice.domain.model.User;
 
 public class UserMapper {
 
-    public static CreateUserRequestDto createUserRequestFromDomainToDto(User user) {
-        return new CreateUserRequestDto(
-                user.getEmail(),
-                user.getPassword(),
-                user.getFullName(),
-                user.getRole().toString(),
-                user.getIsActive(),
-                user.getProfilePicturePath()
-        );
-    }
-
 }
