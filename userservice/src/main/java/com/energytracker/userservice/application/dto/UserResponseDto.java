@@ -1,4 +1,5 @@
-package com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto;
+package com.energytracker.userservice.application.dto;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +8,7 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class UserRestDto {
+public class UserResponseDto {
 
     private Long userAccountId;
     private String email;

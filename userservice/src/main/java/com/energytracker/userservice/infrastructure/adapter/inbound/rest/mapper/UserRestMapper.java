@@ -1,38 +1,45 @@
 package com.energytracker.userservice.infrastructure.adapter.inbound.rest.mapper;
 
-import com.energytracker.userservice.application.dto.UserDto;
-import com.energytracker.userservice.domain.model.Role;
-import com.energytracker.userservice.domain.model.User;
-import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserRestDto;
+import com.energytracker.userservice.application.dto.CreateUserRequestDto;
+import com.energytracker.userservice.application.dto.UserResponseDto;
+import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.CreateUserRequestRestDto;
+import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserResponseRestDto;
 
 public class UserRestMapper {
 
-    public static UserDto fromRestDtoToDto(UserRestDto userRestDto) {
-        return new UserDto(
-                userRestDto.getUserAccountId(),
-                userRestDto.getFullName(),
-                userRestDto.getEmail(),
-                userRestDto.getPassword(),
-                userRestDto.getRole(),
-                userRestDto.getIsActive(),
-                userRestDto.getCreatedDate(),
-                userRestDto.getUpdatedDate(),
-                userRestDto.getProfilePicturePath()
+    public static CreateUserRequestDto createUserRequestFromRestDtoToDto(CreateUserRequestRestDto createUserRequestRestDto) {
+        return new CreateUserRequestDto(
+                createUserRequestRestDto.getEmail(),
+                createUserRequestRestDto.getFullName(),
+                createUserRequestRestDto.getPassword(),
+                createUserRequestRestDto.getRole(),
+                createUserRequestRestDto.getIsActive(),
+                createUserRequestRestDto.getProfilePicturePath()
         );
     }
 
-    public static UserRestDto fromDtoToRestDto(UserDto userDto) {
-        return new UserRestDto(
-                userDto.getUserAccountId(),
-                userDto.getFullName(),
-                userDto.getEmail(),
-                userDto.getPassword(),
-                userDto.getRole(),
-                userDto.getIsActive(),
-                userDto.getCreatedDate(),
-                userDto.getUpdatedDate(),
-                userDto.getProfilePicturePath()
-        );
+    public static CreateUserRequestRestDto createUserRequestFromDtoToRestDto(CreateUserRequestDto createUserRequestDto) {
+        return CreateUserRequestRestDto.builder()
+                .email(createUserRequestDto.getEmail())
+                .fullName(createUserRequestDto.getFullName())
+                .password(createUserRequestDto.getPassword())
+                .role(createUserRequestDto.getRole())
+                .isActive(createUserRequestDto.getIsActive())
+                .profilePicturePath(createUserRequestDto.getProfilePicturePath())
+                .build();
     }
 
+    public static UserResponseRestDto userResponseFromDtoToRestDto(UserResponseDto userResponseDto) {
+        return new UserResponseRestDto(
+                userResponseDto.getUserAccountId(),
+                userResponseDto.getEmail(),
+                userResponseDto.getFullName(),
+                userResponseDto.getPassword(),
+                userResponseDto.getRole(),
+                userResponseDto.getIsActive(),
+                userResponseDto.getCreatedDate(),
+                userResponseDto.getUpdatedDate(),
+                userResponseDto.getProfilePicturePath()
+        );
+    }
 }

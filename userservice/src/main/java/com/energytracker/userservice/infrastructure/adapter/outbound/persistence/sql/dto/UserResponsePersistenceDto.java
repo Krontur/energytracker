@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Getter
 @AllArgsConstructor
-public class UserPersistenceDto {
+public class UserResponsePersistenceDto {
 
     private Long userAccountId;
     private String email;

@@ -1,16 +1,44 @@
 package com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.mapper;
 
-import com.energytracker.userservice.application.dto.UserDto;
-import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.dto.UserPersistenceDto;
+import com.energytracker.userservice.application.dto.CreateUserRequestDto;
+import com.energytracker.userservice.application.dto.UserResponseDto;
+import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.dto.CreateUserRequestPersistenceDto;
+import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.dto.UserResponsePersistenceDto;
 import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.entity.UserEntity;
 
 public class UserPersistenceMapper {
 
-    public static UserPersistenceDto fromEntityToPersistenceDto(UserEntity userEntity) {
-        return new UserPersistenceDto(userEntity.getUserAccountId(),
+    public static UserEntity createUserRequestFromDtoToEntity(CreateUserRequestDto createUserRequestDto) {
+
+        UserEntity userEntity = new UserEntity();
+        userEntity.setEmail(createUserRequestDto.getEmail());
+        userEntity.setFullName(createUserRequestDto.getFullName());
+        userEntity.setPassword(createUserRequestDto.getPassword());
+        userEntity.setRole(createUserRequestDto.getRole());
+        userEntity.setIsActive(createUserRequestDto.getIsActive());
+        userEntity.setProfilePicturePath(createUserRequestDto.getProfilePicturePath());
+
+        return userEntity;
+
+    }
+
+    public static CreateUserRequestPersistenceDto createUserRequestFromDtoToPersistenceDto(CreateUserRequestDto createUserRequestDto) {
+        return new CreateUserRequestPersistenceDto(
+                createUserRequestDto.getEmail(),
+                createUserRequestDto.getFullName(),
+                createUserRequestDto.getPassword(),
+                createUserRequestDto.getRole(),
+                createUserRequestDto.getIsActive(),
+                createUserRequestDto.getProfilePicturePath()
+        );
+    }
+
+    public static UserResponsePersistenceDto userResponseFromEntityToPersistenceDto(UserEntity userEntity) {
+        return new UserResponsePersistenceDto(
+                userEntity.getUserAccountId(),
                 userEntity.getEmail(),
-                userEntity.getPassword(),
                 userEntity.getFullName(),
+                userEntity.getPassword(),
                 userEntity.getRole(),
                 userEntity.getIsActive(),
                 userEntity.getCreatedDate(),
@@ -19,47 +47,17 @@ public class UserPersistenceMapper {
         );
     }
 
-    public static UserEntity fromPersistenceDtoToEntity(UserPersistenceDto userPersistenceDto) {
-
-        return new UserEntity(userPersistenceDto.getUserAccountId(),
-                userPersistenceDto.getEmail(),
-                userPersistenceDto.getPassword(),
-                userPersistenceDto.getFullName(),
-                userPersistenceDto.getRole(),
-                userPersistenceDto.getIsActive(),
-                userPersistenceDto.getCreatedDate(),
-                userPersistenceDto.getUpdatedDate(),
-                userPersistenceDto.getProfilePicturePath());
-
-    }
-
-    public static UserPersistenceDto fromDtoToPersistenceDto(UserDto userDto) {
-        return new UserPersistenceDto(
-                userDto.getUserAccountId(),
-                userDto.getEmail(),
-                userDto.getPassword(),
-                userDto.getFullName(),
-                userDto.getRole(),
-                userDto.getIsActive(),
-                userDto.getCreatedDate(),
-                userDto.getUpdatedDate(),
-                userDto.getProfilePicturePath()
+    public static UserResponseDto userResponseFromPersistenceDtoToDto(UserResponsePersistenceDto userResponsePersistenceDto) {
+        return new UserResponseDto(
+                userResponsePersistenceDto.getUserAccountId(),
+                userResponsePersistenceDto.getEmail(),
+                userResponsePersistenceDto.getFullName(),
+                userResponsePersistenceDto.getPassword(),
+                userResponsePersistenceDto.getRole(),
+                userResponsePersistenceDto.getIsActive(),
+                userResponsePersistenceDto.getCreatedDate(),
+                userResponsePersistenceDto.getUpdatedDate(),
+                userResponsePersistenceDto.getProfilePicturePath()
         );
     }
-
-    public static UserDto fromPersistenceDtoToDto(UserPersistenceDto userPersistenceDto) {
-        return new UserDto(
-                userPersistenceDto.getUserAccountId(),
-                userPersistenceDto.getEmail(),
-                userPersistenceDto.getPassword(),
-                userPersistenceDto.getFullName(),
-                userPersistenceDto.getRole(),
-                userPersistenceDto.getIsActive(),
-                userPersistenceDto.getCreatedDate(),
-                userPersistenceDto.getUpdatedDate(),
-                userPersistenceDto.getProfilePicturePath()
-        );
-    }
-
-
 }

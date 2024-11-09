@@ -1,16 +1,13 @@
 package com.energytracker.userservice.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.userservice.application.dto.UserDto;
+import com.energytracker.userservice.application.dto.UserResponseDto;
 import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
-import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserRestDto;
-import com.energytracker.userservice.application.service.UserService;
+import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.CreateUserRequestRestDto;
+import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserResponseRestDto;
 import com.energytracker.userservice.infrastructure.adapter.inbound.rest.mapper.UserRestMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -22,10 +19,15 @@ public class UserController {
         this.createUserUseCase = createUserUseCase;
     }
 
+    @GetMapping("/")
+    public String HomePageTest(){
+        return "Home Page Test";
+    }
+
     @PostMapping
-    public ResponseEntity<UserRestDto> createUser(@RequestBody UserRestDto userRestDto) {
-        UserDto createdUser = createUserUseCase.createUser(UserRestMapper.fromRestDtoToDto(userRestDto));
-        return new ResponseEntity<>(UserRestMapper.fromDtoToRestDto(createdUser), HttpStatus.CREATED);
+    public ResponseEntity<UserResponseRestDto> createUser(@RequestBody CreateUserRequestRestDto createUserRequestRestDto) {
+        UserResponseDto createdUser = createUserUseCase.createUser(UserRestMapper.createUserRequestFromRestDtoToDto(createUserRequestRestDto));
+        return new ResponseEntity<>(UserRestMapper.userResponseFromDtoToRestDto(createdUser), HttpStatus.CREATED);
     }
 
 }

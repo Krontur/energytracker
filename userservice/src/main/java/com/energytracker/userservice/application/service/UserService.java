@@ -1,11 +1,11 @@
 package com.energytracker.userservice.application.service;
 
-import com.energytracker.userservice.application.dto.UserDto;
-import com.energytracker.userservice.application.mapper.UserMapper;
+import com.energytracker.userservice.application.dto.CreateUserRequestDto;
+import com.energytracker.userservice.application.dto.UserResponseDto;
 import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
 import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
-import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserRestDto;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService implements CreateUserUseCase {
@@ -16,12 +16,13 @@ public class UserService implements CreateUserUseCase {
         this.userRepositoryPort = userRepositoryPort;
     }
 
-    public UserDto createUser(UserDto userDto) {
+    @Transactional
+    public UserResponseDto createUser(CreateUserRequestDto createUserRequestDto) {
 
-        if(userRepositoryPort.existsByEmail(userDto.getEmail())) {
+        if(userRepositoryPort.existsByEmail(createUserRequestDto.getEmail())) {
             throw new IllegalArgumentException("Email already exists");
         }
 
-        return userRepositoryPort.createUser(userDto);
+        return userRepositoryPort.createUser(createUserRequestDto);
     }
 }

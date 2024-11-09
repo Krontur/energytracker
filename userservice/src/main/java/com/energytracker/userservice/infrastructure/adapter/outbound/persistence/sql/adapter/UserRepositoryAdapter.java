@@ -1,8 +1,8 @@
 package com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.adapter;
 
-import com.energytracker.userservice.application.dto.UserDto;
+import com.energytracker.userservice.application.dto.CreateUserRequestDto;
+import com.energytracker.userservice.application.dto.UserResponseDto;
 import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
-import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.dto.UserPersistenceDto;
 import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.entity.UserEntity;
 import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.mapper.UserPersistenceMapper;
 import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.repository.JpaUserRepositoryPort;
@@ -23,11 +23,10 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
     }
 
     @Override
-    public UserDto createUser(UserDto userDto) {
-        UserPersistenceDto userPersistenceDto = UserPersistenceMapper.fromDtoToPersistenceDto(userDto);
-        UserEntity createdUser = jpaUserRepositoryPort.save(UserPersistenceMapper.fromPersistenceDtoToEntity(userPersistenceDto));
+    public UserResponseDto createUser(CreateUserRequestDto createUserRequestDto) {
+        UserEntity createdUser = jpaUserRepositoryPort.save(UserPersistenceMapper.createUserRequestFromDtoToEntity(createUserRequestDto));
 
-        return UserPersistenceMapper.fromPersistenceDtoToDto(UserPersistenceMapper.fromEntityToPersistenceDto(createdUser));
+        return UserPersistenceMapper.userResponseFromPersistenceDtoToDto(UserPersistenceMapper.userResponseFromEntityToPersistenceDto(createdUser));
     }
 
 }

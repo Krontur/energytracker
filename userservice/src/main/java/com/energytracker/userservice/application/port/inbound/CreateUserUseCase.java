@@ -1,9 +1,9 @@
 package com.energytracker.userservice.application.port.inbound;
 
-import com.energytracker.userservice.application.dto.UserDto;
-import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserRestDto;
+import com.energytracker.userservice.application.dto.CreateUserRequestDto;
+import com.energytracker.userservice.application.dto.UserResponseDto;
 
 public interface CreateUserUseCase {
 
-    UserDto createUser(UserDto userDto);
+    UserResponseDto createUser(CreateUserRequestDto createUserRequestDto);
 }

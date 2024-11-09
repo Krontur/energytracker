@@ -3,18 +3,17 @@ package com.energytracker.userservice.infrastructure.adapter.outbound.persistenc
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
 @Table(name = "user_account")
-@Getter
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+@Data
 public class UserEntity {
 
     @Id
@@ -30,7 +29,7 @@ public class UserEntity {
     private String password;
 
     @NotNull (message = "Full name cannot be null")
-    private String FullName;
+    private String fullName;
 
     @NotNull (message = "Role cannot be null")
     private String role;
@@ -38,10 +37,13 @@ public class UserEntity {
     @NotNull (message = "Is active cannot be null")
     private Boolean isActive;
 
-    @NotNull (message = "Created date cannot be null")
     @CreatedDate
+    @Column(updatable = false)
+    @Temporal(TemporalType.DATE)
     private LocalDate createdDate;
 
+    @LastModifiedDate
+    @Temporal(TemporalType.DATE)
     private LocalDate updatedDate;
 
     private String profilePicturePath;
