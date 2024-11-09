@@ -1,35 +1,34 @@
 package com.energytracker.userservice.application.mapper;
 
-import com.energytracker.userservice.application.dto.UserDTO;
+import com.energytracker.userservice.application.dto.UserDto;
+import com.energytracker.userservice.domain.model.Role;
 import com.energytracker.userservice.domain.model.User;
-import org.springframework.stereotype.Component;
+import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserRestDto;
+import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.dto.UserPersistenceDto;
 
-@Component
 public class UserMapper {
 
-    public User toEntity(UserDTO userDTO) {
-
-        User user = new User();
-        user.setEmail(userDTO.getEmail());
-        user.setFullName(userDTO.getFullName());
-        user.setRole(userDTO.getRole());
-        user.setIsActive(userDTO.getIsActive());
-        user.setProfilePicturePath(userDTO.getProfilePicturePath());
-        return user;
-
+    public static UserDto fromDomainToDto(User user) {
+        return new UserDto(user.getUserAccountId(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getFullName(),
+                user.getRole().toString(),
+                user.getIsActive(),
+                user.getCreatedDate(),
+                user.getUpdatedDate(),
+                user.getProfilePicturePath()
+        );
     }
 
-    public UserDTO toDTO(User user) {
-
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUserAccountId(user.getUserAccountId());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setFullName(user.getFullName());
-        userDTO.setRole(user.getRole());
-        userDTO.setIsActive(user.getIsActive());
-        userDTO.setProfilePicturePath(user.getProfilePicturePath());
-        return userDTO;
-
+    public static User fromDtoToDomain(UserDto userDto) {
+        return new User(userDto.getUserAccountId(),
+                userDto.getEmail(),
+                userDto.getPassword(),
+                userDto.getFullName(),
+                Role.valueOf(userDto.getRole()),
+                userDto.getIsActive(),
+                userDto.getProfilePicturePath()
+        );
     }
-
 }

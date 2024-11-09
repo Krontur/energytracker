@@ -1,47 +1,39 @@
-package com.energytracker.userservice.domain.model;
+package com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.entity;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 
+@Table(name = "user_account")
 @Getter
+@Entity
 @AllArgsConstructor
-public class User {
+@NoArgsConstructor
+public class UserEntity {
 
-    public User(Long userAccountId,
-                String email,
-                String password,
-                String fullName,
-                Role role,
-                Boolean isActive,
-                String profilePicturePath) {
-        this.userAccountId = userAccountId;
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-        this.role = role;
-        this.isActive = isActive;
-        this.profilePicturePath = profilePicturePath;
-    }
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userAccountId;
 
     @NotNull (message = "Email cannot be null")
     @Email (message = "Email should be valid")
+    @Column(unique = true)
     private String email;
 
     @NotNull (message = "Password cannot be null")
     private String password;
 
     @NotNull (message = "Full name cannot be null")
-    private String fullName;
+    private String FullName;
 
     @NotNull (message = "Role cannot be null")
-    private Role role;
+    private String role;
 
     @NotNull (message = "Is active cannot be null")
     private Boolean isActive;
@@ -53,6 +45,5 @@ public class User {
     private LocalDate updatedDate;
 
     private String profilePicturePath;
-
 
 }
