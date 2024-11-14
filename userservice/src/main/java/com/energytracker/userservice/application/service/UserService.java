@@ -3,12 +3,15 @@ package com.energytracker.userservice.application.service;
 import com.energytracker.userservice.application.dto.CreateUserRequestDto;
 import com.energytracker.userservice.application.dto.UserResponseDto;
 import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
+import com.energytracker.userservice.application.port.inbound.GetAllUsersUseCase;
 import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
-public class UserService implements CreateUserUseCase {
+public class UserService implements CreateUserUseCase, GetAllUsersUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
 
@@ -24,5 +27,9 @@ public class UserService implements CreateUserUseCase {
         }
 
         return userRepositoryPort.createUser(createUserRequestDto);
+    }
+
+    public List<UserResponseDto> getAllUsers() {
+        return userRepositoryPort.getAllUsers();
     }
 }

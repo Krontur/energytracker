@@ -21,9 +21,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/api/v1/users").permitAll() // Permitir acceso sin autenticación a /api/v1/users
+                                .requestMatchers("/api/v1").permitAll() // Permitir acceso sin autenticación a /api/v1/users
                                 .anyRequest().permitAll()
                 )
+                .cors(cors -> {})
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable); // Deshabilitar autenticación básica
 
