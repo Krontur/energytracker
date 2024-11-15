@@ -1,7 +1,7 @@
 package com.energytracker.userservice.infrastructure.adapter.inbound.rest.controller;
 
 import com.energytracker.userservice.application.dto.UserResponseDto;
-import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
+import com.energytracker.userservice.application.service.UserService;
 import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.CreateUserRequestRestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
@@ -33,7 +33,7 @@ public class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private CreateUserUseCase createUserUseCase;
+    private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -67,7 +67,7 @@ public class UserControllerTest {
                 createUserRequestRestDto.getProfilePicturePath()
         );
 
-        when(createUserUseCase.createUser(any())).thenReturn(userResponseDto);
+        when(userService.createUser(any())).thenReturn(userResponseDto);
 
         mockMvc.perform(post("/api/v1/users")
                         .with(csrf())

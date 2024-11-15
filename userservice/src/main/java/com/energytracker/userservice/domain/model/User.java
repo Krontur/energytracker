@@ -3,13 +3,16 @@ package com.energytracker.userservice.domain.model;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDate;
 
-@Getter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     public User(Long userAccountId,

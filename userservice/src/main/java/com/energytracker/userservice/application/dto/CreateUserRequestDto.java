@@ -2,10 +2,12 @@ package com.energytracker.userservice.application.dto;
 
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CreateUserRequestDto {
 
     private String email;
