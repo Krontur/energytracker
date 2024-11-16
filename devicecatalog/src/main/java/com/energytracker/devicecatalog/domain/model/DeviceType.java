@@ -1,6 +1,5 @@
 package com.energytracker.devicecatalog.domain.model;
 
-public enum ConnectionType {
-
-    LON, TCP, IMPULS;
+public enum DeviceType {
+    ENERGY_METER, STATION;
 }

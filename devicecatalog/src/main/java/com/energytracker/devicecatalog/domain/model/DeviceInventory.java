@@ -1,16 +1,16 @@
 package com.energytracker.devicecatalog.domain.model;
 
-public class EnergyMeterInventory {
+public class DeviceInventory {
 
     private Long inventoryId;
 
-    private EnergyMeter energyMeter;
+    private Device device;
 
     private String storageLocation;
 
     private String installationLocation;
 
-    private MeterStatus meterStatus;
+    private DeviceStatus deviceStatus;
 
     private String comments;
 }

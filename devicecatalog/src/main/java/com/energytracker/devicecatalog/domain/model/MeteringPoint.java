@@ -8,6 +8,8 @@ public class MeteringPoint {
 
     private Long meteringPointId;
 
+    private EnergyMeter energyMeter;
+
     private Channel channel;
 
     private String locationName;

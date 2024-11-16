@@ -1,16 +1,35 @@
 package com.energytracker.devicecatalog.domain.model;
 
 import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class EnergyMeter extends Device {
 
-    private Long parentMeterId;
+    public EnergyMeter(
+            String serialNumber,
+            DeviceType deviceType,
+            String connectionAddress,
+            String energyMeterType,
+            int referenceVoltage,
+            ConnectionType connectionType,
+            int maxCurrent,
+            int midAprovalYear
+    ) {
+        super(serialNumber, deviceType);
+        this.connectionAddress = connectionAddress;
+        this.energyMeterType = energyMeterType;
+        this.referenceVoltage = referenceVoltage;
+        this.connectionType = connectionType;
+        this.maxCurrent = maxCurrent;
+        this.midAprovalYear = midAprovalYear;
+    }
 
     private String connectionAddress;
 
-    private String meterType;
+    private String energyMeterType;
 
     private int referenceVoltage;
 

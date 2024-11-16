@@ -8,12 +8,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@MappedSuperclass
 public class Device {
 
     private Long deviceId;
 
     private String serialNumber;
 
-    private String deviceType;
+    private DeviceType deviceType;
 }
