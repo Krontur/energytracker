@@ -47,7 +47,7 @@ public class EnergyMeterPersistenceMapper {
         List<CalibrationScheduleDto> calibrationScheduleDtoList = new ArrayList<CalibrationScheduleDto>();
 
         energyMeterEntity.getCalibrationSchedules().forEach(calibrationSchedule -> {
-            calibrationScheduleDtoList.add(CalibrationScheduleMapper.calibrationScheduleEntityToDto(calibrationSchedule));
+            calibrationScheduleDtoList.add(CalibrationSchedulePersistenceMapper.calibrationScheduleEntityToDto(calibrationSchedule));
         });
 
         return new EnergyMeterResponseDto(

@@ -4,7 +4,7 @@ import com.energytracker.devicecatalog.application.dto.CalibrationScheduleDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CalibrationSchedulePersistenceDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.CalibrationScheduleEntity;
 
-public class CalibrationScheduleMapper {
+public class CalibrationSchedulePersistenceMapper {
 
     public static CalibrationScheduleDto calibrationScheduleEntityToDto(CalibrationScheduleEntity calibrationScheduleEntity) {
         return null;
