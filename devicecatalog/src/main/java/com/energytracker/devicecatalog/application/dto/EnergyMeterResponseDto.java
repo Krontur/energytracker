@@ -2,7 +2,14 @@ package com.energytracker.devicecatalog.application.dto;
 
 import com.energytracker.devicecatalog.domain.model.CalibrationSchedule;
 import com.energytracker.devicecatalog.domain.model.ConnectionType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
+import java.util.List;
+
+
+@Data
+@AllArgsConstructor
 public class EnergyMeterResponseDto {
 
     private Long deviceId;
@@ -11,19 +18,17 @@ public class EnergyMeterResponseDto {
 
     private String deviceType;
 
-    private Long parentMeterId;
-
     private String connectionAddress;
 
     private String meterType;
 
     private int referenceVoltage;
 
-    private ConnectionType connectionType;
+    private String connectionType;
 
     private int maxCurrent;
 
     private int midAprovalYear;
 
-    private CalibrationSchedule calibrationSchedule;
+    private List<CalibrationScheduleDto> calibrationSchedules;
 }

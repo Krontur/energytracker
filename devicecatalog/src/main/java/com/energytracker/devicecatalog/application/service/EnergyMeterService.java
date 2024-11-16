@@ -6,6 +6,7 @@ import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
 import com.energytracker.devicecatalog.application.port.inbound.CreateEnergyMeterUseCase;
 import com.energytracker.devicecatalog.application.port.inbound.GetAllEnergyMetersUseCase;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
+import com.energytracker.devicecatalog.domain.model.ConnectionType;
 import com.energytracker.devicecatalog.domain.model.DeviceType;
 import com.energytracker.devicecatalog.domain.model.EnergyMeter;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
                 createRequestEnergyMeterDto.getConnectionAddress(),
                 createRequestEnergyMeterDto.getEnergyMeterType(),
                 createRequestEnergyMeterDto.getReferenceVoltage(),
-                createRequestEnergyMeterDto.getConnectionType(),
+                ConnectionType.valueOf(createRequestEnergyMeterDto.getConnectionType()),
                 createRequestEnergyMeterDto.getMaxCurrent(),
                 createRequestEnergyMeterDto.getMidAprovalYear()
         );

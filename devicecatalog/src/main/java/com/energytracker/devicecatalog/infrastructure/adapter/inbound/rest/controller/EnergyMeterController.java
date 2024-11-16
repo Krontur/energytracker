@@ -1,5 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
+import com.energytracker.devicecatalog.application.dto.CreateRequestEnergyMeterDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.service.EnergyMeterService;
 import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.CreateRequestEnergyMeterRestDto;
@@ -24,8 +25,16 @@ public class EnergyMeterController {
     }
 
     @PostMapping
-    public ResponseEntity<EnergyMeterResponseRestDto> createEnergyMeter(@RequestBody CreateRequestEnergyMeterRestDto createRequestEnergyMeterRestDto) {
-        EnergyMeterResponseDto createdEnergyMeter = energyMeterService.createEnergyMeter(EnergyMeterRestMapper.createRequestEnergyMeterRestDtoToDto(createRequestEnergyMeterRestDto));
+    public ResponseEntity<EnergyMeterResponseRestDto> createEnergyMeter(
+            @RequestBody CreateRequestEnergyMeterRestDto createRequestEnergyMeterRestDto) {
+        CreateRequestEnergyMeterDto createRequestEnergyMeterDto =
+                EnergyMeterRestMapper.createRequestEnergyMeterRestDtoToDto(createRequestEnergyMeterRestDto);
+        EnergyMeterResponseDto createdEnergyMeter = null;
+        if (createRequestEnergyMeterDto != null) {
+            createdEnergyMeter = energyMeterService.createEnergyMeter(createRequestEnergyMeterDto);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(EnergyMeterRestMapper.energyMeterResponseDtoToRestDto(createdEnergyMeter), HttpStatus.CREATED);
     }
 

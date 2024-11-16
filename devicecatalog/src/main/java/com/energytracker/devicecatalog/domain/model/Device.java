@@ -2,12 +2,12 @@ package com.energytracker.devicecatalog.domain.model;
 
 
 import jakarta.persistence.MappedSuperclass;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Device {
 
     private Long deviceId;
@@ -15,4 +15,7 @@ public class Device {
     private String serialNumber;
 
     private DeviceType deviceType;
+
+    public Device(String serialNumber, DeviceType deviceType) {
+    }
 }
