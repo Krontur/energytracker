@@ -1,26 +1,20 @@
-package com.energytracker.devicecatalog.application.dto;
+package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto;
+
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 @AllArgsConstructor
-public class CreateRequestEnergyMeterDto {
+public class CreateEnergyMeterRequestRestDto {
 
-    private String serialNumber;
-
+    private String SerialNumber;
     private String deviceType;
-
     private String connectionAddress;
-
     private String energyMeterType;
-
     private int referenceVoltage;
-
     private String connectionType;
-
     private int maxCurrent;
-
-    private int midAprovalYear;
+    private int midApprovalYear;
 
 }

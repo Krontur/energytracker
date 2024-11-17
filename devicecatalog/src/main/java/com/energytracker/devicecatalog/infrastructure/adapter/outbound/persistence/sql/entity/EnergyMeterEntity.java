@@ -2,19 +2,18 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "energy_meter")
-public class EnergyMeterEntity extends BaseEntity {
-
-    private String serialNumber;
+public class EnergyMeterEntity extends DeviceEntity {
 
     @ManyToOne
     @JoinColumn(name = "device_type_id")
@@ -37,7 +36,7 @@ public class EnergyMeterEntity extends BaseEntity {
     private int maxCurrent;
 
     @Column
-    private int midAprovalYear;
+    private int midApprovalYear;
 
     @ManyToOne
     @JoinColumn(name = "meter_status_id", nullable = false)
@@ -54,7 +53,7 @@ public class EnergyMeterEntity extends BaseEntity {
             int referenceVoltage,
             ConnectionTypeEnum connectionTypeEnum,
             int maxCurrent,
-            int midAprovalYear,
+            int midApprovalYear,
             ArrayList<CalibrationScheduleEntity> calibrationSchedules) {
     }
 }

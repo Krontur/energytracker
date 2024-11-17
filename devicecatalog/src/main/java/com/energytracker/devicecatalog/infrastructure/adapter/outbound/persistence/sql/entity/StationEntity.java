@@ -7,7 +7,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class StationEntity extends BaseEntity {
+public class StationEntity extends DeviceEntity {
 
 
 

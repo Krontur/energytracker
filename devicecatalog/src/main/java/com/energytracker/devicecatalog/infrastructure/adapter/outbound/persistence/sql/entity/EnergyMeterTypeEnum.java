@@ -2,10 +2,12 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class EnergyMeterTypeEnum extends BaseEntity {
 
     @Column(name = "energy_meter_type")

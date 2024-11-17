@@ -1,7 +1,5 @@
-package com.energytracker.devicecatalog.domain.config;
+package com.energytracker.devicecatalog.domain.model;
 
-import com.energytracker.devicecatalog.domain.model.EnergyUnit;
-import com.energytracker.devicecatalog.domain.model.PowerUnit;
 import lombok.Getter;
 
 @Getter

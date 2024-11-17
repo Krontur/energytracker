@@ -1,7 +1,7 @@
 package com.energytracker.devicecatalog.application.port.outbound;
 
 
-import com.energytracker.devicecatalog.application.dto.CreateRequestStationDto;
+import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +12,7 @@ public interface StationRepositoryPort {
 
     boolean existsBySerialNumber(String serialNumber);
 
-    StationResponseDto createStation(CreateRequestStationDto createRequestStationDto);
+    StationResponseDto createStation(CreateStationRequestDto createStationRequestDto);
 
     List<StationResponseDto> getAllStations();
 

@@ -1,6 +1,5 @@
 package com.energytracker.devicecatalog.domain.model;
 
-import com.energytracker.devicecatalog.domain.config.ChannelDefaultConfig;
 import lombok.Getter;
 import lombok.Setter;
 

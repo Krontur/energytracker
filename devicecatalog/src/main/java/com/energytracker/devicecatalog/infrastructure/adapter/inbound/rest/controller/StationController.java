@@ -1,6 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.devicecatalog.application.dto.CreateRequestStationDto;
+import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.service.StationService;
 import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.CreateRequestStationRestDto;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/meters")
+@RequestMapping("/api/v1/stations")
 @CrossOrigin(origins = "http://localhost:5173")
 public class StationController {
 
@@ -27,11 +27,11 @@ public class StationController {
     @PostMapping
     public ResponseEntity<StationResponseRestDto> createStation(
             @RequestBody CreateRequestStationRestDto createRequestStationRestDto) {
-        CreateRequestStationDto createRequestStationDto =
+        CreateStationRequestDto createStationRequestDto =
                 StationRestMapper.createRequestStationRestDtoToDto(createRequestStationRestDto);
         StationResponseDto createdStation = null;
-        if (createRequestStationDto != null) {
-            createdStation = stationService.createStation(createRequestStationDto);
+        if (createStationRequestDto != null) {
+            createdStation = stationService.createStation(createStationRequestDto);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

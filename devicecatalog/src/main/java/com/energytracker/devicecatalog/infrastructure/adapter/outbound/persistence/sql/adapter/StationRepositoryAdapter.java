@@ -1,6 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.adapter;
 
-import com.energytracker.devicecatalog.application.dto.CreateRequestStationDto;
+import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaStationPort;
@@ -19,7 +19,7 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
     }
 
     @Override
-    public StationResponseDto createStation(CreateRequestStationDto createRequestStationDto) {
+    public StationResponseDto createStation(CreateStationRequestDto createStationRequestDto) {
         return null;
     }
 

@@ -3,17 +3,19 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
+import lombok.Setter;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class CalibrationScheduleEntity extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "energy_meter_id")
-    private EnergyMeterEntity energyMeter;
+    private EnergyMeterEntity energyMeterEntity;
 
     private LocalDate nextCalibrationDate;
 

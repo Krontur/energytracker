@@ -5,12 +5,13 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Entity
+
 @Data
+@MappedSuperclass
 public class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @Column( nullable = false, updatable = false)

@@ -1,6 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.adapter;
 
-import com.energytracker.devicecatalog.application.dto.CreateRequestEnergyMeterDto;
+import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CreateRequestEnergyMeterPersistenceDto;
@@ -22,9 +22,9 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
     }
 
     @Override
-    public EnergyMeterResponseDto createEnergyMeter(CreateRequestEnergyMeterDto createRequestEnergyMeterDto) {
+    public EnergyMeterResponseDto createEnergyMeter(CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
         CreateRequestEnergyMeterPersistenceDto createRequestEnergyMeterPersistenceDto =
-                EnergyMeterPersistenceMapper.createRequestEnergyMeterDtoToPersistence(createRequestEnergyMeterDto);
+                EnergyMeterPersistenceMapper.createRequestEnergyMeterDtoToPersistenceDto(createEnergyMeterRequestDto);
         EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.save(
                 EnergyMeterPersistenceMapper.createRequestEnergyMeterPersistenceDtoToEntity(createRequestEnergyMeterPersistenceDto));
         EnergyMeterResponseDto energyMeterResponseDto = EnergyMeterPersistenceMapper.energyMeterEntityToResponseDto(energyMeterEntity);

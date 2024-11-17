@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GetAllEnergyMetersUseCase {
 
-    public List<EnergyMeterResponseDto> getAllEnergyMeters();
+    List<EnergyMeterResponseDto> getAllEnergyMeters();
 
 }

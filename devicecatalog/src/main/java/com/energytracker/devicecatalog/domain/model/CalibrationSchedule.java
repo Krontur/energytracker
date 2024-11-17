@@ -1,17 +1,22 @@
 package com.energytracker.devicecatalog.domain.model;
 
+import lombok.Getter;
+
 import java.time.LocalDate;
 
+@Getter
 public class CalibrationSchedule {
 
     public CalibrationSchedule (EnergyMeter energyMeter, int calibrationFrequencyInYears,
                                 String comments, CalibrationStatus calibrationStatus) {
         this.energyMeter = energyMeter;
         if(energyMeter.getCalibrationSchedules().isEmpty()) {
-            this.lastCalibrationDate = LocalDate.of(energyMeter.getMidAprovalYear(), 1, 1);
+            this.lastCalibrationDate = LocalDate.of(energyMeter.getMidApprovalYear(), 1, 1);
         } else {
-            this.lastCalibrationDate = energyMeter.getCalibrationSchedules().getLast().lastCalibrationDate;
+            this.lastCalibrationDate = energyMeter.getCalibrationSchedules().get(
+                    energyMeter.getCalibrationSchedules().size() - 1).getLastCalibrationDate();
         }
+        this.nextCalibrationDate = lastCalibrationDate.plusYears(calibrationFrequencyInYears);
         this.calibrationFrequencyInYears = calibrationFrequencyInYears;
         this.comments = comments;
         this.calibrationStatus = calibrationStatus;

@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.domain.model.ConnectionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -12,7 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 public class EnergyMeterResponseDto {
 
-    private Long deviceId;
+    private Long energyMeterId;
 
     private String serialNumber;
 
@@ -20,7 +21,7 @@ public class EnergyMeterResponseDto {
 
     private String connectionAddress;
 
-    private String meterType;
+    private String energyMeterType;
 
     private int referenceVoltage;
 
@@ -28,7 +29,11 @@ public class EnergyMeterResponseDto {
 
     private int maxCurrent;
 
-    private int midAprovalYear;
+    private int midApprovalYear;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     private List<CalibrationScheduleDto> calibrationSchedules;
 }

@@ -19,19 +19,20 @@ public class EnergyMeter extends Device {
             int referenceVoltage,
             ConnectionType connectionType,
             int maxCurrent,
-            int midAprovalYear
+            int midApprovalYear
     ) {
         super(serialNumber, deviceType);
+
         this.connectionAddress = connectionAddress;
         this.energyMeterType = energyMeterType;
         this.referenceVoltage = referenceVoltage;
         this.connectionType = connectionType;
         this.maxCurrent = maxCurrent;
-        this.midAprovalYear = midAprovalYear;
+        this.midApprovalYear = midApprovalYear;
         this.calibrationSchedules = new ArrayList<CalibrationSchedule>();
 
         addCalibrationSchedule(new CalibrationSchedule(this, 8,
-                "First calibration schedule", CalibrationStatus.COMPLETED));
+                "First calibration schedule", CalibrationStatus.PENDING));
     }
 
     private String connectionAddress;
@@ -44,7 +45,7 @@ public class EnergyMeter extends Device {
 
     private int maxCurrent;
 
-    private int midAprovalYear;
+    private int midApprovalYear;
 
     private List<CalibrationSchedule> calibrationSchedules;
 

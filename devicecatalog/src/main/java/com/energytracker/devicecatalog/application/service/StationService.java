@@ -1,7 +1,7 @@
 package com.energytracker.devicecatalog.application.service;
 
 
-import com.energytracker.devicecatalog.application.dto.CreateRequestStationDto;
+import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.port.inbound.CreateStationUseCase;
 import com.energytracker.devicecatalog.application.port.inbound.GetAllStationsUseCase;
@@ -18,7 +18,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
     private final StationRepositoryPort stationRepositoryPort;
 
     @Override
-    public StationResponseDto createStation(CreateRequestStationDto createRequestStationDto) {
+    public StationResponseDto createStation(CreateStationRequestDto createStationRequestDto) {
         return null;
     }
 

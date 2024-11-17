@@ -1,9 +1,9 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.devicecatalog.application.dto.CreateRequestEnergyMeterDto;
+import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.service.EnergyMeterService;
-import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.CreateRequestEnergyMeterRestDto;
+import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.CreateEnergyMeterRequestRestDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.EnergyMeterResponseRestDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.mapper.EnergyMeterRestMapper;
 import org.springframework.http.HttpStatus;
@@ -26,12 +26,12 @@ public class EnergyMeterController {
 
     @PostMapping
     public ResponseEntity<EnergyMeterResponseRestDto> createEnergyMeter(
-            @RequestBody CreateRequestEnergyMeterRestDto createRequestEnergyMeterRestDto) {
-        CreateRequestEnergyMeterDto createRequestEnergyMeterDto =
-                EnergyMeterRestMapper.createRequestEnergyMeterRestDtoToDto(createRequestEnergyMeterRestDto);
+            @RequestBody CreateEnergyMeterRequestRestDto createEnergyMeterRequestRestDto) {
+        CreateEnergyMeterRequestDto createEnergyMeterRequestDto =
+                EnergyMeterRestMapper.createRequestEnergyMeterRestDtoToDto(createEnergyMeterRequestRestDto);
         EnergyMeterResponseDto createdEnergyMeter = null;
-        if (createRequestEnergyMeterDto != null) {
-            createdEnergyMeter = energyMeterService.createEnergyMeter(createRequestEnergyMeterDto);
+        if (createEnergyMeterRequestDto != null) {
+            createdEnergyMeter = energyMeterService.createEnergyMeter(createEnergyMeterRequestDto);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

@@ -17,5 +17,7 @@ public class Device {
     private DeviceType deviceType;
 
     public Device(String serialNumber, DeviceType deviceType) {
+        this.serialNumber = serialNumber;
+        this.deviceType = deviceType;
     }
 }

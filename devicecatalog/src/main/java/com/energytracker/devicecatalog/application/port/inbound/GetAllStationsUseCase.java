@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface GetAllStationsUseCase {
 
-    public List<StationResponseDto> getAllStations();
+    List<StationResponseDto> getAllStations();
 
 }
