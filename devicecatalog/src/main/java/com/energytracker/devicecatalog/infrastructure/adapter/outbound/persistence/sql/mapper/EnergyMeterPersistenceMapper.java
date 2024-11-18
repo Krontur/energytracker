@@ -5,7 +5,6 @@ import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestD
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CalibrationSchedulePersistenceDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CreateEnergyMeterRequestPersistenceDto;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CreateRequestEnergyMeterPersistenceDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.EnergyMeterResponsePersistenceDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.CalibrationScheduleEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.ConnectionTypeEnum;
@@ -16,9 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EnergyMeterPersistenceMapper {
-    public static CreateRequestEnergyMeterPersistenceDto createRequestEnergyMeterDtoToPersistenceDto(CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
+    public static CreateEnergyMeterRequestPersistenceDto createRequestEnergyMeterDtoToPersistenceDto(CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
 
-        return new CreateRequestEnergyMeterPersistenceDto(
+        return new CreateEnergyMeterRequestPersistenceDto(
                 createEnergyMeterRequestDto.getSerialNumber(),
                 createEnergyMeterRequestDto.getDeviceType(),
                 createEnergyMeterRequestDto.getConnectionAddress(),
@@ -31,7 +30,7 @@ public class EnergyMeterPersistenceMapper {
 
     }
 
-    public static EnergyMeterEntity createRequestEnergyMeterPersistenceDtoToEntity(CreateRequestEnergyMeterPersistenceDto createRequestEnergyMeterPersistenceDto) {
+    public static EnergyMeterEntity createRequestEnergyMeterPersistenceDtoToEntity(CreateEnergyMeterRequestPersistenceDto createRequestEnergyMeterPersistenceDto) {
         return new EnergyMeterEntity(
                 createRequestEnergyMeterPersistenceDto.getSerialNumber(),
                 new DeviceTypeEnum(createRequestEnergyMeterPersistenceDto.getDeviceType()),
@@ -40,7 +39,7 @@ public class EnergyMeterPersistenceMapper {
                 createRequestEnergyMeterPersistenceDto.getReferenceVoltage(),
                 new ConnectionTypeEnum(createRequestEnergyMeterPersistenceDto.getConnectionType()),
                 createRequestEnergyMeterPersistenceDto.getMaxCurrent(),
-                createRequestEnergyMeterPersistenceDto.getMidAprovalYear(),
+                createRequestEnergyMeterPersistenceDto.getMidApprovalYear(),
                 new ArrayList<CalibrationScheduleEntity>()
         );
     }
@@ -49,9 +48,11 @@ public class EnergyMeterPersistenceMapper {
 
         List<CalibrationScheduleDto> calibrationScheduleDtoList = new ArrayList<CalibrationScheduleDto>();
 
-        energyMeterEntity.getCalibrationSchedules().forEach(calibrationSchedule -> {
-            calibrationScheduleDtoList.add(CalibrationSchedulePersistenceMapper.calibrationScheduleEntityToDto(calibrationSchedule));
-        });
+        if(energyMeterEntity.getCalibrationSchedules() != null && !energyMeterEntity.getCalibrationSchedules().isEmpty()) {
+            energyMeterEntity.getCalibrationSchedules().forEach(calibrationSchedule -> {
+                calibrationScheduleDtoList.add(CalibrationSchedulePersistenceMapper.calibrationScheduleEntityToDto(calibrationSchedule));
+            });
+        }
 
         return new EnergyMeterResponseDto(
                 energyMeterEntity.getId(),

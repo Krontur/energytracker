@@ -1,0 +1,17 @@
+GET localhost:8088/api/v1/meters
+
+
+### Create a new Energy Meter POST Request ###
+POST localhost:8088/api/v1/meters
+Content-Type: application/json
+
+{
+    "serialNumber": "CD345323367",
+    "deviceType": "ENERGY_METER",
+    "connectionAddress": "asdk2323lkjasf",
+    "energyMeterType": "U1289",
+    "referenceVoltage": 400,
+    "connectionType": "LON",
+    "maxCurrent": 100,
+    "midApprovalYear": 2021
+}

@@ -2,6 +2,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 
 import jakarta.persistence.Entity;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -10,5 +11,11 @@ import lombok.Setter;
 public class StationEntity extends DeviceEntity {
 
 
+    public StationEntity(String serialNumber, DeviceTypeEnum deviceTypeEnum) {
+        super(serialNumber, deviceTypeEnum);
+    }
 
+    public StationEntity() {
+        super();
+    }
 }
