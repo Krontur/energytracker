@@ -13,7 +13,8 @@ public class EnergyMeter extends Device {
 
     public EnergyMeter(
             String serialNumber,
-            DeviceType deviceType,
+            String deviceType,
+            String deviceStatus,
             String connectionAddress,
             String energyMeterType,
             int referenceVoltage,
@@ -21,10 +22,10 @@ public class EnergyMeter extends Device {
             int maxCurrent,
             int midApprovalYear
     ) {
-        super(serialNumber, deviceType);
+        super(serialNumber, deviceType, deviceStatus);
 
         this.connectionAddress = connectionAddress;
-        this.energyMeterType = energyMeterType;
+        this.energyMeterType = EnergyMeterType.valueOf(energyMeterType);
         this.referenceVoltage = referenceVoltage;
         this.connectionType = connectionType;
         this.maxCurrent = maxCurrent;
@@ -37,7 +38,7 @@ public class EnergyMeter extends Device {
 
     private String connectionAddress;
 
-    private String energyMeterType;
+    private EnergyMeterType energyMeterType;
 
     private int referenceVoltage;
 

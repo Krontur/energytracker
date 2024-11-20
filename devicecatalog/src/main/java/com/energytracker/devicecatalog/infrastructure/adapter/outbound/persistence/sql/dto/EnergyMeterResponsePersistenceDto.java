@@ -15,6 +15,7 @@ public class EnergyMeterResponsePersistenceDto {
     private Long energyMeterId;
     private String serialNumber;
     private String deviceType;
+    private String deviceStatus;
     private String connectionAddress;
     private String energyMeterType;
     private int referenceVoltage;

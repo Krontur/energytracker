@@ -13,6 +13,7 @@ public class EnergyMapperRestMapperTest {
         CreateEnergyMeterRequestRestDto createEnergyMeterRequestRestDto = new CreateEnergyMeterRequestRestDto(
                 "FD234123654",
                 "ENERGY_METER",
+                "IN_STOCK",
                 "908asd89hasd78",
                 "U2289",
                 400,

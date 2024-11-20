@@ -10,6 +10,7 @@ public class CreateEnergyMeterRequestRestDto {
 
     private String SerialNumber;
     private String deviceType;
+    private String deviceStatus;
     private String connectionAddress;
     private String energyMeterType;
     private int referenceVoltage;

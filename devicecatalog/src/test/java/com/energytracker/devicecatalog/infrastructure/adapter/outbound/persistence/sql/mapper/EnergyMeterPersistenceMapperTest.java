@@ -5,10 +5,7 @@ import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CalibrationSchedulePersistenceDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CreateEnergyMeterRequestPersistenceDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.EnergyMeterResponsePersistenceDto;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.CalibrationScheduleEntity;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.ConnectionTypeEnum;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceTypeEnum;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.EnergyMeterEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -29,7 +26,7 @@ public class EnergyMeterPersistenceMapperTest {
         assertEquals(energyMeterEntity.getSerialNumber(), energyMeterResponsePersistenceDto.getSerialNumber());
         assertEquals(energyMeterEntity.getDeviceType().toString(), energyMeterResponsePersistenceDto.getDeviceType());
         assertEquals(energyMeterEntity.getConnectionAddress(), energyMeterResponsePersistenceDto.getConnectionAddress());
-        assertEquals(energyMeterEntity.getEnergyMeterType(), energyMeterResponsePersistenceDto.getEnergyMeterType());
+        assertEquals(energyMeterEntity.getEnergyMeterType().toString(), energyMeterResponsePersistenceDto.getEnergyMeterType());
         assertEquals(energyMeterEntity.getReferenceVoltage(), energyMeterResponsePersistenceDto.getReferenceVoltage());
         assertEquals(energyMeterEntity.getConnectionType().toString(), energyMeterResponsePersistenceDto.getConnectionType());
         assertEquals(energyMeterEntity.getMaxCurrent(), energyMeterResponsePersistenceDto.getMaxCurrent());
@@ -46,6 +43,7 @@ public class EnergyMeterPersistenceMapperTest {
                 1L,
                 "CD345323367",
                 "ENERGY_METER",
+                "IN_STOCK",
                 "asdk2323lkjasf",
                 "U1289",
                 400,
@@ -79,6 +77,7 @@ public class EnergyMeterPersistenceMapperTest {
         CreateEnergyMeterRequestDto createEnergyMeterRequestDto = new CreateEnergyMeterRequestDto(
                 "CD345323367",
                 "ENERGY_METER",
+                "IN_STOCK",
                 "asdk2323lkjasf",
                 "U1289",
                 400,
@@ -104,11 +103,12 @@ public class EnergyMeterPersistenceMapperTest {
         EnergyMeterEntity energyMeterEntity = new EnergyMeterEntity();
         energyMeterEntity.setId(1L);
         energyMeterEntity.setSerialNumber("CD345323367");
-        energyMeterEntity.setDeviceType(new DeviceTypeEnum("ENERGY_METER"));
+        energyMeterEntity.setDeviceType(DeviceTypeEntity.ENERGY_METER);
+        energyMeterEntity.setDeviceStatus(DeviceStatusEntity.IN_STOCK);
         energyMeterEntity.setConnectionAddress("asdk2323lkjasf");
-        energyMeterEntity.setEnergyMeterType("U1289");
+        energyMeterEntity.setEnergyMeterType(EnergyMeterTypeEntity.DIGITAL);
         energyMeterEntity.setReferenceVoltage(400);
-        energyMeterEntity.setConnectionType(new ConnectionTypeEnum("LON"));
+        energyMeterEntity.setConnectionType(ConnectionTypeEntity.LON);
         energyMeterEntity.setMaxCurrent(100);
         energyMeterEntity.setMidApprovalYear(2021);
         energyMeterEntity.setCreatedAt(LocalDateTime.of(2021, 1, 1, 0, 0, 0));

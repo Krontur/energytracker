@@ -14,26 +14,16 @@ import java.util.List;
 public class EnergyMeterResponseDto {
 
     private Long energyMeterId;
-
     private String serialNumber;
-
     private String deviceType;
-
+    private String deviceStatus;
     private String connectionAddress;
-
     private String energyMeterType;
-
     private int referenceVoltage;
-
     private String connectionType;
-
     private int maxCurrent;
-
     private int midApprovalYear;
-
     private LocalDateTime createdAt;
-
     private LocalDateTime updatedAt;
-
     private List<CalibrationScheduleDto> calibrationSchedules;
 }

@@ -8,8 +8,9 @@ Content-Type: application/json
 {
     "serialNumber": "CD345323367",
     "deviceType": "ENERGY_METER",
+    "deviceStatus": "IN_STOCK",
     "connectionAddress": "asdk2323lkjasf",
-    "energyMeterType": "U1289",
+    "energyMeterType": "DIGITAL",
     "referenceVoltage": 400,
     "connectionType": "LON",
     "maxCurrent": 100,

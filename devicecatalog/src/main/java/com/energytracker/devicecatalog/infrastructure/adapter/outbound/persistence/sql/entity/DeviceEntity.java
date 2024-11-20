@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
 public class DeviceEntity extends BaseEntity {
@@ -16,13 +16,17 @@ public class DeviceEntity extends BaseEntity {
     private String serialNumber;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "device_type_id")
-    private DeviceTypeEnum deviceType;
+    @Enumerated(EnumType.STRING)
+    private DeviceTypeEntity deviceType;
 
-    public DeviceEntity(String serialNumber, DeviceTypeEnum deviceTypeEnum) {
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private DeviceStatusEntity deviceStatus;
+
+    public DeviceEntity(String serialNumber, DeviceTypeEntity deviceTypeEntity, DeviceStatusEntity deviceStatus) {
         this.serialNumber = serialNumber;
-        this.deviceType = deviceTypeEnum;
+        this.deviceType = deviceTypeEntity;
+        this.deviceStatus = deviceStatus;
     }
 
     public DeviceEntity() {

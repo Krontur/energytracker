@@ -3,6 +3,7 @@ package com.energytracker.devicecatalog.application.mapper;
 import com.energytracker.devicecatalog.application.dto.CalibrationScheduleDto;
 import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.domain.model.ConnectionType;
+import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.DeviceType;
 import com.energytracker.devicecatalog.domain.model.EnergyMeter;
 
@@ -28,8 +29,9 @@ public class EnergyMeterMapper {
         return new CreateEnergyMeterRequestDto(
                 energyMeter.getSerialNumber(),
                 energyMeter.getDeviceType().name(),
+                energyMeter.getDeviceStatus().name(),
                 energyMeter.getConnectionAddress(),
-                energyMeter.getEnergyMeterType(),
+                energyMeter.getEnergyMeterType().name(),
                 energyMeter.getReferenceVoltage(),
                 energyMeter.getConnectionType().name(),
                 energyMeter.getMaxCurrent(),
@@ -41,7 +43,8 @@ public class EnergyMeterMapper {
     public static EnergyMeter createEnergyMeterRequestDtoToDomain(CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
         return new EnergyMeter(
                 createEnergyMeterRequestDto.getSerialNumber(),
-                DeviceType.valueOf(createEnergyMeterRequestDto.getDeviceType()),
+                createEnergyMeterRequestDto.getDeviceType(),
+                createEnergyMeterRequestDto.getDeviceStatus(),
                 createEnergyMeterRequestDto.getConnectionAddress(),
                 createEnergyMeterRequestDto.getEnergyMeterType(),
                 createEnergyMeterRequestDto.getReferenceVoltage(),

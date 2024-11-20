@@ -13,12 +13,13 @@ import java.util.List;
 @AllArgsConstructor
 public class CreateEnergyMeterRequestDto {
 
-    public CreateEnergyMeterRequestDto(String serialNumber, String deviceType,
+    public CreateEnergyMeterRequestDto(String serialNumber, String deviceType, String deviceStatus,
                                        String connectionAddress, String energyMeterType,
                                        int referenceVoltage, String connectionType,
                                        int maxCurrent, int midApprovalYear) {
         this.serialNumber = serialNumber;
         this.deviceType = deviceType;
+        this.deviceStatus = deviceStatus;
         this.connectionAddress = connectionAddress;
         this.energyMeterType = energyMeterType;
         this.referenceVoltage = referenceVoltage;
@@ -28,21 +29,14 @@ public class CreateEnergyMeterRequestDto {
     }
 
     private String serialNumber;
-
     private String deviceType;
-
+    private String deviceStatus;
     private String connectionAddress;
-
     private String energyMeterType;
-
     private int referenceVoltage;
-
     private String connectionType;
-
     private int maxCurrent;
-
     private int midApprovalYear;
-
     private List<CalibrationScheduleDto> calibrationSchedules;
 
 }

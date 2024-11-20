@@ -1,8 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Setter;
 import lombok.Getter;
 
@@ -25,8 +23,7 @@ public class CalibrationScheduleEntity extends BaseEntity {
 
     private String comments;
 
-    @ManyToOne
-    @JoinColumn(name = "calibration_status_id")
-    private CalibrationStatusEnum calibrationStatus;
+    @Enumerated(EnumType.STRING)
+    private CalibrationStatusEntity calibrationStatus;
 
 }

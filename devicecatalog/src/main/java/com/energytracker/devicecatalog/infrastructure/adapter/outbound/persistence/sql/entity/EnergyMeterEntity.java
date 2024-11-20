@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,17 +20,16 @@ public class EnergyMeterEntity extends DeviceEntity {
     private String connectionAddress;
 
     @NotNull
-    @Column
-    private String energyMeterType;
+    @Enumerated(EnumType.STRING)
+    private EnergyMeterTypeEntity energyMeterType;
 
     @NotNull
     @Column
     private int referenceVoltage;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "connection_type_id", nullable = false)
-    private ConnectionTypeEnum connectionType;
+    @Enumerated(EnumType.STRING)
+    private ConnectionTypeEntity connectionType;
 
     @NotNull
     @Column
@@ -42,29 +40,25 @@ public class EnergyMeterEntity extends DeviceEntity {
     private int midApprovalYear;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "meter_status_id", nullable = false)
-    private EnergyMeterStatusEnum energyMeterStatus;
-
-    @NotNull
-    @OneToMany(mappedBy = "energyMeterEntity")
+    @OneToMany(mappedBy = "energyMeterEntity", fetch = FetchType.EAGER)
     private List<CalibrationScheduleEntity> calibrationSchedules;
 
     public EnergyMeterEntity(
             String serialNumber,
-            DeviceTypeEnum deviceTypeEnum,
+            DeviceTypeEntity deviceTypeEntity,
+            DeviceStatusEntity deviceStatus,
             String connectionAddress,
-            String energyMeterType,
+            EnergyMeterTypeEntity energyMeterType,
             int referenceVoltage,
-            ConnectionTypeEnum connectionTypeEnum,
+            ConnectionTypeEntity connectionType,
             int maxCurrent,
             int midApprovalYear,
             ArrayList<CalibrationScheduleEntity> calibrationSchedules) {
-        super(serialNumber, deviceTypeEnum);
+        super(serialNumber, deviceTypeEntity, deviceStatus);
         this.connectionAddress = connectionAddress;
         this.energyMeterType = energyMeterType;
         this.referenceVoltage = referenceVoltage;
-        this.connectionType = connectionTypeEnum;
+        this.connectionType = connectionType;
         this.maxCurrent = maxCurrent;
         this.midApprovalYear = midApprovalYear;
         this.calibrationSchedules = calibrationSchedules;

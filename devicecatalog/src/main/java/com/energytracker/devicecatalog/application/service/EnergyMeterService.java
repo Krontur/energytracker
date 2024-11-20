@@ -6,8 +6,7 @@ import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
 import com.energytracker.devicecatalog.application.port.inbound.CreateEnergyMeterUseCase;
 import com.energytracker.devicecatalog.application.port.inbound.GetAllEnergyMetersUseCase;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
-import com.energytracker.devicecatalog.domain.model.EnergyMeter;
-import lombok.RequiredArgsConstructor;
+import com.energytracker.devicecatalog.domain.model.EnergyMeter;import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,7 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
 
     @Override
     public List<EnergyMeterResponseDto> getAllEnergyMeters() {
-        return null;
+        return energyMeterRepositoryPort.getAllEnergyMeters();
     };
 
     @Transactional

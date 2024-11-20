@@ -53,6 +53,7 @@ public class EnergyMeterControllerTest {
         CreateEnergyMeterRequestRestDto createEnergyMeterRequestRestDto = new CreateEnergyMeterRequestRestDto(
                 "CD345323367",
                 "ENERGY_METER",
+                "IN_STOCK",
                 "asdk2323lkjasf",
                 "U1289",
                 400,
@@ -65,6 +66,7 @@ public class EnergyMeterControllerTest {
                 1L,
                 createEnergyMeterRequestRestDto.getSerialNumber(),
                 createEnergyMeterRequestRestDto.getDeviceType(),
+                createEnergyMeterRequestRestDto.getDeviceStatus(),
                 createEnergyMeterRequestRestDto.getConnectionAddress(),
                 createEnergyMeterRequestRestDto.getEnergyMeterType(),
                 createEnergyMeterRequestRestDto.getReferenceVoltage(),

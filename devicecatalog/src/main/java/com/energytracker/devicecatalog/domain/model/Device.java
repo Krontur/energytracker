@@ -1,7 +1,6 @@
 package com.energytracker.devicecatalog.domain.model;
 
 
-import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 
 @Getter
@@ -16,8 +15,11 @@ public class Device {
 
     private DeviceType deviceType;
 
-    public Device(String serialNumber, DeviceType deviceType) {
+    private DeviceStatus deviceStatus;
+
+    public Device(String serialNumber, String deviceType, String deviceStatus) {
         this.serialNumber = serialNumber;
-        this.deviceType = deviceType;
+        this.deviceType = DeviceType.valueOf(deviceType);
+        this.deviceStatus = DeviceStatus.valueOf(deviceStatus);
     }
 }

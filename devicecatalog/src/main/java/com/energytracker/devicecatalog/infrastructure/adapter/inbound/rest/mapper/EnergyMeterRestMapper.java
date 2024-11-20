@@ -6,20 +6,20 @@ import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.C
 import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.EnergyMeterResponseRestDto;
 
 public class EnergyMeterRestMapper {
-    public static EnergyMeterResponseRestDto energyMeterResponseDtoToRestDto(EnergyMeterResponseDto createdEnergyMeter) {
+    public static EnergyMeterResponseRestDto energyMeterResponseDtoToRestDto(EnergyMeterResponseDto energyMeterResponseDto) {
 
         return new EnergyMeterResponseRestDto(
-                createdEnergyMeter.getEnergyMeterId(),
-                createdEnergyMeter.getSerialNumber(),
-                createdEnergyMeter.getDeviceType(),
-                createdEnergyMeter.getConnectionAddress(),
-                createdEnergyMeter.getEnergyMeterType(),
-                createdEnergyMeter.getReferenceVoltage(),
-                createdEnergyMeter.getConnectionType(),
-                createdEnergyMeter.getMaxCurrent(),
-                createdEnergyMeter.getMidApprovalYear(),
-                createdEnergyMeter.getCreatedAt(),
-                createdEnergyMeter.getUpdatedAt()
+                energyMeterResponseDto.getEnergyMeterId(),
+                energyMeterResponseDto.getSerialNumber(),
+                energyMeterResponseDto.getDeviceType(),
+                energyMeterResponseDto.getConnectionAddress(),
+                energyMeterResponseDto.getEnergyMeterType(),
+                energyMeterResponseDto.getReferenceVoltage(),
+                energyMeterResponseDto.getConnectionType(),
+                energyMeterResponseDto.getMaxCurrent(),
+                energyMeterResponseDto.getMidApprovalYear(),
+                energyMeterResponseDto.getCreatedAt(),
+                energyMeterResponseDto.getUpdatedAt()
         );
 
     };
@@ -29,6 +29,7 @@ public class EnergyMeterRestMapper {
         return new CreateEnergyMeterRequestDto(
             createEnergyMeterRequestRestDto.getSerialNumber(),
             createEnergyMeterRequestRestDto.getDeviceType(),
+            createEnergyMeterRequestRestDto.getDeviceStatus(),
             createEnergyMeterRequestRestDto.getConnectionAddress(),
             createEnergyMeterRequestRestDto.getEnergyMeterType(),
             createEnergyMeterRequestRestDto.getReferenceVoltage(),
@@ -44,6 +45,7 @@ public class EnergyMeterRestMapper {
         return new CreateEnergyMeterRequestDto(
             createEnergyMeterRequestRestDto.getSerialNumber(),
             createEnergyMeterRequestRestDto.getDeviceType(),
+            createEnergyMeterRequestRestDto.getDeviceStatus(),
             createEnergyMeterRequestRestDto.getConnectionAddress(),
             createEnergyMeterRequestRestDto.getEnergyMeterType(),
             createEnergyMeterRequestRestDto.getReferenceVoltage(),
