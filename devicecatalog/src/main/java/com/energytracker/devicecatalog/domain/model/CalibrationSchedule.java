@@ -9,7 +9,6 @@ public class CalibrationSchedule {
 
     public CalibrationSchedule (EnergyMeter energyMeter, int calibrationFrequencyInYears,
                                 String comments, CalibrationStatus calibrationStatus) {
-        this.energyMeter = energyMeter;
         if(energyMeter.getCalibrationSchedules().isEmpty()) {
             this.lastCalibrationDate = LocalDate.of(energyMeter.getMidApprovalYear(), 1, 1);
         } else {
@@ -24,8 +23,6 @@ public class CalibrationSchedule {
     }
 
     private Long calibrationId;
-
-    private EnergyMeter energyMeter;
 
     private LocalDate nextCalibrationDate;
 

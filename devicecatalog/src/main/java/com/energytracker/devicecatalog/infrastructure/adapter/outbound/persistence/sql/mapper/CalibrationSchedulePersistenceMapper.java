@@ -1,38 +1,33 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleDto;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.dto.CalibrationSchedulePersistenceDto;
+import com.energytracker.devicecatalog.application.dto.CalibrationScheduleRequestDto;
+import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.CalibrationScheduleEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.CalibrationStatusEntity;
 
 public class CalibrationSchedulePersistenceMapper {
 
-    public static CalibrationScheduleDto calibrationScheduleEntityToDto(CalibrationScheduleEntity calibrationScheduleEntity) {
-        return null;
+    public static CalibrationScheduleResponseDto calibrationScheduleEntityToResponseDto(CalibrationScheduleEntity calibrationScheduleEntity) {
+
+        return new CalibrationScheduleResponseDto(
+                calibrationScheduleEntity.getId(),
+                calibrationScheduleEntity.getNextCalibrationDate(),
+                calibrationScheduleEntity.getLastCalibrationDate(),
+                calibrationScheduleEntity.getCalibrationFrequencyInYears(),
+                calibrationScheduleEntity.getComments(),
+                calibrationScheduleEntity.getCalibrationStatus().name()
+        );
+
     }
 
-    public static CalibrationScheduleEntity calibrationScheduleDtoToEntity(CalibrationScheduleDto calibrationScheduleDto) {
-        return null;
-    }
-
-    public static CalibrationSchedulePersistenceDto calibrationScheduleDtoToPersistenceDto(CalibrationScheduleDto calibrationScheduleDto) {
-        return null;
-    }
-
-    public static CalibrationScheduleDto calibrationSchedulePersistenceDtoToDto(CalibrationSchedulePersistenceDto calibrationSchedulePersistenceDto) {
-        return null;
-    }
-
-    public static CalibrationSchedulePersistenceDto calibrationScheduleEntityToPersistenceDto(CalibrationScheduleEntity calibrationSchedule) {
-
-        CalibrationSchedulePersistenceDto calibrationSchedulePersistenceDto = new CalibrationSchedulePersistenceDto();
-        calibrationSchedulePersistenceDto.setId(calibrationSchedule.getId());
-        calibrationSchedulePersistenceDto.setEnergyMeterId(calibrationSchedule.getEnergyMeterEntity().getId());
-        calibrationSchedulePersistenceDto.setNextCalibrationDate(calibrationSchedule.getNextCalibrationDate());
-        calibrationSchedulePersistenceDto.setLastCalibrationDate(calibrationSchedule.getLastCalibrationDate());
-        calibrationSchedulePersistenceDto.setCalibrationFrequency(calibrationSchedule.getCalibrationFrequency());
-        calibrationSchedulePersistenceDto.setComments(calibrationSchedule.getComments());
-        calibrationSchedulePersistenceDto.setCalibrationStatus(calibrationSchedule.getCalibrationStatus().toString());
-        return calibrationSchedulePersistenceDto;
-
+    public static CalibrationScheduleEntity calibrationScheduleRequestDtoToEntity(
+            CalibrationScheduleRequestDto calibrationScheduleRequestDto) {
+        return new CalibrationScheduleEntity(
+                calibrationScheduleRequestDto.getNextCalibrationDate(),
+                calibrationScheduleRequestDto.getLastCalibrationDate(),
+                calibrationScheduleRequestDto.getCalibrationFrequencyInYears(),
+                calibrationScheduleRequestDto.getComments(),
+                CalibrationStatusEntity.valueOf(calibrationScheduleRequestDto.getCalibrationStatus())
+        );
     }
 }

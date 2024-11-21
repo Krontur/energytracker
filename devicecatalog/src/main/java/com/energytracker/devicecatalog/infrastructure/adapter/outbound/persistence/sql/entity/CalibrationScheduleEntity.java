@@ -1,6 +1,8 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.Getter;
 
@@ -9,17 +11,15 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CalibrationScheduleEntity extends BaseEntity {
-
-    @ManyToOne
-    @JoinColumn(name = "energy_meter_id")
-    private EnergyMeterEntity energyMeterEntity;
 
     private LocalDate nextCalibrationDate;
 
     private LocalDate lastCalibrationDate;
 
-    private String calibrationFrequency;
+    private int calibrationFrequencyInYears;
 
     private String comments;
 

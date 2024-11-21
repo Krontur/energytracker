@@ -1,6 +1,5 @@
 package com.energytracker.devicecatalog.domain.model;
 
-import jakarta.persistence.MappedSuperclass;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ public class EnergyMeter extends Device {
             String connectionAddress,
             String energyMeterType,
             int referenceVoltage,
-            ConnectionType connectionType,
+            String connectionType,
             int maxCurrent,
             int midApprovalYear
     ) {
@@ -27,7 +26,7 @@ public class EnergyMeter extends Device {
         this.connectionAddress = connectionAddress;
         this.energyMeterType = EnergyMeterType.valueOf(energyMeterType);
         this.referenceVoltage = referenceVoltage;
-        this.connectionType = connectionType;
+        this.connectionType = ConnectionType.valueOf(connectionType);
         this.maxCurrent = maxCurrent;
         this.midApprovalYear = midApprovalYear;
         this.calibrationSchedules = new ArrayList<CalibrationSchedule>();

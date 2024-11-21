@@ -40,7 +40,8 @@ public class EnergyMeterEntity extends DeviceEntity {
     private int midApprovalYear;
 
     @NotNull
-    @OneToMany(mappedBy = "energyMeterEntity", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
+    @JoinColumn(name = "energy_meter_id")
     private List<CalibrationScheduleEntity> calibrationSchedules;
 
     public EnergyMeterEntity(
@@ -53,7 +54,7 @@ public class EnergyMeterEntity extends DeviceEntity {
             ConnectionTypeEntity connectionType,
             int maxCurrent,
             int midApprovalYear,
-            ArrayList<CalibrationScheduleEntity> calibrationSchedules) {
+            List<CalibrationScheduleEntity> calibrationSchedules) {
         super(serialNumber, deviceTypeEntity, deviceStatus);
         this.connectionAddress = connectionAddress;
         this.energyMeterType = energyMeterType;

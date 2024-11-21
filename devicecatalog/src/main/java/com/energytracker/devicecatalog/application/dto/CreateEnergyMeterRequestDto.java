@@ -37,6 +37,6 @@ public class CreateEnergyMeterRequestDto {
     private String connectionType;
     private int maxCurrent;
     private int midApprovalYear;
-    private List<CalibrationScheduleDto> calibrationSchedules;
+    private List<CalibrationScheduleRequestDto> calibrationSchedules;
 
 }

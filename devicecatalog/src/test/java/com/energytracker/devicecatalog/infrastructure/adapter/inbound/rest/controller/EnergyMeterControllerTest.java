@@ -1,7 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleDto;
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
+import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,7 +54,7 @@ public class EnergyMeterControllerTest {
                 "ENERGY_METER",
                 "IN_STOCK",
                 "asdk2323lkjasf",
-                "U1289",
+                "DIGITAL",
                 400,
                 "LON",
                 100,
@@ -75,7 +74,7 @@ public class EnergyMeterControllerTest {
                 createEnergyMeterRequestRestDto.getMidApprovalYear(),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                new ArrayList<CalibrationScheduleDto>()
+                new ArrayList<CalibrationScheduleResponseDto>()
 
         );
 

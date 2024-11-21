@@ -32,6 +32,10 @@ build/
 ### VS Code ###
 .vscode/
 
+# Docker Compose files
+compose.dev.yaml
+compose.prod.yaml
+
 ### Energy Track Project ###
 /userservice/data/testdb.trace.db
 .env

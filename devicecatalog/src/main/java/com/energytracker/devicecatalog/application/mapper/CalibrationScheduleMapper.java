@@ -1,14 +1,12 @@
 package com.energytracker.devicecatalog.application.mapper;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleDto;
+import com.energytracker.devicecatalog.application.dto.CalibrationScheduleRequestDto;
 import com.energytracker.devicecatalog.domain.model.CalibrationSchedule;
 
 public class CalibrationScheduleMapper {
 
-    public static CalibrationScheduleDto calibrationScheduleDomainToDto(CalibrationSchedule calibrationSchedule) {
-        return new CalibrationScheduleDto(
-                calibrationSchedule.getCalibrationId(),
-                calibrationSchedule.getEnergyMeter().getDeviceId(),
+    public static CalibrationScheduleRequestDto calibrationScheduleRequestDomainToDto(CalibrationSchedule calibrationSchedule) {
+        return new CalibrationScheduleRequestDto(
                 calibrationSchedule.getNextCalibrationDate(),
                 calibrationSchedule.getLastCalibrationDate(),
                 calibrationSchedule.getCalibrationFrequencyInYears(),
