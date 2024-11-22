@@ -3,9 +3,9 @@ package com.energytracker.devicecatalog.application.service;
 import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
-import com.energytracker.devicecatalog.application.port.inbound.CreateEnergyMeterUseCase;
-import com.energytracker.devicecatalog.application.port.inbound.GetAllEnergyMetersUseCase;
+import com.energytracker.devicecatalog.application.port.inbound.*;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
+import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.EnergyMeter;import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +14,8 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEnergyMetersUseCase {
+public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEnergyMetersUseCase,
+        GetEnergyMeterByIdUseCase, DeleteEnergyMeterByIdUseCase, DeactivateEnergyMeterByIdUseCase {
 
     private final EnergyMeterRepositoryPort energyMeterRepositoryPort;
 
@@ -33,5 +34,29 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
 
         return energyMeterRepositoryPort.createEnergyMeter(EnergyMeterMapper.createEnergyMeterRequestDomainToDto(energyMeter));
 
+    }
+
+    @Override
+    public EnergyMeterResponseDto getEnergyMeterById(Long energyMeterId) {
+        return energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
+    }
+
+    public void deleteEnergyMeterById(Long energyMeterId) {
+
+        if(energyMeterRepositoryPort.getEnergyMeterById(energyMeterId) == null) {
+            throw new IllegalArgumentException("Energy Meter with id " + energyMeterId + " not found");
+        }
+        energyMeterRepositoryPort.deleteEnergyMeterById(energyMeterId);
+    }
+
+    @Override
+    public EnergyMeterResponseDto deactivateEnergyMeterById(Long energyMeterId) {
+        EnergyMeterResponseDto energyMeterResponseDto = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
+        EnergyMeter energyMeter = EnergyMeterMapper.energyMeterResponseDtoToDomain(energyMeterResponseDto);
+        if(energyMeter == null) {
+            throw new IllegalArgumentException("Energy Meter with id " + energyMeterId + " not found");
+        }
+        energyMeter.setDeviceStatus(DeviceStatus.DEACTIVATED);
+        return energyMeterRepositoryPort.deactivateEnergyMeterById(EnergyMeterMapper.energyMeterRequestDomainToDto(energyMeter));
     }
 }

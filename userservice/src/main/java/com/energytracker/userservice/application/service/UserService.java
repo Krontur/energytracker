@@ -4,6 +4,7 @@ import com.energytracker.userservice.application.dto.CreateUserRequestDto;
 import com.energytracker.userservice.application.dto.UserResponseDto;
 import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
 import com.energytracker.userservice.application.port.inbound.GetAllUsersUseCase;
+import com.energytracker.userservice.application.port.inbound.GetUserByIdUseCase;
 import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
 import com.energytracker.userservice.domain.model.User;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements CreateUserUseCase, GetAllUsersUseCase {
+public class UserService implements CreateUserUseCase, GetAllUsersUseCase, GetUserByIdUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
 
@@ -33,5 +34,10 @@ public class UserService implements CreateUserUseCase, GetAllUsersUseCase {
 
     public List<UserResponseDto> getAllUsers() {
         return userRepositoryPort.getAllUsers();
+    }
+
+    @Override
+    public UserResponseDto getUserById(Long userId) {
+        return userRepositoryPort.getUserById(userId);
     }
 }

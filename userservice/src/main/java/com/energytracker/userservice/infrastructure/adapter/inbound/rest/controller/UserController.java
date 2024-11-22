@@ -24,6 +24,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponseRestDto> getUserById(@PathVariable Long userId) {
+        UserResponseDto user = userService.getUserById(userId);
+        return new ResponseEntity<>(UserRestMapper.userResponseFromDtoToRestDto(user), HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<UserResponseRestDto>> getAllUsers() {
         List<UserResponseDto> users = userService.getAllUsers();
@@ -33,7 +39,8 @@ public class UserController {
     }
     @PostMapping
     public ResponseEntity<UserResponseRestDto> createUser(@RequestBody CreateUserRequestRestDto createUserRequestRestDto) {
-        UserResponseDto createdUser = userService.createUser(UserRestMapper.createUserRequestFromRestDtoToDto(createUserRequestRestDto));
+        UserResponseDto createdUser = userService.createUser(UserRestMapper.createUserRequestFromRestDtoToDto(
+                createUserRequestRestDto));
         return new ResponseEntity<>(UserRestMapper.userResponseFromDtoToRestDto(createdUser), HttpStatus.CREATED);
     }
 

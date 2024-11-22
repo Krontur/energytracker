@@ -36,7 +36,7 @@ public class UserPersistenceMapperTest {
     }
 
     @Test
-    public void testUserResponseFromEntityToPersistenceDto() {
+    public void testUserResponseFromEntityToDto() {
         UserEntity userEntity = new UserEntity();
         userEntity.setUserAccountId(1L);
         userEntity.setEmail("test@email.com");
@@ -46,65 +46,16 @@ public class UserPersistenceMapperTest {
         userEntity.setIsActive(true);
         userEntity.setProfilePicturePath("profile-picture.jpg");
 
-        UserResponsePersistenceDto userResponsePersistenceDto = UserPersistenceMapper.userResponseFromEntityToPersistenceDto(userEntity);
+        UserResponseDto userResponseDto = UserPersistenceMapper.userResponseEntityToDto(userEntity);
 
-        assertEquals(userEntity.getUserAccountId(), userResponsePersistenceDto.getUserAccountId());
-        assertEquals(userEntity.getEmail(), userResponsePersistenceDto.getEmail());
-        assertEquals(userEntity.getFullName(), userResponsePersistenceDto.getFullName());
-        assertEquals(userEntity.getPassword(), userResponsePersistenceDto.getPassword());
-        assertEquals(userEntity.getRole(), userResponsePersistenceDto.getRole());
-        assertEquals(userEntity.getIsActive(), userResponsePersistenceDto.getIsActive());
-        assertEquals(userEntity.getProfilePicturePath(), userResponsePersistenceDto.getProfilePicturePath());
-
-    }
-
-    @Test
-    public void testUserResponseFromPersistenceDtoToDto() {
-        UserResponsePersistenceDto userResponsePersistenceDto = new UserResponsePersistenceDto(
-                1L,
-                "test@email.com",
-                "Test User",
-                "password",
-                "USER",
-                true,
-                LocalDate.of(2021, 10, 10),
-                LocalDate.of(2021, 10, 10),
-                "profile-picture.jpg"
-        );
-
-        UserResponseDto userResponseDto = UserPersistenceMapper.userResponseFromPersistenceDtoToDto(userResponsePersistenceDto);
-
-        assertEquals(userResponsePersistenceDto.getUserAccountId(), userResponseDto.getUserAccountId());
-        assertEquals(userResponsePersistenceDto.getEmail(), userResponseDto.getEmail());
-        assertEquals(userResponsePersistenceDto.getFullName(), userResponseDto.getFullName());
-        assertEquals(userResponsePersistenceDto.getPassword(), userResponseDto.getPassword());
-        assertEquals(userResponsePersistenceDto.getRole(), userResponseDto.getRole());
-        assertEquals(userResponsePersistenceDto.getIsActive(), userResponseDto.getIsActive());
-        assertEquals(userResponsePersistenceDto.getCreatedDate(), userResponseDto.getCreatedDate());
-        assertEquals(userResponsePersistenceDto.getUpdatedDate(), userResponseDto.getUpdatedDate());
-        assertEquals(userResponsePersistenceDto.getProfilePicturePath(), userResponseDto.getProfilePicturePath());
+        assertEquals(userEntity.getUserAccountId(), userResponseDto.getUserAccountId());
+        assertEquals(userEntity.getEmail(), userResponseDto.getEmail());
+        assertEquals(userEntity.getFullName(), userResponseDto.getFullName());
+        assertEquals(userEntity.getPassword(), userResponseDto.getPassword());
+        assertEquals(userEntity.getRole(), userResponseDto.getRole());
+        assertEquals(userEntity.getIsActive(), userResponseDto.getIsActive());
+        assertEquals(userEntity.getProfilePicturePath(), userResponseDto.getProfilePicturePath());
 
     }
 
-    @Test
-    public void testCreateUserRequestFromDtoToPersistenceDto() {
-        CreateUserRequestDto createUserRequestDto = new CreateUserRequestDto(
-                "email@test.com",
-                "Test User2",
-                "password2",
-                "USER",
-                true,
-                "profile-picture2.jpg"
-        );
-
-        CreateUserRequestPersistenceDto createUserRequestPersistenceDto = UserPersistenceMapper.createUserRequestFromDtoToPersistenceDto(createUserRequestDto);
-
-        assertEquals(createUserRequestDto.getEmail(), createUserRequestPersistenceDto.getEmail());
-        assertEquals(createUserRequestDto.getFullName(), createUserRequestPersistenceDto.getFullName());
-        assertEquals(createUserRequestDto.getPassword(), createUserRequestPersistenceDto.getPassword());
-        assertEquals(createUserRequestDto.getRole(), createUserRequestPersistenceDto.getRole());
-        assertEquals(createUserRequestDto.getIsActive(), createUserRequestPersistenceDto.getIsActive());
-        assertEquals(createUserRequestDto.getProfilePicturePath(), createUserRequestPersistenceDto.getProfilePicturePath());
-
-    }
 }

@@ -18,7 +18,7 @@ public class EnergyMeterPersistenceMapperTest {
     public void testEnergyMeterEntityToResponseDto(){
         EnergyMeterEntity energyMeterEntity = getEnergyMeterEntity();
 
-        EnergyMeterResponseDto energyMeterResponseDto = EnergyMeterPersistenceMapper.energyMeterEntityToResponseDto(energyMeterEntity);
+        EnergyMeterResponseDto energyMeterResponseDto = EnergyMeterPersistenceMapper.energyMeterResponseEntityToDto(energyMeterEntity);
 
         assertEquals(energyMeterEntity.getId(), energyMeterResponseDto.getEnergyMeterId());
         assertEquals(energyMeterEntity.getSerialNumber(), energyMeterResponseDto.getSerialNumber());

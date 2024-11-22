@@ -10,14 +10,14 @@ import java.util.List;
 
 public class EnergyMeterPersistenceMapper {
 
-    public static EnergyMeterResponseDto energyMeterEntityToResponseDto(EnergyMeterEntity energyMeterEntity) {
+    public static EnergyMeterResponseDto energyMeterResponseEntityToDto(EnergyMeterEntity energyMeterEntity) {
 
         List<CalibrationScheduleResponseDto> calibrationScheduleResponseDtoList = new ArrayList<CalibrationScheduleResponseDto>();
 
         if(energyMeterEntity.getCalibrationSchedules() != null && !energyMeterEntity.getCalibrationSchedules().isEmpty()) {
             energyMeterEntity.getCalibrationSchedules().forEach(calibrationSchedule -> {
                 calibrationScheduleResponseDtoList.add(
-                        CalibrationSchedulePersistenceMapper.calibrationScheduleEntityToResponseDto(calibrationSchedule));
+                        CalibrationSchedulePersistenceMapper.calibrationScheduleResponseEntityToDto(calibrationSchedule));
             });
         }
 

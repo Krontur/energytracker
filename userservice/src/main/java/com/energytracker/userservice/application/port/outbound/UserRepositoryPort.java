@@ -14,4 +14,6 @@ public interface UserRepositoryPort {
     UserResponseDto createUser(CreateUserRequestDto createUserRequestDto);
 
     List<UserResponseDto> getAllUsers();
+
+    UserResponseDto getUserById(Long userId);
 }

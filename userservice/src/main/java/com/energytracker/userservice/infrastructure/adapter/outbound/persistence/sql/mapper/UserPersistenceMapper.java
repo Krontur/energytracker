@@ -22,42 +22,17 @@ public class UserPersistenceMapper {
 
     }
 
-    public static CreateUserRequestPersistenceDto createUserRequestFromDtoToPersistenceDto(CreateUserRequestDto createUserRequestDto) {
-        return new CreateUserRequestPersistenceDto(
-                createUserRequestDto.getEmail(),
-                createUserRequestDto.getFullName(),
-                createUserRequestDto.getPassword(),
-                createUserRequestDto.getRole(),
-                createUserRequestDto.getIsActive(),
-                createUserRequestDto.getProfilePicturePath()
-        );
-    }
-
-    public static UserResponsePersistenceDto userResponseFromEntityToPersistenceDto(UserEntity userEntity) {
-        return new UserResponsePersistenceDto(
-                userEntity.getUserAccountId(),
-                userEntity.getEmail(),
-                userEntity.getFullName(),
-                userEntity.getPassword(),
-                userEntity.getRole(),
-                userEntity.getIsActive(),
-                userEntity.getCreatedDate(),
-                userEntity.getUpdatedDate(),
-                userEntity.getProfilePicturePath()
-        );
-    }
-
-    public static UserResponseDto userResponseFromPersistenceDtoToDto(UserResponsePersistenceDto userResponsePersistenceDto) {
+    public static UserResponseDto userResponseEntityToDto(UserEntity user) {
         return new UserResponseDto(
-                userResponsePersistenceDto.getUserAccountId(),
-                userResponsePersistenceDto.getEmail(),
-                userResponsePersistenceDto.getFullName(),
-                userResponsePersistenceDto.getPassword(),
-                userResponsePersistenceDto.getRole(),
-                userResponsePersistenceDto.getIsActive(),
-                userResponsePersistenceDto.getCreatedDate(),
-                userResponsePersistenceDto.getUpdatedDate(),
-                userResponsePersistenceDto.getProfilePicturePath()
+                user.getUserAccountId(),
+                user.getEmail(),
+                user.getFullName(),
+                user.getPassword(),
+                user.getRole(),
+                user.getIsActive(),
+                user.getCreatedDate(),
+                user.getUpdatedDate(),
+                user.getProfilePicturePath()
         );
     }
 }

@@ -1,10 +1,12 @@
 package com.energytracker.devicecatalog.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
 
 @Getter
+@AllArgsConstructor
 public class CalibrationSchedule {
 
     public CalibrationSchedule (EnergyMeter energyMeter, int calibrationFrequencyInYears,

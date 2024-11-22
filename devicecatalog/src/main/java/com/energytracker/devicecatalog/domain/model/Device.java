@@ -17,9 +17,9 @@ public class Device {
 
     private DeviceStatus deviceStatus;
 
-    public Device(String serialNumber, String deviceType, String deviceStatus) {
+    public Device(String serialNumber, DeviceType deviceType, DeviceStatus deviceStatus) {
         this.serialNumber = serialNumber;
-        this.deviceType = DeviceType.valueOf(deviceType);
-        this.deviceStatus = DeviceStatus.valueOf(deviceStatus);
+        this.deviceType = deviceType;
+        this.deviceStatus = deviceStatus;
     }
 }

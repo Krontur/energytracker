@@ -7,7 +7,7 @@ import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persisten
 
 public class CalibrationSchedulePersistenceMapper {
 
-    public static CalibrationScheduleResponseDto calibrationScheduleEntityToResponseDto(CalibrationScheduleEntity calibrationScheduleEntity) {
+    public static CalibrationScheduleResponseDto calibrationScheduleResponseEntityToDto(CalibrationScheduleEntity calibrationScheduleEntity) {
 
         return new CalibrationScheduleResponseDto(
                 calibrationScheduleEntity.getId(),

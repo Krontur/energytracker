@@ -1,5 +1,6 @@
 package com.energytracker.devicecatalog.domain.model;
 
+import com.energytracker.devicecatalog.application.dto.EnergyMeterRequestDto;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -11,22 +12,46 @@ import java.util.List;
 public class EnergyMeter extends Device {
 
     public EnergyMeter(
+            Long deviceId,
             String serialNumber,
-            String deviceType,
-            String deviceStatus,
+            DeviceType deviceType,
+            DeviceStatus deviceStatus,
             String connectionAddress,
-            String energyMeterType,
+            EnergyMeterType energyMeterType,
             int referenceVoltage,
-            String connectionType,
+            ConnectionType connectionType,
+            int maxCurrent,
+            int midApprovalYear,
+            List<CalibrationSchedule> calibrationSchedules
+    ) {
+        super(deviceId, serialNumber, deviceType, deviceStatus);
+
+        this.connectionAddress = connectionAddress;
+        this.energyMeterType = energyMeterType;
+        this.referenceVoltage = referenceVoltage;
+        this.connectionType = connectionType;
+        this.maxCurrent = maxCurrent;
+        this.midApprovalYear = midApprovalYear;
+        this.calibrationSchedules = calibrationSchedules;
+    }
+
+    public EnergyMeter(
+            String serialNumber,
+            DeviceType deviceType,
+            DeviceStatus deviceStatus,
+            String connectionAddress,
+            EnergyMeterType energyMeterType,
+            int referenceVoltage,
+            ConnectionType connectionType,
             int maxCurrent,
             int midApprovalYear
     ) {
         super(serialNumber, deviceType, deviceStatus);
 
         this.connectionAddress = connectionAddress;
-        this.energyMeterType = EnergyMeterType.valueOf(energyMeterType);
+        this.energyMeterType = energyMeterType;
         this.referenceVoltage = referenceVoltage;
-        this.connectionType = ConnectionType.valueOf(connectionType);
+        this.connectionType = connectionType;
         this.maxCurrent = maxCurrent;
         this.midApprovalYear = midApprovalYear;
         this.calibrationSchedules = new ArrayList<CalibrationSchedule>();
@@ -51,6 +76,10 @@ public class EnergyMeter extends Device {
 
     public void addCalibrationSchedule(CalibrationSchedule calibrationSchedule) {
         calibrationSchedules.add(calibrationSchedule);
+    }
+
+    public void deactivate() {
+        this.setDeviceStatus(DeviceStatus.DEACTIVATED);
     }
 
 }
