@@ -7,9 +7,8 @@ import lombok.Setter;
 @Setter
 public class Channel {
 
-    public Channel(int channelNumber, Station station, ChannelDefaultConfig channelDefaultConfig){
+    public Channel(int channelNumber, ChannelDefaultConfig channelDefaultConfig){
         this.channelNumber = channelNumber;
-        this.station = station;
         this.channelName = channelDefaultConfig.getChannelName();
         this.channelMode = channelDefaultConfig.getChannelMode();
         this.channelLongName = channelDefaultConfig.getChannelLongName();
@@ -19,7 +18,7 @@ public class Channel {
         this.iRatio = channelDefaultConfig.getIRatio();
         this.pFactor = uRatio * iRatio;
         this.lonSubChannel = channelDefaultConfig.getLonSubChannel();
-        this.lonStop = channelDefaultConfig.getLonStop();
+        this.lonIsActive = channelDefaultConfig.getLonIsActive();
     }
 
     public Channel(
@@ -33,9 +32,8 @@ public class Channel {
             int uRatio,
             int iRatio,
             int lonSubChannel,
-            Boolean lonStop ){
+            Boolean lonIsActive ){
         this.channelNumber = channelNumber;
-        this.station = station;
         this.channelName = channelName;
         this.channelMode = channelMode;
         this.channelLongName = channelLongName;
@@ -45,10 +43,8 @@ public class Channel {
         this.iRatio = iRatio;
         this.pFactor = uRatio * iRatio;
         this.lonSubChannel = lonSubChannel;
-        this.lonStop = lonStop;
+        this.lonIsActive = lonIsActive;
     }
-
-    private Station station;
 
     private Long channelId;
 
@@ -72,5 +68,5 @@ public class Channel {
 
     private int lonSubChannel;
 
-    private Boolean lonStop;
+    private Boolean lonIsActive;
 }

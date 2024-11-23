@@ -16,4 +16,9 @@ public interface StationRepositoryPort {
 
     List<StationResponseDto> getAllStations();
 
+    StationResponseDto getStationById(Long stationId);
+
+    void deleteStationById(Long stationId);
+
+    StationResponseDto deactivateStationById(Long stationId);
 }

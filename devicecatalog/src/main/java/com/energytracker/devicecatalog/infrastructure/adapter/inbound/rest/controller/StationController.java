@@ -25,25 +25,39 @@ public class StationController {
     }
 
     @PostMapping
-    public ResponseEntity<StationResponseRestDto> createStation(
-            @RequestBody CreateRequestStationRestDto createRequestStationRestDto) {
-        CreateStationRequestDto createStationRequestDto =
-                StationRestMapper.createRequestStationRestDtoToDto(createRequestStationRestDto);
+    public ResponseEntity<StationResponseDto> createStation(
+            @RequestBody CreateStationRequestDto createStationRequestDto) {
         StationResponseDto createdStation = null;
         if (createStationRequestDto != null) {
             createdStation = stationService.createStation(createStationRequestDto);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(StationRestMapper.stationResponseDtoToRestDto(createdStation), HttpStatus.CREATED);
+        return new ResponseEntity<>(createdStation, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<StationResponseRestDto>> getAllStations() {
+    public ResponseEntity<List<StationResponseDto>> getAllStations() {
         List<StationResponseDto> stations = stationService.getAllStations();
-        List<StationResponseRestDto> stationResponseRestDtos = new ArrayList<StationResponseRestDto>();
-        stations.forEach(station -> stationResponseRestDtos.add(StationRestMapper.stationResponseDtoToRestDto(station)));
-        return new ResponseEntity<>(stationResponseRestDtos, HttpStatus.OK);
+        List<StationResponseDto> stationResponseDtos = new ArrayList<StationResponseDto>(stations);
+        return new ResponseEntity<>(stationResponseDtos, HttpStatus.OK);
+    }
+
+    @GetMapping("/{stationId}")
+    public ResponseEntity<StationResponseDto> getStationById(@PathVariable Long stationId) {
+        StationResponseDto station = stationService.getStationById(stationId);
+        return new ResponseEntity<>(station, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{stationId}")
+    public ResponseEntity<Void> deleteStationById(@PathVariable Long stationId) {
+        stationService.deleteStationById(stationId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/{stationId}/deactivate")
+    public ResponseEntity<StationResponseDto> deactivateStation(@PathVariable Long stationId) {
+        return new ResponseEntity<>(stationService.deactivateStationById(stationId), HttpStatus.OK);
     }
 
 }

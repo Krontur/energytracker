@@ -10,29 +10,60 @@ import java.util.List;
 @Setter
 public class Station extends Device{
 
-    public Station(Long id, String name){
-        this.setDeviceId(id);
+    public Station(
+            Long deviceId,
+            String serialNumber,
+            DeviceType deviceType,
+            DeviceStatus deviceStatus,
+            String stationName,
+            String stationType,
+            String stationTag,
+            int readingIntervalInSeconds
+    ) {
+        super(deviceId, serialNumber, deviceType, deviceStatus);
+
+        this.stationName = stationName;
+        this.stationType = stationType;
+        this.stationTag = stationTag;
+        this.readingIntervalInSeconds = readingIntervalInSeconds;
     }
+
+    public Station(
+            String serialNumber,
+            DeviceType deviceType,
+            DeviceStatus deviceStatus,
+            String stationName,
+            String stationType,
+            String stationTag,
+            int readingIntervalInSeconds
+    ) {
+        super(serialNumber, deviceType, deviceStatus);
+
+        this.stationName = stationName;
+        this.stationType = stationType;
+        this.stationTag = stationTag;
+        this.readingIntervalInSeconds = readingIntervalInSeconds;
+        initializeDefaultChannels(64);
+    };
 
     private String stationName;
 
-    private String stationTyp;
+    private String stationType;
 
     private String stationTag;
 
-    private int intervalSeconds;
+    private int readingIntervalInSeconds;
 
     List<Channel> channels = new ArrayList<>();
 
-    public void addChannel(Channel channel) {
-        channel.setStation(this);
+    private void addChannel(Channel channel) {
         channels.add(channel);
     }
 
-    public void initializeDefaultChannels(int numberOfChannels) {
+    private void initializeDefaultChannels(int numberOfChannels) {
         ChannelDefaultConfig channelDefaultConfig = new ChannelDefaultConfig();
         for(int i = 1; i <= numberOfChannels; i++) {
-            Channel channel = new Channel(i, this, channelDefaultConfig);
+            Channel channel = new Channel(i, channelDefaultConfig);
             addChannel(channel);
         }
     }
