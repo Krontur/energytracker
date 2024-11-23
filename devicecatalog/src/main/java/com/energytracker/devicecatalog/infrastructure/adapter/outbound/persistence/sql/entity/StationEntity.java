@@ -15,12 +15,13 @@ public class StationEntity extends DeviceEntity {
 
     public StationEntity(String serialNumber, DeviceTypeEntity deviceTypeEntity,
                          DeviceStatusEntity deviceStatus, String stationName, String stationType,
-                         int readingIntervalInSeconds, String stationTag) {
+                         int readingIntervalInSeconds, String stationTag, List<ChannelEntity> channelList) {
         super(serialNumber, deviceTypeEntity, deviceStatus);
         this.stationName = stationName;
         this.stationType = stationType;
         this.readingIntervalInSeconds = readingIntervalInSeconds;
         this.stationTag = stationTag;
+        this.channelList = channelList;
     }
 
     public StationEntity() {

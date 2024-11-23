@@ -7,6 +7,7 @@ import com.energytracker.devicecatalog.application.port.inbound.*;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
 import com.energytracker.devicecatalog.application.mapper.StationMapper;
 import com.energytracker.devicecatalog.domain.model.Station;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
     private final StationRepositoryPort stationRepositoryPort;
 
     @Override
+    @Transactional
     public StationResponseDto createStation(CreateStationRequestDto createStationRequestDto) {
         Station station = StationMapper.createStationRequestDtoToDomain(createStationRequestDto);
         if (stationRepositoryPort.existsBySerialNumber(createStationRequestDto.getSerialNumber())) {

@@ -5,11 +5,14 @@ import com.energytracker.devicecatalog.domain.model.PowerUnit;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChannelEntity extends BaseEntity {
 
     private String channelName;
@@ -34,4 +37,20 @@ public class ChannelEntity extends BaseEntity {
 
     private Boolean lonIsActive;
 
+    public ChannelEntity(int channelNumber, String channelName, int channelMode,
+                         String channelLongName, String energyUnit, String powerUnit,
+                         int uRatio, int iRatio, int pFactor, int lonSubChannel, Boolean lonIsActive) {
+        this.channelNumber = channelNumber;
+        this.channelName = channelName;
+        this.channelMode = channelMode;
+        this.channelLongName = channelLongName;
+        this.energyUnit = EnergyUnit.valueOf(energyUnit);
+        this.powerUnit = PowerUnit.valueOf(powerUnit);
+        this.uRatio = uRatio;
+        this.iRatio = iRatio;
+        this.pFactor = pFactor;
+        this.lonSubChannel = lonSubChannel;
+        this.lonIsActive = lonIsActive;
+
+    }
 }

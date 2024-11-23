@@ -23,7 +23,6 @@ public class Channel {
 
     public Channel(
             int channelNumber,
-            Station station,
             String channelName,
             int channelMode,
             String channelLongName,

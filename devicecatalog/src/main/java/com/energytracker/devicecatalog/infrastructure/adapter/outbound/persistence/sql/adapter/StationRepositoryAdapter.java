@@ -3,14 +3,21 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceStatusEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.StationEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.StationPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaStationPort;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
+@AllArgsConstructor
 public class StationRepositoryAdapter implements StationRepositoryPort {
 
     private JpaStationPort jpaStationPort;
@@ -29,21 +36,35 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
 
     @Override
     public List<StationResponseDto> getAllStations() {
-        return List.of();
+        List<StationEntity> stationEntityList = jpaStationPort.findAll();
+        List<StationResponseDto> stationResponseDtoList = new ArrayList<StationResponseDto>();
+        stationEntityList.forEach(stationEntity -> {
+            stationResponseDtoList.add(StationPersistenceMapper.stationResponseEntityToDto(stationEntity));
+        });
+        return stationResponseDtoList;
     }
 
     @Override
     public StationResponseDto getStationById(Long stationId) {
-        return null;
+        Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
+        if (stationEntity.isEmpty()) {
+            return null;
+        }
+        return StationPersistenceMapper.stationResponseEntityToDto(stationEntity.get());
     }
 
     @Override
     public void deleteStationById(Long stationId) {
-
+        jpaStationPort.deleteById(stationId);
     }
 
     @Override
     public StationResponseDto deactivateStationById(Long stationId) {
-        return null;
+        Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
+        if (stationEntity.isEmpty()) {
+            return null;
+        }
+        stationEntity.get().setDeviceStatus(DeviceStatusEntity.DEACTIVATED);
+        return StationPersistenceMapper.stationResponseEntityToDto(jpaStationPort.save(stationEntity.get()));
     }
 }

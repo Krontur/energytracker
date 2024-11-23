@@ -20,7 +20,7 @@ public class ChannelRequestDto {
     private int iRatio;
     private int pFactor;
     private int lonSubChannel;
-    private boolean lonIsActive;
+    private Boolean lonIsActive;
 
 
 }

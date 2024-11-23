@@ -3,14 +3,10 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.service.StationService;
-import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.CreateRequestStationRestDto;
-import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.dto.StationResponseRestDto;
-import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.mapper.StationRestMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -39,13 +35,18 @@ public class StationController {
     @GetMapping
     public ResponseEntity<List<StationResponseDto>> getAllStations() {
         List<StationResponseDto> stations = stationService.getAllStations();
-        List<StationResponseDto> stationResponseDtos = new ArrayList<StationResponseDto>(stations);
-        return new ResponseEntity<>(stationResponseDtos, HttpStatus.OK);
+        if (stations.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(stations, HttpStatus.OK);
     }
 
     @GetMapping("/{stationId}")
     public ResponseEntity<StationResponseDto> getStationById(@PathVariable Long stationId) {
         StationResponseDto station = stationService.getStationById(stationId);
+        if (station == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(station, HttpStatus.OK);
     }
 
@@ -57,6 +58,10 @@ public class StationController {
 
     @PutMapping("/{stationId}/deactivate")
     public ResponseEntity<StationResponseDto> deactivateStation(@PathVariable Long stationId) {
+        StationResponseDto station = stationService.deactivateStationById(stationId);
+        if (station == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(stationService.deactivateStationById(stationId), HttpStatus.OK);
     }
 
