@@ -1,28 +1,23 @@
 package com.energytracker.devicecatalog.application.port.outbound;
 
-
-import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationResponseDto;
-import org.springframework.stereotype.Component;
+import com.energytracker.devicecatalog.domain.model.Channel;
+import com.energytracker.devicecatalog.domain.model.Station;
 
 import java.util.List;
 
-@Component
 public interface StationRepositoryPort {
 
     boolean existsBySerialNumber(String serialNumber);
 
-    StationResponseDto createStation(CreateStationRequestDto createStationRequestDto);
+    Station createStation(Station station);
 
-    List<StationResponseDto> getAllStations();
+    List<Station> getAllStations();
 
-    StationResponseDto getStationById(Long stationId);
+    Station getStationById(Long stationId);
 
     void deleteStationById(Long stationId);
 
-    StationResponseDto deactivateStationById(StationRequestDto stationRequestDto);
+    List<Channel> getChannelsByStationId(Long stationId);
 
-    List<ChannelResponseDto> getChannelsByStationId(Long stationId);
+    Station save(Station station);
 }

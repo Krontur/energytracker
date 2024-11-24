@@ -236,7 +236,7 @@ public class EnergyMeterControllerTest {
 
         when(energyMeterService.deactivateEnergyMeterById(1L)).thenReturn(energyMeterResponseDto);
 
-        mockMvc.perform(put("/api/v1/meters/1/deactivate")
+        mockMvc.perform(post("/api/v1/meters/1/deactivate")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(energyMeterResponseDto)))
                         .andExpect(status().isOk())

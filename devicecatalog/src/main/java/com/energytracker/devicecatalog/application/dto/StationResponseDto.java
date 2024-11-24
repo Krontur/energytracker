@@ -14,6 +14,28 @@ import java.util.List;
 @NoArgsConstructor
 public class StationResponseDto {
 
+    public StationResponseDto(
+            Long stationId,
+            String serialNumber,
+            String deviceType,
+            String deviceStatus,
+            String stationName,
+            String stationType,
+            int readingIntervalInSeconds,
+            String stationTag,
+            List<ChannelResponseDto> channelList
+    ) {
+        this.stationId = stationId;
+        this.serialNumber = serialNumber;
+        this.deviceType = deviceType;
+        this.deviceStatus = deviceStatus;
+        this.stationName = stationName;
+        this.stationType = stationType;
+        this.readingIntervalInSeconds = readingIntervalInSeconds;
+        this.stationTag = stationTag;
+        this.channelList = channelList;
+    }
+
     private Long stationId;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

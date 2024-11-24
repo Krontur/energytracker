@@ -199,7 +199,7 @@ public class StationControllerTest {
 
         when(stationService.deactivateStationById(1L)).thenReturn(stationResponseDto);
 
-        mockMvc.perform(put("/api/v1/stations/1/deactivate")
+        mockMvc.perform(post("/api/v1/stations/1/deactivate")
                 .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.stationId").value(stationResponseDto.getStationId()))

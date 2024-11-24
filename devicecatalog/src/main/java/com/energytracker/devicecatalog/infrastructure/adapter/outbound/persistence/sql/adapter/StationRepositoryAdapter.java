@@ -1,25 +1,22 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.adapter;
 
-import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceStatusEntity;
+import com.energytracker.devicecatalog.domain.model.Channel;
+import com.energytracker.devicecatalog.domain.model.Station;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.StationEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.ChannelPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.StationPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaStationPort;
+import jakarta.transaction.Transactional;
+import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Repository
 @AllArgsConstructor
 public class StationRepositoryAdapter implements StationRepositoryPort {
 
@@ -31,29 +28,28 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
     }
 
     @Override
-    public StationResponseDto createStation(CreateStationRequestDto createStationRequestDto) {
-        StationEntity stationEntity = StationPersistenceMapper.createStationRequestDtoToEntity(createStationRequestDto);
-        StationResponseDto stationResponseDto = StationPersistenceMapper.stationResponseEntityToDto(jpaStationPort.save(stationEntity));
-        return stationResponseDto;
+    public Station createStation(Station station) {
+        StationEntity stationEntity = StationPersistenceMapper.stationToEntity(station);
+        return StationPersistenceMapper.stationResponseEntityToDomain(jpaStationPort.save(stationEntity));
     }
 
     @Override
-    public List<StationResponseDto> getAllStations() {
+    public List<Station> getAllStations() {
         List<StationEntity> stationEntityList = jpaStationPort.findAll();
-        List<StationResponseDto> stationResponseDtoList = new ArrayList<StationResponseDto>();
+        List<Station> stationResponseList = new ArrayList<Station>();
         stationEntityList.forEach(stationEntity -> {
-            stationResponseDtoList.add(StationPersistenceMapper.stationResponseEntityToDto(stationEntity));
+            stationResponseList.add(StationPersistenceMapper.stationResponseEntityToDomain(stationEntity));
         });
-        return stationResponseDtoList;
+        return stationResponseList;
     }
 
     @Override
-    public StationResponseDto getStationById(Long stationId) {
+    public Station getStationById(Long stationId) {
         Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
         if (stationEntity.isEmpty()) {
-            return null;
+            throw new NotFoundException("Station not found");
         }
-        return StationPersistenceMapper.stationResponseEntityToDto(stationEntity.get());
+        return StationPersistenceMapper.stationResponseEntityToDomain(stationEntity.get());
     }
 
     @Override
@@ -62,24 +58,21 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
     }
 
     @Override
-    public StationResponseDto deactivateStationById(StationRequestDto stationRequestDto) {
-        StationEntity stationEntity = StationPersistenceMapper.stationRequestDtoToEntity(stationRequestDto);
-        if (stationEntity == null) {
-            throw new IllegalArgumentException("Station with id " + stationRequestDto.getStationId() + " not found");
+    public List<Channel> getChannelsByStationId(Long stationId) {
+        Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
+        if (stationEntity.isEmpty()) {
+            throw new NotFoundException("Station not found");
         }
-        return StationPersistenceMapper.stationResponseEntityToDto(jpaStationPort.save(stationEntity));
+        List<Channel> channelList = new ArrayList<Channel>();
+        stationEntity.get().getChannelList().forEach(channelEntity -> {
+                channelList.add(ChannelPersistenceMapper.channelEntityToDomain(channelEntity));
+                });
+        return channelList;
     }
 
     @Override
-    public List<ChannelResponseDto> getChannelsByStationId(Long stationId) {
-        Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
-        if (stationEntity.isEmpty()) {
-            return null;
-        }
-        List<ChannelResponseDto> channelResponseDtoList = new ArrayList<ChannelResponseDto>();
-        stationEntity.get().getChannelList().forEach(channelEntity -> {
-                    channelResponseDtoList.add(ChannelPersistenceMapper.channelEntityToDto(channelEntity));
-                });
-        return channelResponseDtoList;
+    public Station save(Station station) {
+        StationEntity stationEntity = jpaStationPort.save(StationPersistenceMapper.stationToEntity(station));
+        return StationPersistenceMapper.stationResponseEntityToDomain(stationEntity);
     }
 }

@@ -2,6 +2,7 @@ package com.energytracker.devicecatalog.application.mapper;
 
 import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
+import com.energytracker.devicecatalog.domain.model.Channel;
 import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.DeviceType;
 import com.energytracker.devicecatalog.domain.model.Station;
@@ -37,7 +38,8 @@ public class StationMapperTest {
                 "Station 1",
                 "U1601",
                 "A2",
-                90
+                90,
+                new ArrayList<Channel>()
         );
 
     }

@@ -11,7 +11,7 @@ public class ChannelDefaultConfig {
 
     private int channelMode = 0;
 
-    private EnergyUnit energyUnit = EnergyUnit.KWh;
+    private EnergyUnit energyUnit = EnergyUnit.KWH;
 
     private PowerUnit powerUnit = PowerUnit.KW;
 

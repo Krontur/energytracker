@@ -23,9 +23,9 @@ public class ChannelEntity extends BaseEntity {
 
     private String channelLongName;
 
-    private EnergyUnit energyUnit;
+    private EnergyUnitEntity energyUnit;
 
-    private PowerUnit powerUnit;
+    private PowerUnitEntity powerUnit;
 
     private int uRatio;
 
@@ -44,8 +44,8 @@ public class ChannelEntity extends BaseEntity {
         this.channelName = channelName;
         this.channelMode = channelMode;
         this.channelLongName = channelLongName;
-        this.energyUnit = EnergyUnit.valueOf(energyUnit);
-        this.powerUnit = PowerUnit.valueOf(powerUnit);
+        this.energyUnit = EnergyUnitEntity.valueOf(energyUnit);
+        this.powerUnit = PowerUnitEntity.valueOf(powerUnit);
         this.uRatio = uRatio;
         this.iRatio = iRatio;
         this.pFactor = pFactor;

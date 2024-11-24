@@ -3,12 +3,16 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Getter
 @Setter
+@NoArgsConstructor
 public class DeviceEntity extends BaseEntity {
 
     @NotNull
@@ -29,7 +33,17 @@ public class DeviceEntity extends BaseEntity {
         this.deviceStatus = deviceStatus;
     }
 
-    public DeviceEntity() {
-
+    public DeviceEntity(
+            Long deviceId,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            String serialNumber,
+            DeviceTypeEntity deviceTypeEntity,
+            DeviceStatusEntity deviceStatus
+    ) {
+        super(deviceId, createdAt, updatedAt);
+        this.serialNumber = serialNumber;
+        this.deviceType = deviceTypeEntity;
+        this.deviceStatus = deviceStatus;
     }
 }

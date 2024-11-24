@@ -1,10 +1,12 @@
 package com.energytracker.devicecatalog.domain.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Channel {
 
     public Channel(int channelNumber, ChannelDefaultConfig channelDefaultConfig){

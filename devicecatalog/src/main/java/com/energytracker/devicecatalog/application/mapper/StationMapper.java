@@ -1,6 +1,7 @@
 package com.energytracker.devicecatalog.application.mapper;
 
 import com.energytracker.devicecatalog.application.dto.*;
+import com.energytracker.devicecatalog.domain.model.Channel;
 import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.DeviceType;
 import com.energytracker.devicecatalog.domain.model.Station;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class StationMapper {
     public static CreateStationRequestDto createRequestStationDomainToDto(Station station) {
-        List<ChannelRequestDto> channelRequestDtos = station.getChannels().stream()
+        List<ChannelRequestDto> channelRequestDtos = station.getChannelList().stream()
                 .map(channel -> new ChannelRequestDto(channel.getChannelName(), channel.getChannelNumber(),
                         channel.getChannelMode(), channel.getChannelLongName(), channel.getEnergyUnit().name(),
                         channel.getPowerUnit().name(), channel.getURatio(), channel.getIRatio(), channel.getPFactor(),
@@ -59,13 +60,13 @@ public class StationMapper {
 
 
     public static StationRequestDto stationRequestDomainToDto(Station station) {
-        List<ChannelRequestDto> channelRequestDtos = station.getChannels().stream()
+        List<ChannelRequestDto> channelRequestDtos = station.getChannelList().stream()
                 .map(channel -> new ChannelRequestDto(channel.getChannelName(), channel.getChannelNumber(),
                         channel.getChannelMode(), channel.getChannelLongName(), channel.getEnergyUnit().name(),
                         channel.getPowerUnit().name(), channel.getURatio(), channel.getIRatio(), channel.getPFactor(),
                         channel.getLonSubChannel(), channel.getLonIsActive()))
                 .collect(Collectors.toList());
-        StationRequestDto stationResponseDto = new StationRequestDto(
+        StationRequestDto stationRequestDto = new StationRequestDto(
                 station.getDeviceId(),
                 station.getSerialNumber(),
                 station.getDeviceType().name(),
@@ -76,7 +77,48 @@ public class StationMapper {
                 station.getStationTag(),
                 channelRequestDtos
         );
+        System.out.println("StationMapper.stationRequestDomainToDto: " + stationRequestDto);
+        return stationRequestDto;
+    }
+
+    public static StationResponseDto stationResponseDomainToDto(Station station) {
+        List<ChannelResponseDto> channelResponseDtos = station.getChannelList().stream()
+                .map(channel -> new ChannelResponseDto(channel.getChannelId(), channel.getChannelName(), channel.getChannelNumber(),
+                        channel.getChannelMode(), channel.getChannelLongName(), channel.getEnergyUnit().name(),
+                        channel.getPowerUnit().name(), channel.getURatio(), channel.getIRatio(), channel.getPFactor(),
+                        channel.getLonSubChannel(), channel.getLonIsActive()))
+                .collect(Collectors.toList());
+        StationResponseDto stationResponseDto = new StationResponseDto(
+                station.getDeviceId(),
+                station.getCreatedAt(),
+                station.getUpdatedAt(),
+                station.getSerialNumber(),
+                station.getDeviceType().name(),
+                station.getDeviceStatus().name(),
+                station.getStationName(),
+                station.getStationType(),
+                station.getReadingIntervalInSeconds(),
+                station.getStationTag(),
+                channelResponseDtos
+        );
         System.out.println("StationMapper.stationRequestDomainToDto: " + stationResponseDto);
         return stationResponseDto;
+    }
+
+    public static ChannelResponseDto channelDomainToDto(Channel channel) {
+        return new ChannelResponseDto(
+                channel.getChannelId(),
+                channel.getChannelName(),
+                channel.getChannelNumber(),
+                channel.getChannelMode(),
+                channel.getChannelLongName(),
+                channel.getEnergyUnit().name(),
+                channel.getPowerUnit().name(),
+                channel.getURatio(),
+                channel.getIRatio(),
+                channel.getPFactor(),
+                channel.getLonSubChannel(),
+                channel.getLonIsActive()
+        );
     }
 }

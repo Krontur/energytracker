@@ -3,6 +3,8 @@ package com.energytracker.devicecatalog.domain.model;
 
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,11 +15,22 @@ public class Device {
 
     private String serialNumber;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
     private DeviceType deviceType;
 
     private DeviceStatus deviceStatus;
 
     public Device(String serialNumber, DeviceType deviceType, DeviceStatus deviceStatus) {
+        this.serialNumber = serialNumber;
+        this.deviceType = deviceType;
+        this.deviceStatus = deviceStatus;
+    }
+
+    public Device(Long deviceId, String serialNumber, DeviceType deviceType, DeviceStatus deviceStatus) {
+        this.deviceId = deviceId;
         this.serialNumber = serialNumber;
         this.deviceType = deviceType;
         this.deviceStatus = deviceStatus;

@@ -1,13 +1,17 @@
 package com.energytracker.devicecatalog.domain.model;
 
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
+@AllArgsConstructor
 public class Station extends Device{
 
     public Station(
@@ -18,7 +22,8 @@ public class Station extends Device{
             String stationName,
             String stationType,
             String stationTag,
-            int readingIntervalInSeconds
+            int readingIntervalInSeconds,
+            List<Channel> channelList
     ) {
         super(deviceId, serialNumber, deviceType, deviceStatus);
 
@@ -26,6 +31,29 @@ public class Station extends Device{
         this.stationType = stationType;
         this.stationTag = stationTag;
         this.readingIntervalInSeconds = readingIntervalInSeconds;
+        this.channelList = channelList;
+    }
+
+    public Station(
+            Long deviceId,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            String serialNumber,
+            DeviceType deviceType,
+            DeviceStatus deviceStatus,
+            String stationName,
+            String stationType,
+            String stationTag,
+            int readingIntervalInSeconds,
+            List<Channel> channelList
+    ) {
+        super(deviceId, serialNumber, createdAt, updatedAt, deviceType, deviceStatus);
+
+        this.stationName = stationName;
+        this.stationType = stationType;
+        this.stationTag = stationTag;
+        this.readingIntervalInSeconds = readingIntervalInSeconds;
+        this.channelList = channelList;
     }
 
     public Station(
@@ -54,10 +82,11 @@ public class Station extends Device{
 
     private int readingIntervalInSeconds;
 
-    List<Channel> channels = new ArrayList<>();
+    List<Channel> channelList = new ArrayList<>();
+
 
     private void addChannel(Channel channel) {
-        channels.add(channel);
+        channelList.add(channel);
     }
 
     private void initializeDefaultChannels(int numberOfChannels) {

@@ -2,7 +2,7 @@
 GET http://localhost:8088/api/v1/stations
 
 ### Get station by id ###
-GET http://localhost:8088/api/v1/stations/10
+GET http://localhost:8088/api/v1/stations/148
 
 ### Create station ###
 POST http://localhost:8088/api/v1/stations
@@ -19,4 +19,10 @@ Content-Type: application/json
 }
 
 ### Get Channels by station id ###
-GET http://localhost:8088/api/v1/stations/10/channels
+GET http://localhost:8088/api/v1/stations/148/channels
+
+### Deactivate station by id ###
+POST http://localhost:8088/api/v1/stations/148/deactivate
+
+### Delete station by id ###
+DELETE http://localhost:8088/api/v1/stations/148

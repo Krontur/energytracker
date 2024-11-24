@@ -4,10 +4,8 @@ import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.ChannelEntity;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceStatusEntity;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceTypeEntity;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.StationEntity;
+import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +115,79 @@ public class StationPersistenceMapper {
                 stationRequestDto.getReadingIntervalInSeconds(),
                 stationRequestDto.getStationTag(),
                 channelEntityList
+        );
+    }
+
+    public static StationEntity stationToEntity(Station station) {
+        List<ChannelEntity> channelEntityList = new ArrayList<ChannelEntity>();
+        station.getChannelList().forEach(
+                channel -> {
+                    channelEntityList.add(
+                            new ChannelEntity(
+                                    channel.getChannelNumber(),
+                                    channel.getChannelName(),
+                                    channel.getChannelMode(),
+                                    channel.getChannelLongName(),
+                                    channel.getEnergyUnit().name(),
+                                    channel.getPowerUnit().name(),
+                                    channel.getURatio(),
+                                    channel.getIRatio(),
+                                    channel.getPFactor(),
+                                    channel.getLonSubChannel(),
+                                    channel.getLonIsActive()
+                            )
+                    );
+                }
+        );
+        return new StationEntity(
+                station.getDeviceId(),
+                station.getCreatedAt(),
+                station.getUpdatedAt(),
+                station.getSerialNumber(),
+                DeviceTypeEntity.valueOf(station.getDeviceType().name()),
+                DeviceStatusEntity.valueOf(station.getDeviceStatus().name()),
+                station.getStationName(),
+                station.getStationType(),
+                station.getReadingIntervalInSeconds(),
+                station.getStationTag(),
+                channelEntityList
+        );
+    }
+
+    public static Station stationResponseEntityToDomain(StationEntity stationEntity) {
+        List<Channel> channelList = new ArrayList<Channel>();
+        stationEntity.getChannelList().forEach(
+                channelEntity -> {
+                    channelList.add(
+                            new Channel(
+                                    channelEntity.getId(),
+                                    channelEntity.getChannelName(),
+                                    channelEntity.getChannelNumber(),
+                                    channelEntity.getChannelMode(),
+                                    channelEntity.getChannelLongName(),
+                                    EnergyUnit.valueOf(channelEntity.getEnergyUnit().name()),
+                                    PowerUnit.valueOf(channelEntity.getPowerUnit().name()),
+                                    channelEntity.getURatio(),
+                                    channelEntity.getIRatio(),
+                                    channelEntity.getPFactor(),
+                                    channelEntity.getLonSubChannel(),
+                                    channelEntity.getLonIsActive()
+                            )
+                    );
+                }
+        );
+        return new Station(
+                stationEntity.getId(),
+                stationEntity.getCreatedAt(),
+                stationEntity.getUpdatedAt(),
+                stationEntity.getSerialNumber(),
+                DeviceType.valueOf(stationEntity.getDeviceType().name()),
+                DeviceStatus.valueOf(stationEntity.getDeviceStatus().name()),
+                stationEntity.getStationName(),
+                stationEntity.getStationType(),
+                stationEntity.getStationTag(),
+                stationEntity.getReadingIntervalInSeconds(),
+                channelList
         );
     }
 }

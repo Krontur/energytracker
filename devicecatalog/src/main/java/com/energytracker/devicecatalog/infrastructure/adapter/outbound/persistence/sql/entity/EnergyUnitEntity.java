@@ -3,6 +3,5 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 public enum EnergyUnitEntity {
     WH,
     KWH,
-    MWH,
-    GWH;
+    MWH;
 }

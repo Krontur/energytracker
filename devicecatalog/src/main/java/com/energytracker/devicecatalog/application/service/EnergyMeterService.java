@@ -6,7 +6,9 @@ import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
 import com.energytracker.devicecatalog.application.port.inbound.*;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
 import com.energytracker.devicecatalog.domain.model.DeviceStatus;
-import com.energytracker.devicecatalog.domain.model.EnergyMeter;import lombok.RequiredArgsConstructor;
+import com.energytracker.devicecatalog.domain.model.EnergyMeter;
+import jakarta.ws.rs.NotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +46,7 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
     public void deleteEnergyMeterById(Long energyMeterId) {
 
         if(energyMeterRepositoryPort.getEnergyMeterById(energyMeterId) == null) {
-            throw new IllegalArgumentException("Energy Meter with id " + energyMeterId + " not found");
+            throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
         }
         energyMeterRepositoryPort.deleteEnergyMeterById(energyMeterId);
     }
@@ -54,7 +56,7 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
         EnergyMeterResponseDto energyMeterResponseDto = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
         EnergyMeter energyMeter = EnergyMeterMapper.energyMeterResponseDtoToDomain(energyMeterResponseDto);
         if(energyMeter == null) {
-            throw new IllegalArgumentException("Energy Meter with id " + energyMeterId + " not found");
+            throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
         }
         energyMeter.deactivate();
         System.out.println("EnergyMeterService.deactivateEnergyMeterById: " + energyMeter.getDeviceStatus());
