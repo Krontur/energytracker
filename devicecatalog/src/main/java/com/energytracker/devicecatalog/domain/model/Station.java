@@ -54,10 +54,10 @@ public class Station extends Device{
 
     private int readingIntervalInSeconds;
 
-    List<Channel> channelEntities = new ArrayList<>();
+    List<Channel> channels = new ArrayList<>();
 
     private void addChannel(Channel channel) {
-        channelEntities.add(channel);
+        channels.add(channel);
     }
 
     private void initializeDefaultChannels(int numberOfChannels) {

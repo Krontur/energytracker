@@ -1,10 +1,13 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.adapter;
 
+import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
+import com.energytracker.devicecatalog.application.dto.StationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceStatusEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.StationEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.ChannelPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.StationPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaStationPort;
 import lombok.AllArgsConstructor;
@@ -59,12 +62,24 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
     }
 
     @Override
-    public StationResponseDto deactivateStationById(Long stationId) {
+    public StationResponseDto deactivateStationById(StationRequestDto stationRequestDto) {
+        StationEntity stationEntity = StationPersistenceMapper.stationRequestDtoToEntity(stationRequestDto);
+        if (stationEntity == null) {
+            throw new IllegalArgumentException("Station with id " + stationRequestDto.getStationId() + " not found");
+        }
+        return StationPersistenceMapper.stationResponseEntityToDto(jpaStationPort.save(stationEntity));
+    }
+
+    @Override
+    public List<ChannelResponseDto> getChannelsByStationId(Long stationId) {
         Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
         if (stationEntity.isEmpty()) {
             return null;
         }
-        stationEntity.get().setDeviceStatus(DeviceStatusEntity.DEACTIVATED);
-        return StationPersistenceMapper.stationResponseEntityToDto(jpaStationPort.save(stationEntity.get()));
+        List<ChannelResponseDto> channelResponseDtoList = new ArrayList<ChannelResponseDto>();
+        stationEntity.get().getChannelList().forEach(channelEntity -> {
+                    channelResponseDtoList.add(ChannelPersistenceMapper.channelEntityToDto(channelEntity));
+                });
+        return channelResponseDtoList;
     }
 }

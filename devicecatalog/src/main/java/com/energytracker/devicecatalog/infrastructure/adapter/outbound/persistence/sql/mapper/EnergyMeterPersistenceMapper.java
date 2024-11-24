@@ -1,8 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
+import com.energytracker.devicecatalog.application.dto.*;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.*;
 
 import java.util.ArrayList;
@@ -61,6 +59,35 @@ public class EnergyMeterPersistenceMapper {
                 createEnergyMeterRequestDto.getMaxCurrent(),
                 createEnergyMeterRequestDto.getMidApprovalYear(),
                 calibrationScheduleEntityList
+        );
+    }
+
+    public static EnergyMeterEntity energyMeterRequestDtoToEntity(EnergyMeterRequestDto energyMeterRequestDto) {
+        List<CalibrationScheduleEntity> calibrationScheduleEntityList = new ArrayList<CalibrationScheduleEntity>();
+        energyMeterRequestDto.getCalibrationSchedules().forEach(
+                calibrationScheduleRequestDto -> {
+                    calibrationScheduleEntityList.add(
+                            new CalibrationScheduleEntity(
+                                    calibrationScheduleRequestDto.getNextCalibrationDate(),
+                                    calibrationScheduleRequestDto.getLastCalibrationDate(),
+                                    calibrationScheduleRequestDto.getCalibrationFrequencyInYears(),
+                                    calibrationScheduleRequestDto.getComments(),
+                                    CalibrationStatusEntity.valueOf(calibrationScheduleRequestDto.getCalibrationStatus()
+                            )));
+                }
+        );
+        return new EnergyMeterEntity(
+                energyMeterRequestDto.getSerialNumber(),
+                DeviceTypeEntity.valueOf(energyMeterRequestDto.getDeviceType()),
+                DeviceStatusEntity.valueOf(energyMeterRequestDto.getDeviceStatus()),
+                energyMeterRequestDto.getConnectionAddress(),
+                EnergyMeterTypeEntity.valueOf(energyMeterRequestDto.getEnergyMeterType()),
+                energyMeterRequestDto.getReferenceVoltage(),
+                ConnectionTypeEntity.valueOf(energyMeterRequestDto.getConnectionType()),
+                energyMeterRequestDto.getMaxCurrent(),
+                energyMeterRequestDto.getMidApprovalYear(),
+                calibrationScheduleEntityList
+
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
+import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.application.service.StationService;
@@ -56,13 +57,22 @@ public class StationController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{stationId}/deactivate")
+    @PostMapping("/{stationId}/deactivate")
     public ResponseEntity<StationResponseDto> deactivateStation(@PathVariable Long stationId) {
         StationResponseDto station = stationService.deactivateStationById(stationId);
         if (station == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(stationService.deactivateStationById(stationId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{stationId}/channels")
+    public ResponseEntity<List<ChannelResponseDto>> getChannelsByStationId(@PathVariable Long stationId) {
+        List<ChannelResponseDto> channels = stationService.getChannelsByStationId(stationId);
+        if (channels.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(channels, HttpStatus.OK);
     }
 
 }

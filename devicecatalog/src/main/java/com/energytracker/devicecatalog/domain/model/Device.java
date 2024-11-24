@@ -22,4 +22,8 @@ public class Device {
         this.deviceType = deviceType;
         this.deviceStatus = deviceStatus;
     }
+
+    public void deactivate() {
+        this.deviceStatus = DeviceStatus.DEACTIVATED;
+    }
 }

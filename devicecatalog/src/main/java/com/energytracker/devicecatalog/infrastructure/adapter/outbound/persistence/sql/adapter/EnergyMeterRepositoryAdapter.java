@@ -58,9 +58,8 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
 
     @Override
     public EnergyMeterResponseDto deactivateEnergyMeterById(EnergyMeterRequestDto energyMeterRequestDto) {
-        EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.findById(energyMeterRequestDto.getDeviceId()).orElseThrow(
-                () -> new RuntimeException("Energy Meter with id " + energyMeterRequestDto.getDeviceId() + " not found")
-        );
+        EnergyMeterEntity energyMeterEntity = EnergyMeterPersistenceMapper.energyMeterRequestDtoToEntity(energyMeterRequestDto);
+
         return EnergyMeterPersistenceMapper.energyMeterResponseEntityToDto(jpaEnergyMeterPort.save(energyMeterEntity));
     }
 }

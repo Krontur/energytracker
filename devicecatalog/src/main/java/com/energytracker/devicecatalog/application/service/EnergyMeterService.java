@@ -56,7 +56,8 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
         if(energyMeter == null) {
             throw new IllegalArgumentException("Energy Meter with id " + energyMeterId + " not found");
         }
-        energyMeter.setDeviceStatus(DeviceStatus.DEACTIVATED);
+        energyMeter.deactivate();
+        System.out.println("EnergyMeterService.deactivateEnergyMeterById: " + energyMeter.getDeviceStatus());
         return energyMeterRepositoryPort.deactivateEnergyMeterById(EnergyMeterMapper.energyMeterRequestDomainToDto(energyMeter));
     }
 }

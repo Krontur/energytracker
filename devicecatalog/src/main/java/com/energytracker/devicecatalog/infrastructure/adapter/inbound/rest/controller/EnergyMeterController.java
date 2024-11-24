@@ -58,7 +58,7 @@ public class EnergyMeterController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/{energyMeterId}/deactivate")
+    @PostMapping("/{energyMeterId}/deactivate")
     public ResponseEntity<EnergyMeterResponseDto> deactivateEnergyMeter(@PathVariable Long energyMeterId) {
         EnergyMeterResponseDto energyMeter = energyMeterService.getEnergyMeterById(energyMeterId);
         if (energyMeter == null) {

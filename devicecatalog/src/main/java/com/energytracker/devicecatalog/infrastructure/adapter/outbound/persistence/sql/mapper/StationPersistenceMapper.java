@@ -2,6 +2,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 
 import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
+import com.energytracker.devicecatalog.application.dto.StationRequestDto;
 import com.energytracker.devicecatalog.application.dto.StationResponseDto;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.ChannelEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceStatusEntity;
@@ -84,5 +85,38 @@ public class StationPersistenceMapper {
                 channelResponseDtoList
         );
 
+    }
+
+    public static StationEntity stationRequestDtoToEntity(StationRequestDto stationRequestDto) {
+        List<ChannelEntity> channelEntityList = new ArrayList<ChannelEntity>();
+        stationRequestDto.getChannelList().forEach(
+                channelRequestDto -> {
+                    channelEntityList.add(
+                            new ChannelEntity(
+                                    channelRequestDto.getChannelNumber(),
+                                    channelRequestDto.getChannelName(),
+                                    channelRequestDto.getChannelMode(),
+                                    channelRequestDto.getChannelLongName(),
+                                    channelRequestDto.getEnergyUnit(),
+                                    channelRequestDto.getPowerUnit(),
+                                    channelRequestDto.getURatio(),
+                                    channelRequestDto.getIRatio(),
+                                    channelRequestDto.getPFactor(),
+                                    channelRequestDto.getLonSubChannel(),
+                                    channelRequestDto.getLonIsActive()
+                            )
+                    );
+                }
+        );
+        return new StationEntity(
+                stationRequestDto.getSerialNumber(),
+                DeviceTypeEntity.valueOf(stationRequestDto.getDeviceType()),
+                DeviceStatusEntity.valueOf(stationRequestDto.getDeviceStatus()),
+                stationRequestDto.getStationName(),
+                stationRequestDto.getStationType(),
+                stationRequestDto.getReadingIntervalInSeconds(),
+                stationRequestDto.getStationTag(),
+                channelEntityList
+        );
     }
 }

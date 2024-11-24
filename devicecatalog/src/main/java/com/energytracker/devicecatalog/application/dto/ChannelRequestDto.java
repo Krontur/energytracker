@@ -22,5 +22,4 @@ public class ChannelRequestDto {
     private int lonSubChannel;
     private Boolean lonIsActive;
 
-
 }

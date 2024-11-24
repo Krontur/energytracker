@@ -19,3 +19,6 @@ Content-Type: application/json
 
 ### Get by Id ###
 GET localhost:8088/api/v1/meters/1
+
+### Deactivate Energy Meter ###
+POST localhost:8088/api/v1/meters/1/deactivate
