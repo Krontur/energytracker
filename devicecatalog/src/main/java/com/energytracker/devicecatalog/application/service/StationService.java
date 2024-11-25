@@ -64,7 +64,6 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
             throw new NotFoundException("Station with id " + stationId + " not found");
         }
         station.deactivate();
-        System.out.println("StationService.deactivateStationById: " + station + " " + station.getDeviceId());
         return StationMapper.stationResponseDomainToDto(stationRepositoryPort.save(station));
     }
 

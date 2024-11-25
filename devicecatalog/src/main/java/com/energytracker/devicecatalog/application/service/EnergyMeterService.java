@@ -1,5 +1,6 @@
 package com.energytracker.devicecatalog.application.service;
 
+import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,7 +25,15 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
 
     @Override
     public List<EnergyMeterResponseDto> getAllEnergyMeters() {
-        return energyMeterRepositoryPort.getAllEnergyMeters();
+        List<EnergyMeter> energyMeters = energyMeterRepositoryPort.getAllEnergyMeters();
+        if (energyMeters.isEmpty()) {
+            throw new NotFoundException("No energy meters found");
+        }
+        List<EnergyMeterResponseDto> energyMeterResponseDtos = new ArrayList<EnergyMeterResponseDto>();
+        energyMeters.forEach(energyMeter -> {
+            energyMeterResponseDtos.add(EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeter));
+        });
+        return energyMeterResponseDtos;
     };
 
     @Transactional
@@ -33,14 +43,17 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
         if(energyMeterRepositoryPort.existsBySerialNumber(energyMeter.getSerialNumber())) {
             throw new IllegalArgumentException("Serial number already exists");
         }
-
-        return energyMeterRepositoryPort.createEnergyMeter(EnergyMeterMapper.createEnergyMeterRequestDomainToDto(energyMeter));
+        return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.createEnergyMeter(energyMeter));
 
     }
 
     @Override
     public EnergyMeterResponseDto getEnergyMeterById(Long energyMeterId) {
-        return energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
+        EnergyMeter energyMeter = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
+        if(energyMeter == null) {
+            throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
+        }
+        return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeter);
     }
 
     public void deleteEnergyMeterById(Long energyMeterId) {
@@ -53,13 +66,11 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
 
     @Override
     public EnergyMeterResponseDto deactivateEnergyMeterById(Long energyMeterId) {
-        EnergyMeterResponseDto energyMeterResponseDto = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
-        EnergyMeter energyMeter = EnergyMeterMapper.energyMeterResponseDtoToDomain(energyMeterResponseDto);
+        EnergyMeter energyMeter = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
         if(energyMeter == null) {
             throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
         }
         energyMeter.deactivate();
-        System.out.println("EnergyMeterService.deactivateEnergyMeterById: " + energyMeter.getDeviceStatus());
-        return energyMeterRepositoryPort.deactivateEnergyMeterById(EnergyMeterMapper.energyMeterRequestDomainToDto(energyMeter));
+        return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.save(energyMeter));
     }
 }

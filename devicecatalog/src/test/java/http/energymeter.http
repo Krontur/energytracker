@@ -6,7 +6,7 @@ POST localhost:8088/api/v1/meters
 Content-Type: application/json
 
 {
-    "serialNumber": "CD345323367",
+    "serialNumber": "CD347393367",
     "deviceType": "ENERGY_METER",
     "deviceStatus": "IN_STOCK",
     "connectionAddress": "asdk2323lkjasf",

@@ -29,4 +29,15 @@ public class CalibrationScheduleMapper {
         );
 
     }
+
+    public static CalibrationScheduleResponseDto calibrationScheduleDomainToResponseDto(CalibrationSchedule calibrationSchedule) {
+        return new CalibrationScheduleResponseDto(
+                calibrationSchedule.getCalibrationId(),
+                calibrationSchedule.getNextCalibrationDate(),
+                calibrationSchedule.getLastCalibrationDate(),
+                calibrationSchedule.getCalibrationFrequencyInYears(),
+                calibrationSchedule.getComments(),
+                calibrationSchedule.getCalibrationStatus().name()
+        );
+    }
 }

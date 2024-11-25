@@ -1,9 +1,6 @@
 package com.energytracker.devicecatalog.application.mapper;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleRequestDto;
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
+import com.energytracker.devicecatalog.application.dto.*;
 import com.energytracker.devicecatalog.domain.model.*;
 
 import java.util.ArrayList;
@@ -13,11 +10,11 @@ public class EnergyMeterMapper {
     public static CreateEnergyMeterRequestDto createEnergyMeterRequestDomainToDto(EnergyMeter energyMeter) {
         List<CalibrationScheduleRequestDto> calibrationScheduleRequestDtoList = new ArrayList<CalibrationScheduleRequestDto>();
 
-        if(energyMeter.getCalibrationSchedules().isEmpty()){
+        if(energyMeter.getCalibrationScheduleList().isEmpty()){
             throw new RuntimeException("Calibration Schedules are empty");
         }
 
-        energyMeter.getCalibrationSchedules().forEach(calibrationSchedule -> {
+        energyMeter.getCalibrationScheduleList().forEach(calibrationSchedule -> {
             calibrationScheduleRequestDtoList.add(CalibrationScheduleMapper.calibrationScheduleRequestDomainToDto(calibrationSchedule));
         });
 
@@ -49,7 +46,7 @@ public class EnergyMeterMapper {
         );
 
     }
-
+/*
     public static EnergyMeterRequestDto energyMeterRequestDomainToDto(EnergyMeter energyMeter) {
 
         List<CalibrationScheduleRequestDto> calibrationScheduleRequestDtoList = new ArrayList<CalibrationScheduleRequestDto>();
@@ -104,5 +101,28 @@ public class EnergyMeterMapper {
                 calibrationScheduleList
         );
 
+    }*/
+
+    public static EnergyMeterResponseDto energyMeterDomainToResponseDto(EnergyMeter energyMeter) {
+        List<CalibrationScheduleResponseDto> calibrationScheduleResponseDtoList =
+                new ArrayList<CalibrationScheduleResponseDto>();
+        energyMeter.getCalibrationScheduleList().forEach(calibrationSchedule -> {
+            calibrationScheduleResponseDtoList.add(CalibrationScheduleMapper.calibrationScheduleDomainToResponseDto(calibrationSchedule));
+        });
+        return new EnergyMeterResponseDto(
+                energyMeter.getDeviceId(),
+                energyMeter.getSerialNumber(),
+                energyMeter.getDeviceType().name(),
+                energyMeter.getDeviceStatus().name(),
+                energyMeter.getConnectionAddress(),
+                energyMeter.getEnergyMeterType().name(),
+                energyMeter.getReferenceVoltage(),
+                energyMeter.getConnectionType().name(),
+                energyMeter.getMaxCurrent(),
+                energyMeter.getMidApprovalYear(),
+                energyMeter.getCreatedAt(),
+                energyMeter.getUpdatedAt(),
+                calibrationScheduleResponseDtoList
+        );
     }
 }

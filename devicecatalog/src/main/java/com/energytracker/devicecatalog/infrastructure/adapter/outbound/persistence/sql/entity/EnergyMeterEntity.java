@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -42,26 +42,52 @@ public class EnergyMeterEntity extends DeviceEntity {
     @NotNull
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval=true)
     @JoinColumn(name = "energy_meter_id")
-    private List<CalibrationScheduleEntity> calibrationSchedules;
+    private List<CalibrationScheduleEntity> calibrationScheduleList;
 
     public EnergyMeterEntity(
             String serialNumber,
             DeviceTypeEntity deviceTypeEntity,
-            DeviceStatusEntity deviceStatus,
+            DeviceStatusEntity deviceStatusEntity,
             String connectionAddress,
-            EnergyMeterTypeEntity energyMeterType,
+            EnergyMeterTypeEntity energyMeterTypeEntity,
             int referenceVoltage,
-            ConnectionTypeEntity connectionType,
+            ConnectionTypeEntity connectionTypeEntity,
             int maxCurrent,
             int midApprovalYear,
-            List<CalibrationScheduleEntity> calibrationSchedules) {
-        super(serialNumber, deviceTypeEntity, deviceStatus);
+            List<CalibrationScheduleEntity> calibrationScheduleList
+            ) {
+        super(serialNumber, deviceTypeEntity, deviceStatusEntity);
         this.connectionAddress = connectionAddress;
-        this.energyMeterType = energyMeterType;
+        this.energyMeterType = energyMeterTypeEntity;
         this.referenceVoltage = referenceVoltage;
-        this.connectionType = connectionType;
+        this.connectionType = connectionTypeEntity;
         this.maxCurrent = maxCurrent;
         this.midApprovalYear = midApprovalYear;
-        this.calibrationSchedules = calibrationSchedules;
+        this.calibrationScheduleList = calibrationScheduleList;
+    }
+
+    public EnergyMeterEntity(
+            Long deviceId,
+            String serialNumber,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            DeviceTypeEntity deviceTypeEntity,
+            DeviceStatusEntity deviceStatusEntity,
+            String connectionAddress,
+            EnergyMeterTypeEntity energyMeterTypeEntity,
+            int referenceVoltage,
+            ConnectionTypeEntity connectionTypeEntity,
+            int maxCurrent,
+            int midApprovalYear,
+            List<CalibrationScheduleEntity> calibrationScheduleList
+    ) {
+        super(deviceId, serialNumber, createdAt, updatedAt, deviceTypeEntity, deviceStatusEntity);
+        this.connectionAddress = connectionAddress;
+        this.energyMeterType = energyMeterTypeEntity;
+        this.referenceVoltage = referenceVoltage;
+        this.connectionType = connectionTypeEntity;
+        this.maxCurrent = maxCurrent;
+        this.midApprovalYear = midApprovalYear;
+        this.calibrationScheduleList = calibrationScheduleList;
     }
 }

@@ -3,6 +3,7 @@ package com.energytracker.devicecatalog.application.service;
 import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
+import com.energytracker.devicecatalog.domain.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,23 +41,22 @@ public class EnergyMeterServiceTest {
                 2021
         );
 
-        EnergyMeterResponseDto energyMeterResponseDto = new EnergyMeterResponseDto(
+        EnergyMeter energyMeter = new EnergyMeter(
                 1L,
                 "CD345323367",
-                "ENERGY_METER",
-                "INSTALLED",
+                DeviceType.valueOf("ENERGY_METER"),
+                DeviceStatus.valueOf("INSTALLED"),
                 "asdk2323lkjasf",
-                "DIGITAL",
+                EnergyMeterType.valueOf("DIGITAL"),
                 400,
-                "LON",
+                ConnectionType.valueOf("LON"),
                 100,
                 2021,
                 LocalDateTime.of( 2021, 1, 1, 0, 0),
-                LocalDateTime.of( 2021, 1, 1, 0, 0),
-                new ArrayList<>()
+                LocalDateTime.of( 2021, 1, 1, 0, 0)
         );
 
-        when(energyMeterRepositoryPort.createEnergyMeter(any(CreateEnergyMeterRequestDto.class))).thenReturn(energyMeterResponseDto);
+        when(energyMeterRepositoryPort.createEnergyMeter(any(EnergyMeter.class))).thenReturn(energyMeter);
 
         EnergyMeterResponseDto result = energyMeterService.createEnergyMeter(createEnergyMeterRequestDto);
 
@@ -69,9 +69,8 @@ public class EnergyMeterServiceTest {
         assertEquals(createEnergyMeterRequestDto.getConnectionType(), result.getConnectionType());
         assertEquals(createEnergyMeterRequestDto.getMaxCurrent(), result.getMaxCurrent());
         assertEquals(createEnergyMeterRequestDto.getMidApprovalYear(), result.getMidApprovalYear());
-        assertEquals(0, result.getCalibrationSchedules().size());
-        assertEquals(energyMeterResponseDto.getCreatedAt(), result.getCreatedAt());
-        assertEquals(energyMeterResponseDto.getUpdatedAt(), result.getUpdatedAt());
+        assertEquals(energyMeter.getCreatedAt(), result.getCreatedAt());
+        assertEquals(energyMeter.getUpdatedAt(), result.getUpdatedAt());
     }
 
 }

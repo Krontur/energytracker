@@ -46,4 +46,17 @@ public class DeviceEntity extends BaseEntity {
         this.deviceType = deviceTypeEntity;
         this.deviceStatus = deviceStatus;
     }
+
+    public DeviceEntity(
+            Long deviceId,
+            String serialNumber,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            DeviceTypeEntity deviceTypeEntity,
+            DeviceStatusEntity deviceStatusEntity) {
+        super(deviceId, createdAt, updatedAt);
+        this.serialNumber = serialNumber;
+        this.deviceType = deviceTypeEntity;
+        this.deviceStatus = deviceStatusEntity;
+    }
 }

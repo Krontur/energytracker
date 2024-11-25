@@ -1,8 +1,10 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
+import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.service.EnergyMeterService;
+import com.energytracker.devicecatalog.domain.model.CalibrationSchedule;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

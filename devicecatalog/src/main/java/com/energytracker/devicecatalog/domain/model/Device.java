@@ -37,6 +37,9 @@ public class Device {
     }
 
     public void deactivate() {
+        if (this.deviceStatus == DeviceStatus.DEACTIVATED) {
+            throw new IllegalStateException("Device is already deactivated");
+        }
         this.deviceStatus = DeviceStatus.DEACTIVATED;
     }
 }

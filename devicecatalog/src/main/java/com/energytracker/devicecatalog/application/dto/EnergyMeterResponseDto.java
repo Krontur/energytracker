@@ -24,4 +24,33 @@ public class EnergyMeterResponseDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<CalibrationScheduleResponseDto> calibrationSchedules;
+
+    public EnergyMeterResponseDto(
+            Long energyMeterId,
+            String serialNumber,
+            String deviceType,
+            String deviceStatus,
+            String connectionAddress,
+            String energyMeterType,
+            int referenceVoltage,
+            String connectionType,
+            int maxCurrent,
+            int midApprovalYear,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
+        this.energyMeterId = energyMeterId;
+        this.serialNumber = serialNumber;
+        this.deviceType = deviceType;
+        this.deviceStatus = deviceStatus;
+        this.connectionAddress = connectionAddress;
+        this.energyMeterType = energyMeterType;
+        this.referenceVoltage = referenceVoltage;
+        this.connectionType = connectionType;
+        this.maxCurrent = maxCurrent;
+        this.midApprovalYear = midApprovalYear;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
 }

@@ -9,7 +9,7 @@ POST http://localhost:8088/api/v1/stations
 Content-Type: application/json
 
 {
-  "serialNumber": "HU3244234234",
+  "serialNumber": "HU3244634234",
   "deviceType": "STATION",
   "deviceStatus": "IN_STOCK",
   "stationName": "Station 1",

@@ -1,11 +1,10 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.adapter;
 
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
+import com.energytracker.devicecatalog.domain.model.EnergyMeter;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.EnergyMeterEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.EnergyMeterPersistenceMapper;import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaEnergyMeterPort;
+import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -23,30 +22,29 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
         return jpaEnergyMeterPort.existsBySerialNumber(serialNumber);
     }
     @Override
-    public EnergyMeterResponseDto createEnergyMeter(CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
-        EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.save(
-                EnergyMeterPersistenceMapper.createEnergyMeterRequestDtoToEntity(createEnergyMeterRequestDto));
-        EnergyMeterResponseDto energyMeterResponseDto = EnergyMeterPersistenceMapper.energyMeterResponseEntityToDto(energyMeterEntity);
-        return energyMeterResponseDto;
+    public EnergyMeter createEnergyMeter(EnergyMeter energyMeter) {
+        EnergyMeterEntity energyMeterEntity =
+                jpaEnergyMeterPort.save(EnergyMeterPersistenceMapper.energyMeterDomainToEntity(energyMeter));
+        return EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity);
     }
 
 
     @Override
-    public List<EnergyMeterResponseDto> getAllEnergyMeters() {
+    public List<EnergyMeter> getAllEnergyMeters() {
         List<EnergyMeterEntity> energyMeterEntities = jpaEnergyMeterPort.findAll();
-        List<EnergyMeterResponseDto> energyMeterEntitiesToResponseDtos = new ArrayList<EnergyMeterResponseDto>();
+        List<EnergyMeter> energyMeters = new ArrayList<EnergyMeter>();
         energyMeterEntities.forEach(energyMeterEntity -> {
-            energyMeterEntitiesToResponseDtos.add(EnergyMeterPersistenceMapper.energyMeterResponseEntityToDto(energyMeterEntity));
+            energyMeters.add(EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity));
         });
-        return energyMeterEntitiesToResponseDtos;
+        return energyMeters;
     }
 
     @Override
-    public EnergyMeterResponseDto getEnergyMeterById(Long energyMeterId) {
+    public EnergyMeter getEnergyMeterById(Long energyMeterId) {
         EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.findById(energyMeterId).orElseThrow(
-                () -> new RuntimeException("Energy Meter with id " + energyMeterId + " not found")
+                () -> new NotFoundException("Energy Meter with id " + energyMeterId + " not found")
         );
-        return EnergyMeterPersistenceMapper.energyMeterResponseEntityToDto(energyMeterEntity);
+        return EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity);
     }
 
     @Override
@@ -55,9 +53,8 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
     }
 
     @Override
-    public EnergyMeterResponseDto deactivateEnergyMeterById(EnergyMeterRequestDto energyMeterRequestDto) {
-        EnergyMeterEntity energyMeterEntity = EnergyMeterPersistenceMapper.energyMeterRequestDtoToEntity(energyMeterRequestDto);
-
-        return EnergyMeterPersistenceMapper.energyMeterResponseEntityToDto(jpaEnergyMeterPort.save(energyMeterEntity));
+    public EnergyMeter save(EnergyMeter energyMeter) {
+        EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.save(EnergyMeterPersistenceMapper.energyMeterDomainToEntity(energyMeter));
+        return EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity);
     }
 }
