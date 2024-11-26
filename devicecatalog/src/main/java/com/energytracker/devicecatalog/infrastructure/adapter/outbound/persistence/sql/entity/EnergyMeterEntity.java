@@ -71,6 +71,7 @@ public class EnergyMeterEntity extends DeviceEntity {
             String serialNumber,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
+            Long version,
             DeviceTypeEntity deviceTypeEntity,
             DeviceStatusEntity deviceStatusEntity,
             String connectionAddress,
@@ -81,7 +82,7 @@ public class EnergyMeterEntity extends DeviceEntity {
             int midApprovalYear,
             List<CalibrationScheduleEntity> calibrationScheduleList
     ) {
-        super(deviceId, serialNumber, createdAt, updatedAt, deviceTypeEntity, deviceStatusEntity);
+        super(deviceId, serialNumber, createdAt, updatedAt, version, deviceTypeEntity, deviceStatusEntity);
         this.connectionAddress = connectionAddress;
         this.energyMeterType = energyMeterTypeEntity;
         this.referenceVoltage = referenceVoltage;

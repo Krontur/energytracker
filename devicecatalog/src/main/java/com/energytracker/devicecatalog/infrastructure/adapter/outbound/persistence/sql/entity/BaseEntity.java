@@ -1,7 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,11 +15,13 @@ public class BaseEntity {
     public BaseEntity(
             Long id,
             LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            LocalDateTime updatedAt,
+            Long version
     ) {
         this.id = id;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.version = version;
     }
 
     @Id
@@ -33,6 +34,10 @@ public class BaseEntity {
 
     @Column( nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column( nullable = false)
+    @Version
+    private Long version;
 
     @PrePersist
     public void prePersist() {

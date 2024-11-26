@@ -65,6 +65,9 @@ public class EnergyMeterControllerTest {
         EnergyMeterResponseDto energyMeterResponseDto = new EnergyMeterResponseDto(
                 1L,
                 createEnergyMeterRequestDto.getSerialNumber(),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0L,
                 createEnergyMeterRequestDto.getDeviceType(),
                 createEnergyMeterRequestDto.getDeviceStatus(),
                 createEnergyMeterRequestDto.getConnectionAddress(),
@@ -73,8 +76,6 @@ public class EnergyMeterControllerTest {
                 createEnergyMeterRequestDto.getConnectionType(),
                 createEnergyMeterRequestDto.getMaxCurrent(),
                 createEnergyMeterRequestDto.getMidApprovalYear(),
-                LocalDateTime.now(),
-                LocalDateTime.now(),
                 new ArrayList<CalibrationScheduleResponseDto>()
 
         );
@@ -104,6 +105,9 @@ public class EnergyMeterControllerTest {
         EnergyMeterResponseDto energyMeterResponseDto = new EnergyMeterResponseDto(
                 1L,
                 "CD345323367",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0L,
                 "ENERGY_METER",
                 "IN_STOCK",
                 "asdk2323lkjasf",
@@ -112,8 +116,6 @@ public class EnergyMeterControllerTest {
                 "LON",
                 100,
                 2021,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
                 new ArrayList<CalibrationScheduleResponseDto>()
         );
 
@@ -143,6 +145,9 @@ public class EnergyMeterControllerTest {
         energyMeterResponseDtoList.add( new EnergyMeterResponseDto(
                 1L,
                 "CD345323367",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0L,
                 "ENERGY_METER",
                 "IN_STOCK",
                 "asdk2323lkjasf",
@@ -151,8 +156,6 @@ public class EnergyMeterControllerTest {
                 "LON",
                 100,
                 2021,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
                 new ArrayList<CalibrationScheduleResponseDto>()
         ));
 
@@ -160,6 +163,9 @@ public class EnergyMeterControllerTest {
                 new EnergyMeterResponseDto(
                 2L,
                 "CD345323368",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0L,
                 "ENERGY_METER",
                 "IN_STOCK",
                 "asdk2323lkjasf",
@@ -168,8 +174,6 @@ public class EnergyMeterControllerTest {
                 "LON",
                 100,
                 2021,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
                 new ArrayList<CalibrationScheduleResponseDto>()
         ));
 
@@ -221,6 +225,9 @@ public class EnergyMeterControllerTest {
         EnergyMeterResponseDto energyMeterResponseDto = new EnergyMeterResponseDto(
                 1L,
                 "CD345323367",
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                0L,
                 "ENERGY_METER",
                 "DEACTIVATED",
                 "asdk2323lkjasf",
@@ -229,8 +236,6 @@ public class EnergyMeterControllerTest {
                 "LON",
                 100,
                 2021,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
                 new ArrayList<CalibrationScheduleResponseDto>()
         );
 

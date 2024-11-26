@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persisten
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -33,6 +34,9 @@ public class EnergyMeterPersistenceMapperTest {
         EnergyMeter energyMeter = new EnergyMeter(
                 1L,
                 "CD345323367",
+                LocalDateTime.of(2021, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 0, 0, 0),
+                0L,
                 DeviceType.valueOf("ENERGY_METER"),
                 DeviceStatus.valueOf("IN_STOCK"),
                 "asdk2323lkjasf",
@@ -41,8 +45,7 @@ public class EnergyMeterPersistenceMapperTest {
                 ConnectionType.valueOf("LON"),
                 100,
                 2021,
-                LocalDateTime.of(2021, 1, 1, 0, 0, 0),
-                LocalDateTime.of(2021, 1, 1, 0, 0, 0)
+                new ArrayList<CalibrationSchedule>()
         );
 
         EnergyMeterEntity energyMeterEntity = EnergyMeterPersistenceMapper.energyMeterDomainToEntity(energyMeter);
@@ -62,19 +65,21 @@ public class EnergyMeterPersistenceMapperTest {
 
 
     private static EnergyMeterEntity getEnergyMeterEntity() {
-        EnergyMeterEntity energyMeterEntity = new EnergyMeterEntity();
-        energyMeterEntity.setId(1L);
-        energyMeterEntity.setSerialNumber("CD345323367");
-        energyMeterEntity.setDeviceType(DeviceTypeEntity.ENERGY_METER);
-        energyMeterEntity.setDeviceStatus(DeviceStatusEntity.IN_STOCK);
-        energyMeterEntity.setConnectionAddress("asdk2323lkjasf");
-        energyMeterEntity.setEnergyMeterType(EnergyMeterTypeEntity.DIGITAL);
-        energyMeterEntity.setReferenceVoltage(400);
-        energyMeterEntity.setConnectionType(ConnectionTypeEntity.LON);
-        energyMeterEntity.setMaxCurrent(100);
-        energyMeterEntity.setMidApprovalYear(2021);
-        energyMeterEntity.setCreatedAt(LocalDateTime.of(2021, 1, 1, 0, 0, 0));
-        energyMeterEntity.setUpdatedAt(LocalDateTime.of(2021, 1, 1, 0, 0, 0));
-        return energyMeterEntity;
+        return new EnergyMeterEntity(
+                1L,
+                "CD345323367",
+                LocalDateTime.of(2021, 1, 1, 0, 0, 0),
+                LocalDateTime.of(2021, 1, 1, 0, 0, 0),
+                0L,
+                DeviceTypeEntity.ENERGY_METER,
+                DeviceStatusEntity.IN_STOCK,
+                "asdk2323lkjasf",
+                EnergyMeterTypeEntity.DIGITAL,
+                400,
+                ConnectionTypeEntity.LON,
+                100,
+                2021,
+                new ArrayList<CalibrationScheduleEntity>()
+        );
     }
 }

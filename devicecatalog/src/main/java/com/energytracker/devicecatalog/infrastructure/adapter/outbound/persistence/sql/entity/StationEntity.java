@@ -25,10 +25,10 @@ public class StationEntity extends DeviceEntity {
         this.channelList = channelList;
     }
 
-    public StationEntity(Long deviceId, LocalDateTime createdAt, LocalDateTime updatedAt, String serialNumber, DeviceTypeEntity deviceTypeEntity,
+    public StationEntity(Long deviceId, LocalDateTime createdAt, LocalDateTime updatedAt, Long version, String serialNumber, DeviceTypeEntity deviceTypeEntity,
                          DeviceStatusEntity deviceStatus, String stationName, String stationType,
                          int readingIntervalInSeconds, String stationTag, List<ChannelEntity> channelList) {
-        super(deviceId, createdAt, updatedAt, serialNumber, deviceTypeEntity, deviceStatus);
+        super(deviceId, createdAt, updatedAt, version, serialNumber, deviceTypeEntity, deviceStatus);
         this.stationName = stationName;
         this.stationType = stationType;
         this.readingIntervalInSeconds = readingIntervalInSeconds;

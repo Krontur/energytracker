@@ -19,6 +19,8 @@ public class Device {
 
     private LocalDateTime updatedAt;
 
+    Long version;
+
     private DeviceType deviceType;
 
     private DeviceStatus deviceStatus;
@@ -29,11 +31,12 @@ public class Device {
         this.deviceStatus = deviceStatus;
     }
 
-    public Device(Long deviceId, String serialNumber, DeviceType deviceType, DeviceStatus deviceStatus) {
+    public Device(Long deviceId, String serialNumber, DeviceType deviceType, DeviceStatus deviceStatus, Long version) {
         this.deviceId = deviceId;
         this.serialNumber = serialNumber;
         this.deviceType = deviceType;
         this.deviceStatus = deviceStatus;
+        this.version = version;
     }
 
     public void deactivate() {

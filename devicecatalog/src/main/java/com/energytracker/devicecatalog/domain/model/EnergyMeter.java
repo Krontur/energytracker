@@ -14,6 +14,9 @@ public class EnergyMeter extends Device {
     public EnergyMeter(
             Long deviceId,
             String serialNumber,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            Long version,
             DeviceType deviceType,
             DeviceStatus deviceStatus,
             String connectionAddress,
@@ -21,11 +24,9 @@ public class EnergyMeter extends Device {
             int referenceVoltage,
             ConnectionType connectionType,
             int maxCurrent,
-            int midApprovalYear,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            int midApprovalYear
     ) {
-        super(deviceId, serialNumber, createdAt, updatedAt, deviceType, deviceStatus);
+        super(deviceId, serialNumber, createdAt, updatedAt, version, deviceType, deviceStatus);
 
         this.connectionAddress = connectionAddress;
         this.energyMeterType = energyMeterType;
@@ -38,6 +39,9 @@ public class EnergyMeter extends Device {
     public EnergyMeter(
             Long deviceId,
             String serialNumber,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            Long version,
             DeviceType deviceType,
             DeviceStatus deviceStatus,
             String connectionAddress,
@@ -46,11 +50,9 @@ public class EnergyMeter extends Device {
             ConnectionType connectionType,
             int maxCurrent,
             int midApprovalYear,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt,
             List<CalibrationSchedule> calibrationSchedules
     ) {
-        super(deviceId, serialNumber, createdAt, updatedAt, deviceType, deviceStatus);
+        super(deviceId, serialNumber, createdAt, updatedAt, version, deviceType, deviceStatus);
 
         this.connectionAddress = connectionAddress;
         this.energyMeterType = energyMeterType;

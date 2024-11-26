@@ -1,5 +1,6 @@
 package com.energytracker.devicecatalog.application.mapper;
 
+import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.domain.model.*;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -104,6 +106,9 @@ public class EnergyMeterMapperTest {
             EnergyMeter energyMeter = new EnergyMeter(
                     1L,
                     "JI45345345",
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    1L,
                     DeviceType.ENERGY_METER,
                     DeviceStatus.IN_STOCK,
                     "asdoina98hasdonasd",
@@ -112,13 +117,15 @@ public class EnergyMeterMapperTest {
                     ConnectionType.LON,
                     50,
                     2021,
-                    LocalDateTime.of(2021, 1, 1, 0, 0),
-                    LocalDateTime.of(2021, 1, 1, 0, 0)
+                    new ArrayList<CalibrationSchedule>()
             );
 
             EnergyMeterResponseDto energyMeterResponseDto = new EnergyMeterResponseDto(
                     1L,
                     "JI45345345",
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    LocalDateTime.of(2021, 1, 1, 0, 0),
+                    1L,
                     "ENERGY_METER",
                     "IN_STOCK",
                     "asdoina98hasdonasd",
@@ -127,8 +134,7 @@ public class EnergyMeterMapperTest {
                     "LON",
                     50,
                     2021,
-                    LocalDateTime.of(2021, 1, 1, 0, 0),
-                    LocalDateTime.of(2021, 1, 1, 0, 0)
+                    new ArrayList<CalibrationScheduleResponseDto>()
             );
 
             EnergyMeterResponseDto result = EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeter);

@@ -13,6 +13,9 @@ public class EnergyMeterResponseDto {
 
     private Long energyMeterId;
     private String serialNumber;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Long version;
     private String deviceType;
     private String deviceStatus;
     private String connectionAddress;
@@ -21,13 +24,14 @@ public class EnergyMeterResponseDto {
     private String connectionType;
     private int maxCurrent;
     private int midApprovalYear;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
     private List<CalibrationScheduleResponseDto> calibrationSchedules;
 
     public EnergyMeterResponseDto(
             Long energyMeterId,
             String serialNumber,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt,
+            Long version,
             String deviceType,
             String deviceStatus,
             String connectionAddress,
@@ -35,12 +39,13 @@ public class EnergyMeterResponseDto {
             int referenceVoltage,
             String connectionType,
             int maxCurrent,
-            int midApprovalYear,
-            LocalDateTime createdAt,
-            LocalDateTime updatedAt
+            int midApprovalYear
     ) {
         this.energyMeterId = energyMeterId;
         this.serialNumber = serialNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.version = version;
         this.deviceType = deviceType;
         this.deviceStatus = deviceStatus;
         this.connectionAddress = connectionAddress;
@@ -49,8 +54,6 @@ public class EnergyMeterResponseDto {
         this.connectionType = connectionType;
         this.maxCurrent = maxCurrent;
         this.midApprovalYear = midApprovalYear;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
     }
 
 }

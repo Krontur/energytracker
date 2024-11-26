@@ -29,6 +29,9 @@ public class EnergyMeterPersistenceMapper {
         return new EnergyMeter(
                 energyMeterEntity.getId(),
                 energyMeterEntity.getSerialNumber(),
+                energyMeterEntity.getCreatedAt(),
+                energyMeterEntity.getUpdatedAt(),
+                energyMeterEntity.getVersion(),
                 DeviceType.valueOf(energyMeterEntity.getDeviceType().name()),
                 DeviceStatus.valueOf(energyMeterEntity.getDeviceStatus().name()),
                 energyMeterEntity.getConnectionAddress(),
@@ -37,8 +40,6 @@ public class EnergyMeterPersistenceMapper {
                 ConnectionType.valueOf(energyMeterEntity.getConnectionType().toString()),
                 energyMeterEntity.getMaxCurrent(),
                 energyMeterEntity.getMidApprovalYear(),
-                energyMeterEntity.getCreatedAt(),
-                energyMeterEntity.getUpdatedAt(),
                 calibrationScheduleList
         );
 
@@ -67,6 +68,7 @@ public class EnergyMeterPersistenceMapper {
                     energyMeter.getSerialNumber(),
                     energyMeter.getCreatedAt(),
                     energyMeter.getUpdatedAt(),
+                    energyMeter.getVersion(),
                     DeviceTypeEntity.valueOf(energyMeter.getDeviceType().name()),
                     DeviceStatusEntity.valueOf(energyMeter.getDeviceStatus().name()),
                     energyMeter.getConnectionAddress(),

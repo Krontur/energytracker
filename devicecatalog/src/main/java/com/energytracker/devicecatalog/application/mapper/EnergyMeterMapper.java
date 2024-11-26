@@ -112,6 +112,9 @@ public class EnergyMeterMapper {
         return new EnergyMeterResponseDto(
                 energyMeter.getDeviceId(),
                 energyMeter.getSerialNumber(),
+                energyMeter.getCreatedAt(),
+                energyMeter.getUpdatedAt(),
+                energyMeter.getVersion(),
                 energyMeter.getDeviceType().name(),
                 energyMeter.getDeviceStatus().name(),
                 energyMeter.getConnectionAddress(),
@@ -120,8 +123,6 @@ public class EnergyMeterMapper {
                 energyMeter.getConnectionType().name(),
                 energyMeter.getMaxCurrent(),
                 energyMeter.getMidApprovalYear(),
-                energyMeter.getCreatedAt(),
-                energyMeter.getUpdatedAt(),
                 calibrationScheduleResponseDtoList
         );
     }

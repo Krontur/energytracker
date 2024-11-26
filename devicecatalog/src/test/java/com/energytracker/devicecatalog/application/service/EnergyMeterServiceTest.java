@@ -44,6 +44,9 @@ public class EnergyMeterServiceTest {
         EnergyMeter energyMeter = new EnergyMeter(
                 1L,
                 "CD345323367",
+                LocalDateTime.of( 2021, 1, 1, 0, 0),
+                LocalDateTime.of( 2021, 1, 1, 0, 0),
+                0L,
                 DeviceType.valueOf("ENERGY_METER"),
                 DeviceStatus.valueOf("INSTALLED"),
                 "asdk2323lkjasf",
@@ -52,8 +55,7 @@ public class EnergyMeterServiceTest {
                 ConnectionType.valueOf("LON"),
                 100,
                 2021,
-                LocalDateTime.of( 2021, 1, 1, 0, 0),
-                LocalDateTime.of( 2021, 1, 1, 0, 0)
+                new ArrayList<CalibrationSchedule>()
         );
 
         when(energyMeterRepositoryPort.createEnergyMeter(any(EnergyMeter.class))).thenReturn(energyMeter);

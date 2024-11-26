@@ -37,11 +37,12 @@ public class DeviceEntity extends BaseEntity {
             Long deviceId,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
+            Long version,
             String serialNumber,
             DeviceTypeEntity deviceTypeEntity,
             DeviceStatusEntity deviceStatus
     ) {
-        super(deviceId, createdAt, updatedAt);
+        super(deviceId, createdAt, updatedAt, version);
         this.serialNumber = serialNumber;
         this.deviceType = deviceTypeEntity;
         this.deviceStatus = deviceStatus;
@@ -52,9 +53,10 @@ public class DeviceEntity extends BaseEntity {
             String serialNumber,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
+            Long version,
             DeviceTypeEntity deviceTypeEntity,
             DeviceStatusEntity deviceStatusEntity) {
-        super(deviceId, createdAt, updatedAt);
+        super(deviceId, createdAt, updatedAt, version);
         this.serialNumber = serialNumber;
         this.deviceType = deviceTypeEntity;
         this.deviceStatus = deviceStatusEntity;

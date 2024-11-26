@@ -1,13 +1,12 @@
 package com.energytracker.devicecatalog.application.service;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
 import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
 import com.energytracker.devicecatalog.application.port.inbound.*;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
-import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.EnergyMeter;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -39,11 +38,18 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
     @Transactional
     public EnergyMeterResponseDto createEnergyMeter(CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
         EnergyMeter energyMeter = EnergyMeterMapper.createEnergyMeterRequestDtoToDomain(createEnergyMeterRequestDto);
-
-        if(energyMeterRepositoryPort.existsBySerialNumber(energyMeter.getSerialNumber())) {
+        if (energyMeterRepositoryPort.existsBySerialNumber(energyMeter.getSerialNumber())) {
             throw new IllegalArgumentException("Serial number already exists");
         }
-        return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.createEnergyMeter(energyMeter));
+        EnergyMeter createdEnergyMeter;
+        try {
+            createdEnergyMeter = energyMeterRepositoryPort.createEnergyMeter(energyMeter);
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Error creating energy meter, entity has been modified");
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating energy meter");
+        }
+        return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.createEnergyMeter(createdEnergyMeter));
 
     }
 
@@ -61,7 +67,14 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
         if(energyMeterRepositoryPort.getEnergyMeterById(energyMeterId) == null) {
             throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
         }
-        energyMeterRepositoryPort.deleteEnergyMeterById(energyMeterId);
+        try {
+            energyMeterRepositoryPort.deleteEnergyMeterById(energyMeterId);
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Error deleting energy meter, entity has been modified");
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting energy meter");
+        }
+
     }
 
     @Override
@@ -71,6 +84,12 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
             throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
         }
         energyMeter.deactivate();
-        return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.save(energyMeter));
+        try {
+            return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.save(energyMeter));
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Error deactivating energy meter, entity has been modified");
+        } catch (Exception e) {
+            throw new RuntimeException("Error deactivating energy meter");
+        }
     }
 }

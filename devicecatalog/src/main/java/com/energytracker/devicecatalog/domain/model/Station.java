@@ -1,6 +1,5 @@
 package com.energytracker.devicecatalog.domain.model;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,28 +15,9 @@ public class Station extends Device{
 
     public Station(
             Long deviceId,
-            String serialNumber,
-            DeviceType deviceType,
-            DeviceStatus deviceStatus,
-            String stationName,
-            String stationType,
-            String stationTag,
-            int readingIntervalInSeconds,
-            List<Channel> channelList
-    ) {
-        super(deviceId, serialNumber, deviceType, deviceStatus);
-
-        this.stationName = stationName;
-        this.stationType = stationType;
-        this.stationTag = stationTag;
-        this.readingIntervalInSeconds = readingIntervalInSeconds;
-        this.channelList = channelList;
-    }
-
-    public Station(
-            Long deviceId,
             LocalDateTime createdAt,
             LocalDateTime updatedAt,
+            Long version,
             String serialNumber,
             DeviceType deviceType,
             DeviceStatus deviceStatus,
@@ -47,7 +27,7 @@ public class Station extends Device{
             int readingIntervalInSeconds,
             List<Channel> channelList
     ) {
-        super(deviceId, serialNumber, createdAt, updatedAt, deviceType, deviceStatus);
+        super(deviceId, serialNumber, createdAt, updatedAt, version, deviceType, deviceStatus);
 
         this.stationName = stationName;
         this.stationType = stationType;

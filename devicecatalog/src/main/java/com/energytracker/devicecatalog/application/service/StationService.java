@@ -8,8 +8,8 @@ import com.energytracker.devicecatalog.application.port.inbound.*;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
 import com.energytracker.devicecatalog.application.mapper.StationMapper;
 import com.energytracker.devicecatalog.domain.model.Channel;
-import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.Station;
+import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,17 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
     @Transactional
     public StationResponseDto createStation(CreateStationRequestDto createStationRequestDto) {
         Station station = StationMapper.createStationRequestDtoToDomain(createStationRequestDto);
+        Station createdStation;
         if (stationRepositoryPort.existsBySerialNumber(createStationRequestDto.getSerialNumber())) {
             throw new IllegalArgumentException("Serial number already exists");
         }
-        Station createdStation = stationRepositoryPort.createStation(station);
+        try {
+            createdStation = stationRepositoryPort.createStation(station);
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Error creating station");
+        } catch (Exception e) {
+            throw new RuntimeException("Error creating station");
+        }
         if (createdStation == null) {
             throw new IllegalStateException("The save operation did not return the created station.");
         }
@@ -45,7 +52,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
         if (stations.isEmpty()) {
             throw new NotFoundException("No stations found");
         }
-        List<StationResponseDto> stationResponseDtos = new ArrayList<StationResponseDto>();
+        List<StationResponseDto> stationResponseDtos = new ArrayList<>();
         stations.forEach(station -> {
             stationResponseDtos.add(StationMapper.stationResponseDomainToDto(station));
         });
@@ -64,13 +71,25 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
             throw new NotFoundException("Station with id " + stationId + " not found");
         }
         station.deactivate();
-        return StationMapper.stationResponseDomainToDto(stationRepositoryPort.save(station));
+        try {
+            return StationMapper.stationResponseDomainToDto(stationRepositoryPort.save(station));
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Error deactivating station with id " + stationId + ", entity has been modified");
+        } catch (Exception e) {
+            throw new NotFoundException("Error deactivating station with id " + stationId);
+        }
     }
 
 
     @Override
     public void deleteStationById(Long stationId) {
-        stationRepositoryPort.deleteStationById(stationId);
+        try {
+            stationRepositoryPort.deleteStationById(stationId);
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Error deleting station with id " + stationId + ", entity has been modified");
+        } catch (Exception e) {
+            throw new NotFoundException("Error deleting station with id " + stationId);
+        }
     }
 
     @Override
@@ -79,7 +98,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
         if (channels.isEmpty()) {
             throw new NotFoundException("No channels found for station with id " + stationId);
         }
-        List<ChannelResponseDto> channelResponseDtos = new ArrayList<ChannelResponseDto>();
+        List<ChannelResponseDto> channelResponseDtos = new ArrayList<>();
         channels.forEach(channel -> {
             channelResponseDtos.add(StationMapper.channelDomainToDto(channel));
         });

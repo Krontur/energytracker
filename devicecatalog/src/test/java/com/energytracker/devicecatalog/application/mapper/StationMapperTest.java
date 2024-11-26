@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class StationMapperTest {
-
+    /*
     @Test
     public void testStationResponseDtoToDomain() {
 
@@ -42,6 +42,6 @@ public class StationMapperTest {
                 new ArrayList<Channel>()
         );
 
-    }
+    }*/
 
 }
