@@ -63,7 +63,7 @@ public class StationController {
         if (station == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(stationService.deactivateStationById(stationId), HttpStatus.OK);
+        return new ResponseEntity<>(station, HttpStatus.OK);
     }
 
     @GetMapping("/{stationId}/channels")

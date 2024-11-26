@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestD
 import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.service.EnergyMeterService;
 import com.energytracker.devicecatalog.domain.model.CalibrationSchedule;
+import com.energytracker.devicecatalog.domain.model.EnergyMeter;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,13 +64,10 @@ public class EnergyMeterController {
 
     @PostMapping("/{energyMeterId}/deactivate")
     public ResponseEntity<EnergyMeterResponseDto> deactivateEnergyMeter(@PathVariable Long energyMeterId) {
-        try {
-            EnergyMeterResponseDto energyMeter = energyMeterService.getEnergyMeterById(energyMeterId);
-            return new ResponseEntity<>(energyMeterService.deactivateEnergyMeterById(energyMeterId), HttpStatus.OK);
-        } catch (NotFoundException e) {
+        EnergyMeterResponseDto energyMeter = energyMeterService.getEnergyMeterById(energyMeterId);
+        if (energyMeter == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+        return new ResponseEntity<>(energyMeterService.deactivateEnergyMeterById(energyMeterId), HttpStatus.OK);
     }
 }

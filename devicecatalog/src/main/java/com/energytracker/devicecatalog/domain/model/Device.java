@@ -19,7 +19,7 @@ public class Device {
 
     private LocalDateTime updatedAt;
 
-    Long version;
+    private Long version;
 
     private DeviceType deviceType;
 

@@ -6,7 +6,7 @@ POST localhost:8088/api/v1/meters
 Content-Type: application/json
 
 {
-    "serialNumber": "CD347393367",
+    "serialNumber": "CD387763367",
     "deviceType": "ENERGY_METER",
     "deviceStatus": "IN_STOCK",
     "connectionAddress": "asdk2323lkjasf",
@@ -21,4 +21,4 @@ Content-Type: application/json
 GET localhost:8088/api/v1/meters/1
 
 ### Deactivate Energy Meter ###
-POST localhost:8088/api/v1/meters/1/deactivate
+POST localhost:8088/api/v1/meters/208/deactivate

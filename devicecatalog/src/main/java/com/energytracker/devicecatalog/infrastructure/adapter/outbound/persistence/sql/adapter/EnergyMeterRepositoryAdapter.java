@@ -4,12 +4,12 @@ import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepo
 import com.energytracker.devicecatalog.domain.model.EnergyMeter;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.EnergyMeterEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.EnergyMeterPersistenceMapper;import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaEnergyMeterPort;
-import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
@@ -41,10 +41,11 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
 
     @Override
     public EnergyMeter getEnergyMeterById(Long energyMeterId) {
-        EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.findById(energyMeterId).orElseThrow(
-                () -> new NotFoundException("Energy Meter with id " + energyMeterId + " not found")
-        );
-        return EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity);
+        EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.findById(energyMeterId).orElse(null);
+        if (energyMeterEntity != null) {
+            return EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity);
+        }
+        return null;
     }
 
     @Override

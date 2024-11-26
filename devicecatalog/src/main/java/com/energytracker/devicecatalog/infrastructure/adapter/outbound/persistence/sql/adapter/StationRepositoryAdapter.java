@@ -37,6 +37,9 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
     public List<Station> getAllStations() {
         List<StationEntity> stationEntityList = jpaStationPort.findAll();
         List<Station> stationResponseList = new ArrayList<Station>();
+        if (stationEntityList.isEmpty()) {
+            return stationResponseList;
+        }
         stationEntityList.forEach(stationEntity -> {
             stationResponseList.add(StationPersistenceMapper.stationResponseEntityToDomain(stationEntity));
         });
@@ -46,10 +49,10 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
     @Override
     public Station getStationById(Long stationId) {
         Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
-        if (stationEntity.isEmpty()) {
-            throw new NotFoundException("Station not found");
+        if (stationEntity.isPresent()) {
+            return StationPersistenceMapper.stationResponseEntityToDomain(stationEntity.get());
         }
-        return StationPersistenceMapper.stationResponseEntityToDomain(stationEntity.get());
+        return null;
     }
 
     @Override
@@ -59,12 +62,9 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
 
     @Override
     public List<Channel> getChannelsByStationId(Long stationId) {
-        Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
-        if (stationEntity.isEmpty()) {
-            throw new NotFoundException("Station not found");
-        }
+        StationEntity stationEntity = jpaStationPort.findById(stationId).get();
         List<Channel> channelList = new ArrayList<Channel>();
-        stationEntity.get().getChannelList().forEach(channelEntity -> {
+        stationEntity.getChannelList().forEach(channelEntity -> {
                 channelList.add(ChannelPersistenceMapper.channelEntityToDomain(channelEntity));
                 });
         return channelList;

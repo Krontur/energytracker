@@ -1,6 +1,16 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity;
 
-import jakarta.persistence.*;
+
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
+import jakarta.persistence.Version;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -35,7 +45,6 @@ public class BaseEntity {
     @Column( nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column( nullable = false)
     @Version
     private Long version;
 

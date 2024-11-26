@@ -106,8 +106,4 @@ public class EnergyMeter extends Device {
         calibrationScheduleList.add(calibrationSchedule);
     }
 
-    public void deactivate() {
-        this.setDeviceStatus(DeviceStatus.DEACTIVATED);
-    }
-
 }

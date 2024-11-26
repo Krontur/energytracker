@@ -25,9 +25,6 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
     @Override
     public List<EnergyMeterResponseDto> getAllEnergyMeters() {
         List<EnergyMeter> energyMeters = energyMeterRepositoryPort.getAllEnergyMeters();
-        if (energyMeters.isEmpty()) {
-            throw new NotFoundException("No energy meters found");
-        }
         List<EnergyMeterResponseDto> energyMeterResponseDtos = new ArrayList<EnergyMeterResponseDto>();
         energyMeters.forEach(energyMeter -> {
             energyMeterResponseDtos.add(EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeter));
@@ -56,15 +53,15 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
     @Override
     public EnergyMeterResponseDto getEnergyMeterById(Long energyMeterId) {
         EnergyMeter energyMeter = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
-        if(energyMeter == null) {
-            throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
+        if (energyMeter != null) {
+            return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeter);
         }
-        return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeter);
+        return null;
     }
 
     public void deleteEnergyMeterById(Long energyMeterId) {
-
-        if(energyMeterRepositoryPort.getEnergyMeterById(energyMeterId) == null) {
+        EnergyMeter energyMeter = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
+        if(energyMeter == null) {
             throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
         }
         try {
@@ -81,7 +78,7 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
     public EnergyMeterResponseDto deactivateEnergyMeterById(Long energyMeterId) {
         EnergyMeter energyMeter = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
         if(energyMeter == null) {
-            throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
+            return null;
         }
         energyMeter.deactivate();
         try {

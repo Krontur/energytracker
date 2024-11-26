@@ -49,10 +49,10 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
     @Override
     public List<StationResponseDto> getAllStations() {
         List<Station> stations = stationRepositoryPort.getAllStations();
-        if (stations.isEmpty()) {
-            throw new NotFoundException("No stations found");
-        }
         List<StationResponseDto> stationResponseDtos = new ArrayList<>();
+        if (stations.isEmpty()) {
+            return stationResponseDtos;
+        }
         stations.forEach(station -> {
             stationResponseDtos.add(StationMapper.stationResponseDomainToDto(station));
         });
@@ -61,14 +61,18 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
 
     @Override
     public StationResponseDto getStationById(Long stationId) {
-        return StationMapper.stationResponseDomainToDto(stationRepositoryPort.getStationById(stationId));
+        Station station = stationRepositoryPort.getStationById(stationId);
+        if (station != null) {
+            return StationMapper.stationResponseDomainToDto(station);
+        }
+        return null;
     }
 
     @Override
     public StationResponseDto deactivateStationById(Long stationId) {
         Station station = stationRepositoryPort.getStationById(stationId);
         if (station == null) {
-            throw new NotFoundException("Station with id " + stationId + " not found");
+            return null;
         }
         station.deactivate();
         try {
@@ -96,7 +100,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
     public List<ChannelResponseDto> getChannelsByStationId(Long stationId) {
         List<Channel> channels = stationRepositoryPort.getChannelsByStationId(stationId);
         if (channels.isEmpty()) {
-            throw new NotFoundException("No channels found for station with id " + stationId);
+            return null;
         }
         List<ChannelResponseDto> channelResponseDtos = new ArrayList<>();
         channels.forEach(channel -> {
