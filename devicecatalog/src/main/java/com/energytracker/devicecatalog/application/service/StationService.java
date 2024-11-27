@@ -1,14 +1,14 @@
 package com.energytracker.devicecatalog.application.service;
 
 
-import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationResponseDto;
-import com.energytracker.devicecatalog.application.port.inbound.*;
+import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
+import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
+import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
+import com.energytracker.devicecatalog.application.port.inbound.station.*;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
 import com.energytracker.devicecatalog.application.mapper.StationMapper;
-import com.energytracker.devicecatalog.domain.model.Channel;
-import com.energytracker.devicecatalog.domain.model.Station;
+import com.energytracker.devicecatalog.domain.model.station.Channel;
+import com.energytracker.devicecatalog.domain.model.station.Station;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StationService implements CreateStationUseCase, GetAllStationsUseCase, GetStationByIdUseCase,
-                        DeactivateStationByIdUseCase, DeleteStationByIdUseCase, GetChannelsByStationIdUseCase {
+        DeactivateStationByIdUseCase, DeleteStationByIdUseCase, GetChannelsByStationIdUseCase {
 
     private final StationRepositoryPort stationRepositoryPort;
 

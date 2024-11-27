@@ -1,7 +1,15 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper;
 
 import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.domain.model.energymeter.CalibrationSchedule;
+import com.energytracker.devicecatalog.domain.model.energymeter.ConnectionType;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeterType;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.*;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.CalibrationScheduleEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.ConnectionTypeEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.EnergyMeterEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.EnergyMeterTypeEntity;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;

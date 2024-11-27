@@ -1,7 +1,6 @@
 package com.energytracker.devicecatalog.application.port.outbound;
 
-import com.energytracker.devicecatalog.domain.model.CalibrationSchedule;
-import com.energytracker.devicecatalog.domain.model.EnergyMeter;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
 
 import java.util.List;
 

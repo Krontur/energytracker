@@ -1,14 +1,12 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.adapter;
 
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
-import com.energytracker.devicecatalog.domain.model.Channel;
-import com.energytracker.devicecatalog.domain.model.Station;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.StationEntity;
+import com.energytracker.devicecatalog.domain.model.station.Channel;
+import com.energytracker.devicecatalog.domain.model.station.Station;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.station.StationEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.ChannelPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.StationPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaStationPort;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 

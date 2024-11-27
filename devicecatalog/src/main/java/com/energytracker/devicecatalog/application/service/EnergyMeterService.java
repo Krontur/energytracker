@@ -1,11 +1,11 @@
 package com.energytracker.devicecatalog.application.service;
 
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
-import com.energytracker.devicecatalog.application.port.inbound.*;
+import com.energytracker.devicecatalog.application.port.inbound.energymeter.*;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
-import com.energytracker.devicecatalog.domain.model.EnergyMeter;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;

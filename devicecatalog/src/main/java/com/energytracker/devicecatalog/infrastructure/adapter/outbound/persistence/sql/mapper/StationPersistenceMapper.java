@@ -1,11 +1,17 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper;
 
-import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationResponseDto;
+import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
+import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
+import com.energytracker.devicecatalog.application.dto.station.StationRequestDto;
+import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
 import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.domain.model.station.Channel;
+import com.energytracker.devicecatalog.domain.model.station.EnergyUnit;
+import com.energytracker.devicecatalog.domain.model.station.PowerUnit;
+import com.energytracker.devicecatalog.domain.model.station.Station;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.*;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.station.ChannelEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.station.StationEntity;
 
 import java.util.ArrayList;
 import java.util.List;

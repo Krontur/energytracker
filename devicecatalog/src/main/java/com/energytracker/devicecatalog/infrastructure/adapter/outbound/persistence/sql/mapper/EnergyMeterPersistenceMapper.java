@@ -1,8 +1,9 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper;
 
-import com.energytracker.devicecatalog.application.dto.*;
 import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.domain.model.energymeter.*;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.*;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.*;
 
 import java.util.ArrayList;
 import java.util.List;

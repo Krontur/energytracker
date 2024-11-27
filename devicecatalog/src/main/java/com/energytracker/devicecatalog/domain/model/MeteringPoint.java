@@ -1,12 +1,25 @@
 package com.energytracker.devicecatalog.domain.model;
 
-import java.time.LocalDate;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
+import com.energytracker.devicecatalog.domain.model.station.Channel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
+@AllArgsConstructor
 public class MeteringPoint {
 
-    private MeteringPoint parentMeteringPoint;
-
     private Long meteringPointId;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private MeteringPoint parentMeteringPoint;
 
     private EnergyMeter energyMeter;
 
@@ -15,10 +28,6 @@ public class MeteringPoint {
     private String locationName;
 
     private String connectionDescription;
-
-    private LocalDate createdDate;
-
-    private LocalDate updatedDate;
 
     private Boolean activeStatus;
 

@@ -1,7 +1,13 @@
 package com.energytracker.devicecatalog.application.mapper;
 
-import com.energytracker.devicecatalog.application.dto.*;
+import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationScheduleRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationScheduleResponseDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.domain.model.energymeter.ConnectionType;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeterType;
 
 import java.util.ArrayList;
 import java.util.List;

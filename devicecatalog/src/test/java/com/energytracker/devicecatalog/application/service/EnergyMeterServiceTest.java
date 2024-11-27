@@ -1,9 +1,13 @@
 package com.energytracker.devicecatalog.application.service;
 
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
 import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.domain.model.energymeter.CalibrationSchedule;
+import com.energytracker.devicecatalog.domain.model.energymeter.ConnectionType;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeterType;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

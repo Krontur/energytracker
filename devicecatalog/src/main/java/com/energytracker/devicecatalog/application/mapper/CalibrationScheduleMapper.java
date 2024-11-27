@@ -1,9 +1,9 @@
 package com.energytracker.devicecatalog.application.mapper;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleRequestDto;
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
-import com.energytracker.devicecatalog.domain.model.CalibrationSchedule;
-import com.energytracker.devicecatalog.domain.model.CalibrationStatus;
+import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationScheduleRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationScheduleResponseDto;
+import com.energytracker.devicecatalog.domain.model.energymeter.CalibrationSchedule;
+import com.energytracker.devicecatalog.domain.model.energymeter.CalibrationStatus;
 
 public class CalibrationScheduleMapper {
 

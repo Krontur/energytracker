@@ -1,7 +1,7 @@
 package com.energytracker.devicecatalog.application.port.outbound;
 
-import com.energytracker.devicecatalog.domain.model.Channel;
-import com.energytracker.devicecatalog.domain.model.Station;
+import com.energytracker.devicecatalog.domain.model.station.Channel;
+import com.energytracker.devicecatalog.domain.model.station.Station;
 
 import java.util.List;
 

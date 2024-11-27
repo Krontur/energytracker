@@ -1,9 +1,9 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleRequestDto;
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.CalibrationScheduleEntity;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.CalibrationStatusEntity;
+import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationScheduleRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationScheduleResponseDto;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.CalibrationScheduleEntity;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.CalibrationStatusEntity;
 
 public class CalibrationSchedulePersistenceMapper {
 

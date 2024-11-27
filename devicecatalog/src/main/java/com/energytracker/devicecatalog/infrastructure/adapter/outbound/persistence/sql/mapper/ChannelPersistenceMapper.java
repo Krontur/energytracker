@@ -1,11 +1,10 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper;
 
-import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
-import com.energytracker.devicecatalog.domain.model.Channel;
-import com.energytracker.devicecatalog.domain.model.EnergyMeter;
-import com.energytracker.devicecatalog.domain.model.EnergyUnit;
-import com.energytracker.devicecatalog.domain.model.PowerUnit;
-import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.ChannelEntity;
+import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
+import com.energytracker.devicecatalog.domain.model.station.Channel;
+import com.energytracker.devicecatalog.domain.model.station.EnergyUnit;
+import com.energytracker.devicecatalog.domain.model.station.PowerUnit;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.station.ChannelEntity;
 
 public class ChannelPersistenceMapper {
 

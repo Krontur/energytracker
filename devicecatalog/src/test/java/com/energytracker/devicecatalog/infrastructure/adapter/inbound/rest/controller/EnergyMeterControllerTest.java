@@ -1,6 +1,6 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.devicecatalog.application.dto.*;
+import com.energytracker.devicecatalog.application.dto.energymeter.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
@@ -239,6 +239,7 @@ public class EnergyMeterControllerTest {
                 new ArrayList<CalibrationScheduleResponseDto>()
         );
 
+        when(energyMeterService.getEnergyMeterById(1L)).thenReturn(energyMeterResponseDto);
         when(energyMeterService.deactivateEnergyMeterById(1L)).thenReturn(energyMeterResponseDto);
 
         mockMvc.perform(post("/api/v1/meters/1/deactivate")

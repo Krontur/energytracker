@@ -1,9 +1,13 @@
 package com.energytracker.devicecatalog.application.mapper;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationScheduleResponseDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.domain.model.energymeter.CalibrationSchedule;
+import com.energytracker.devicecatalog.domain.model.energymeter.ConnectionType;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
+import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeterType;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.test.context.support.WithMockUser;
 

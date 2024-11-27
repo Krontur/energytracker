@@ -1,10 +1,10 @@
 package com.energytracker.devicecatalog.application.mapper;
 
-import com.energytracker.devicecatalog.application.dto.*;
-import com.energytracker.devicecatalog.domain.model.Channel;
+import com.energytracker.devicecatalog.application.dto.station.*;
+import com.energytracker.devicecatalog.domain.model.station.Channel;
 import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.DeviceType;
-import com.energytracker.devicecatalog.domain.model.Station;
+import com.energytracker.devicecatalog.domain.model.station.Station;
 
 import java.util.List;
 import java.util.stream.Collectors;

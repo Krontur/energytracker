@@ -1,18 +1,13 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.devicecatalog.application.dto.CalibrationScheduleResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateEnergyMeterRequestDto;
-import com.energytracker.devicecatalog.application.dto.EnergyMeterResponseDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
+import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.service.EnergyMeterService;
-import com.energytracker.devicecatalog.domain.model.CalibrationSchedule;
-import com.energytracker.devicecatalog.domain.model.EnergyMeter;
-import jakarta.ws.rs.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/meters")

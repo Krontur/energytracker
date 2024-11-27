@@ -1,8 +1,8 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.devicecatalog.application.dto.ChannelResponseDto;
-import com.energytracker.devicecatalog.application.dto.CreateStationRequestDto;
-import com.energytracker.devicecatalog.application.dto.StationResponseDto;
+import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
+import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
+import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
 import com.energytracker.devicecatalog.application.service.StationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
