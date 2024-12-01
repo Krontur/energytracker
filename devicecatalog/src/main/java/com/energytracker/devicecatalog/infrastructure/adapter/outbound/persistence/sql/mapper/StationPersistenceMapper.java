@@ -165,22 +165,7 @@ public class StationPersistenceMapper {
         List<Channel> channelList = new ArrayList<Channel>();
         stationEntity.getChannelList().forEach(
                 channelEntity -> {
-                    channelList.add(
-                            new Channel(
-                                    channelEntity.getId(),
-                                    channelEntity.getChannelName(),
-                                    channelEntity.getChannelNumber(),
-                                    channelEntity.getChannelMode(),
-                                    channelEntity.getChannelLongName(),
-                                    EnergyUnit.valueOf(channelEntity.getEnergyUnit().name()),
-                                    PowerUnit.valueOf(channelEntity.getPowerUnit().name()),
-                                    channelEntity.getURatio(),
-                                    channelEntity.getIRatio(),
-                                    channelEntity.getPFactor(),
-                                    channelEntity.getLonSubChannel(),
-                                    channelEntity.getLonIsActive()
-                            )
-                    );
+                    channelList.add( ChannelPersistenceMapper.channelEntityToDomain(channelEntity));
                 }
         );
         return new Station(

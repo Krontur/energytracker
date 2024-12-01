@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.application.dto.energymeter.CalibrationSc
 import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.domain.model.*;
+import com.energytracker.devicecatalog.domain.model.energymeter.CalibrationSchedule;
 import com.energytracker.devicecatalog.domain.model.energymeter.ConnectionType;
 import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
 import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeterType;
@@ -131,5 +132,29 @@ public class EnergyMeterMapper {
                 energyMeter.getMidApprovalYear(),
                 calibrationScheduleResponseDtoList
         );
+    }
+
+    public static EnergyMeter energyMeterResponseDtoToDomain(EnergyMeterResponseDto energyMeterResponseDto) {
+        List<CalibrationSchedule> calibrationScheduleList = new ArrayList<CalibrationSchedule>();
+        energyMeterResponseDto.getCalibrationSchedules().forEach(calibrationSchedule -> {
+            calibrationScheduleList.add(CalibrationScheduleMapper.calibrationScheduleResponseDtoToDomain(calibrationSchedule));
+        });
+        return new EnergyMeter(
+                energyMeterResponseDto.getEnergyMeterId(),
+                energyMeterResponseDto.getSerialNumber(),
+                energyMeterResponseDto.getCreatedAt(),
+                energyMeterResponseDto.getUpdatedAt(),
+                energyMeterResponseDto.getVersion(),
+                DeviceType.valueOf(energyMeterResponseDto.getDeviceType()),
+                DeviceStatus.valueOf(energyMeterResponseDto.getDeviceStatus()),
+                energyMeterResponseDto.getConnectionAddress(),
+                EnergyMeterType.valueOf(energyMeterResponseDto.getEnergyMeterType()),
+                energyMeterResponseDto.getReferenceVoltage(),
+                ConnectionType.valueOf(energyMeterResponseDto.getConnectionType()),
+                energyMeterResponseDto.getMaxCurrent(),
+                energyMeterResponseDto.getMidApprovalYear(),
+                calibrationScheduleList
+        );
+
     }
 }

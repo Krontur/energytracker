@@ -25,6 +25,10 @@ public class Device {
 
     private DeviceStatus deviceStatus;
 
+    public Device(Long deviceId) {
+        this.deviceId = deviceId;
+    }
+
     public Device(String serialNumber, DeviceType deviceType, DeviceStatus deviceStatus) {
         this.serialNumber = serialNumber;
         this.deviceType = deviceType;

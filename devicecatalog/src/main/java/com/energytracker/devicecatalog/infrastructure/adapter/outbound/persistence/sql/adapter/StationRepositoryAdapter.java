@@ -7,6 +7,7 @@ import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persisten
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.ChannelPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.StationPersistenceMapper;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaStationPort;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -46,9 +47,11 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
 
     @Override
     public Station getStationById(Long stationId) {
-        Optional<StationEntity> stationEntity = jpaStationPort.findById(stationId);
-        if (stationEntity.isPresent()) {
-            return StationPersistenceMapper.stationResponseEntityToDomain(stationEntity.get());
+        StationEntity stationEntity = jpaStationPort.findById(stationId).orElseThrow(
+                () -> new EntityNotFoundException("Station with id " + stationId + " not found")
+        );
+        if (stationEntity != null) {
+            return StationPersistenceMapper.stationResponseEntityToDomain(stationEntity);
         }
         return null;
     }
@@ -60,11 +63,14 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
 
     @Override
     public List<Channel> getChannelsByStationId(Long stationId) {
-        StationEntity stationEntity = jpaStationPort.findById(stationId).get();
+        StationEntity stationEntity = jpaStationPort.findById(stationId).orElse(null);
+        if (stationEntity == null) {
+            return null;
+        }
         List<Channel> channelList = new ArrayList<Channel>();
         stationEntity.getChannelList().forEach(channelEntity -> {
-                channelList.add(ChannelPersistenceMapper.channelEntityToDomain(channelEntity));
-                });
+            channelList.add(ChannelPersistenceMapper.channelEntityToDomain(channelEntity));
+        });
         return channelList;
     }
 

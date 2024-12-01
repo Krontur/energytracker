@@ -8,4 +8,5 @@ public interface MeteringPointRepositoryPort {
 
     List<MeteringPoint> getAllMeteringPoints();
 
+    MeteringPoint createMeteringPoint(MeteringPoint meteringPoint);
 }

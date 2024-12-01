@@ -1,2 +1,15 @@
 ### Get all Metering Points ###
 GET http://localhost:8088/api/v1/metering-points
+
+### Create a new Metering Point ###
+POST http://localhost:8088/api/v1/metering-points
+Content-Type: application/json
+
+{
+  "locationName": "Location 1",
+  "connectionDescription": "Connection Description 1",
+  "parentMeteringPointId": null,
+  "energyMeterId": 7,
+  "channelId": 204,
+  "activeStatus": true
+}

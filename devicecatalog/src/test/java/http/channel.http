@@ -1,0 +1,2 @@
+### Get channel by id ###
+GET http://localhost:8088/api/v1/channels/74

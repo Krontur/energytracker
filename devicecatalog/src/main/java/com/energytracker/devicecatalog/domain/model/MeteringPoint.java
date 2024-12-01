@@ -13,13 +13,23 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MeteringPoint {
 
+    public MeteringPoint(String locationName, String connectionDescription, Long parentMeteringPointId,
+                         Long energyMeterId, Long channelId, Boolean activeStatus) {
+        this.locationName = locationName;
+        this.connectionDescription = connectionDescription;
+        this.parentMeteringPointId = parentMeteringPointId;
+        this.energyMeter = new EnergyMeter(energyMeterId);
+        this.channel = new Channel(channelId);
+        this.activeStatus = activeStatus;
+    }
+
     private Long meteringPointId;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
 
-    private MeteringPoint parentMeteringPoint;
+    private Long parentMeteringPointId;
 
     private EnergyMeter energyMeter;
 

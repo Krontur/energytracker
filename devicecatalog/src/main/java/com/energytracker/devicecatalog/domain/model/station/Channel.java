@@ -4,10 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
 public class Channel {
+
+    public Channel(Long channelId){
+        this.channelId = channelId;
+    }
 
     public Channel(int channelNumber, ChannelDefaultConfig channelDefaultConfig){
         this.channelNumber = channelNumber;
@@ -49,6 +55,12 @@ public class Channel {
 
     private Long channelId;
 
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    private Long version;
+
     private String channelName;
 
     private int channelNumber;
@@ -70,4 +82,6 @@ public class Channel {
     private int lonSubChannel;
 
     private Boolean lonIsActive;
+
+    private Long stationId;
 }

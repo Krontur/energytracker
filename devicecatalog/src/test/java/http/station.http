@@ -2,27 +2,30 @@
 GET http://localhost:8088/api/v1/stations
 
 ### Get station by id ###
-GET http://localhost:8088/api/v1/stations/148
+GET http://localhost:8088/api/v1/stations/10
 
 ### Create station ###
 POST http://localhost:8088/api/v1/stations
 Content-Type: application/json
 
 {
-  "serialNumber": "HU3454634234",
+  "serialNumber": "HG3445653434",
   "deviceType": "STATION",
   "deviceStatus": "IN_STOCK",
   "stationName": "Station 1",
   "stationType": "U1601",
-  "stationTag": "A2",
+  "stationTag": "A1",
   "readingIntervalInSeconds": 900
 }
 
 ### Get Channels by station id ###
-GET http://localhost:8088/api/v1/stations/148/channels
+GET http://localhost:8088/api/v1/stations/10/channels
+
+### Get Channel by station id and channel id ###
+GET http://localhost:8088/api/v1/stations/10/channels/74
 
 ### Deactivate station by id ###
 POST http://localhost:8088/api/v1/stations/11/deactivate
 
 ### Delete station by id ###
-DELETE http://localhost:8088/api/v1/stations/148
+DELETE http://localhost:8088/api/v1/stations/75

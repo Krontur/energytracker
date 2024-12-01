@@ -13,12 +13,23 @@ public class MeteringPointPersistenceMapper {
                 meteringPointEntity.getId(),
                 meteringPointEntity.getCreatedAt(),
                 meteringPointEntity.getUpdatedAt(),
-                meteringPointEntity.getParentMeteringPointEntity() == null ? null : MeteringPointPersistenceMapper.meteringPointEntityToDomain(meteringPointEntity.getParentMeteringPointEntity()),
+                meteringPointEntity.getParentMeteringPointId(),
                 EnergyMeterPersistenceMapper.energyMeterEntityToDomain(meteringPointEntity.getEnergyMeterEntity()),
                 ChannelPersistenceMapper.channelEntityToDomain(meteringPointEntity.getChannelEntity()),
                 meteringPointEntity.getLocationName(),
                 meteringPointEntity.getConnectionDescription(),
                 meteringPointEntity.getActiveStatus()
+        );
+    }
+
+    public static MeteringPointEntity meteringPointDomainToEntity(MeteringPoint meteringPoint) {
+        return new MeteringPointEntity(
+                meteringPoint.getParentMeteringPointId(),
+                EnergyMeterPersistenceMapper.energyMeterDomainToEntity(meteringPoint.getEnergyMeter()),
+                ChannelPersistenceMapper.channelDomainToEntity(meteringPoint.getChannel()),
+                meteringPoint.getLocationName(),
+                meteringPoint.getConnectionDescription(),
+                meteringPoint.getActiveStatus()
         );
     }
 }

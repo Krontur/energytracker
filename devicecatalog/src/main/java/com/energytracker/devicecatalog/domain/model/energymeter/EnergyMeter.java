@@ -14,6 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 public class EnergyMeter extends Device {
 
+    public EnergyMeter(Long deviceId) {
+        super(deviceId);
+    }
+
     public EnergyMeter(
             Long deviceId,
             String serialNumber,

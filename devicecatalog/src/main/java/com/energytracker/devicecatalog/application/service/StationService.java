@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDt
 import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
 import com.energytracker.devicecatalog.application.port.inbound.station.*;
+import com.energytracker.devicecatalog.application.port.outbound.ChannelRepositoryPort;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
 import com.energytracker.devicecatalog.application.mapper.StationMapper;
 import com.energytracker.devicecatalog.domain.model.station.Channel;
@@ -24,6 +25,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
         DeactivateStationByIdUseCase, DeleteStationByIdUseCase, GetChannelsByStationIdUseCase {
 
     private final StationRepositoryPort stationRepositoryPort;
+    private final ChannelRepositoryPort channelRepositoryPort;
 
     @Override
     @Transactional
@@ -61,11 +63,14 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
 
     @Override
     public StationResponseDto getStationById(Long stationId) {
-        Station station = stationRepositoryPort.getStationById(stationId);
-        if (station != null) {
+        try {
+            Station station = stationRepositoryPort.getStationById(stationId);
             return StationMapper.stationResponseDomainToDto(station);
+        } catch (NotFoundException e) {
+            throw new NotFoundException("Station with id " + stationId + " not found");
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting station with id " + stationId);
         }
-        return null;
     }
 
     @Override
@@ -98,8 +103,9 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
 
     @Override
     public List<ChannelResponseDto> getChannelsByStationId(Long stationId) {
-        List<Channel> channels = stationRepositoryPort.getChannelsByStationId(stationId);
-        if (channels.isEmpty()) {
+        List<Channel> channels = new ArrayList<>();
+        channels = stationRepositoryPort.getChannelsByStationId(stationId);
+        if (channels == null || channels.isEmpty()) {
             return null;
         }
         List<ChannelResponseDto> channelResponseDtos = new ArrayList<>();
@@ -107,5 +113,15 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
             channelResponseDtos.add(StationMapper.channelDomainToDto(channel));
         });
         return channelResponseDtos;
+    }
+
+    public Channel getChannelById(Long channelId) {
+        try {
+            return channelRepositoryPort.getChannelById(channelId);
+        } catch (NotFoundException e) {
+            throw new NotFoundException("Channel with id " + channelId + " not found");
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting channel with id " + channelId);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
-import com.energytracker.devicecatalog.application.dto.MeteringPointResponseDto;
+import com.energytracker.devicecatalog.application.dto.meteringpoint.CreateMeteringPointRequestDto;
+import com.energytracker.devicecatalog.application.dto.meteringpoint.MeteringPointResponseDto;
 import com.energytracker.devicecatalog.application.service.MeteringPointService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,8 +35,13 @@ public class MeteringPointController {
     }
 
     @PostMapping
-    public String createMeteringPoint() {
-        return "createMeteringPoint";
+    public ResponseEntity<MeteringPointResponseDto> createMeteringPoint(@RequestBody CreateMeteringPointRequestDto createMeteringPointRequestDto) {
+        try {
+            MeteringPointResponseDto meteringPoint = meteringPointService.createMeteringPoint(createMeteringPointRequestDto);
+            return new ResponseEntity<>(meteringPoint, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
 

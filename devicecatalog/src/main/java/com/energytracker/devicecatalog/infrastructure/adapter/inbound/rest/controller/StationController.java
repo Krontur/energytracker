@@ -4,6 +4,7 @@ import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDt
 import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
 import com.energytracker.devicecatalog.application.service.StationService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -44,11 +45,14 @@ public class StationController {
 
     @GetMapping("/{stationId}")
     public ResponseEntity<StationResponseDto> getStationById(@PathVariable Long stationId) {
-        StationResponseDto station = stationService.getStationById(stationId);
-        if (station == null) {
+        try {
+            StationResponseDto station = stationService.getStationById(stationId);
+            return new ResponseEntity<>(station, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>(station, HttpStatus.OK);
     }
 
     @DeleteMapping("/{stationId}")
@@ -69,7 +73,7 @@ public class StationController {
     @GetMapping("/{stationId}/channels")
     public ResponseEntity<List<ChannelResponseDto>> getChannelsByStationId(@PathVariable Long stationId) {
         List<ChannelResponseDto> channels = stationService.getChannelsByStationId(stationId);
-        if (channels.isEmpty()) {
+        if (channels == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(channels, HttpStatus.OK);
