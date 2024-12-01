@@ -9,7 +9,7 @@ POST http://localhost:8088/api/v1/stations
 Content-Type: application/json
 
 {
-  "serialNumber": "HG3445653434",
+  "serialNumber": "HG3335653434",
   "deviceType": "STATION",
   "deviceStatus": "IN_STOCK",
   "stationName": "Station 1",
@@ -29,3 +29,6 @@ POST http://localhost:8088/api/v1/stations/11/deactivate
 
 ### Delete station by id ###
 DELETE http://localhost:8088/api/v1/stations/75
+
+### Get channels of a station by lonIsActive status ###
+GET http://localhost:8088/api/v1/stations/140/channels/lon-is-active

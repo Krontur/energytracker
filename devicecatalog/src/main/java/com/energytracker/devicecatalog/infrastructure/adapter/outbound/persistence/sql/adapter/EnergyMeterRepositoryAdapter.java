@@ -2,6 +2,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
 import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
+import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceStatusEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.energymeter.EnergyMeterEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.mapper.EnergyMeterPersistenceMapper;import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.repository.JpaEnergyMeterPort;
 import lombok.AllArgsConstructor;
@@ -56,5 +57,15 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
     public EnergyMeter save(EnergyMeter energyMeter) {
         EnergyMeterEntity energyMeterEntity = jpaEnergyMeterPort.save(EnergyMeterPersistenceMapper.energyMeterDomainToEntity(energyMeter));
         return EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity);
+    }
+
+    @Override
+    public List<EnergyMeter> getInStockEnergyMeters() {
+        List<EnergyMeter> energyMeters = new ArrayList<>();
+        List<EnergyMeterEntity> energyMeterEntities = jpaEnergyMeterPort.findByDeviceStatus(DeviceStatusEntity.IN_STOCK);
+        energyMeterEntities.forEach(energyMeterEntity -> {
+            energyMeters.add(EnergyMeterPersistenceMapper.energyMeterEntityToDomain(energyMeterEntity));
+        });
+        return energyMeters;
     }
 }

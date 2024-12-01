@@ -65,4 +65,13 @@ public class EnergyMeterController {
         }
         return new ResponseEntity<>(energyMeterService.deactivateEnergyMeterById(energyMeterId), HttpStatus.OK);
     }
+
+    @GetMapping("/in-stock")
+    public ResponseEntity<List<EnergyMeterResponseDto>> getInStockEnergyMeters() {
+        List<EnergyMeterResponseDto> energyMeters = energyMeterService.getInStockEnergyMeters();
+        if (energyMeters == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(energyMeters, HttpStatus.OK);
+    }
 }

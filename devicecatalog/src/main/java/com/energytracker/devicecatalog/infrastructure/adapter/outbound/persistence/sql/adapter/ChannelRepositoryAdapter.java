@@ -31,6 +31,12 @@ public class ChannelRepositoryAdapter implements ChannelRepositoryPort {
     }
 
     @Override
+    public Channel updateChannel(Channel channel) {
+        ChannelEntity channelEntity = jpaChannelPort.save(ChannelPersistenceMapper.channelDomainToEntity(channel));
+        return ChannelPersistenceMapper.channelEntityToDomain(channelEntity);
+    }
+
+    @Override
     public Channel getChannelById(Long channelId) {
         ChannelEntity channelEntity = jpaChannelPort.findById(channelId).orElse(null);
         if (channelEntity != null) {

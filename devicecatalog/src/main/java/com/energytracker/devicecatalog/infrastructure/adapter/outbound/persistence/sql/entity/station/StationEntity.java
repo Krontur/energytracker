@@ -55,6 +55,7 @@ public class StationEntity extends DeviceEntity {
     private int readingIntervalInSeconds;
 
     @NotNull
+    @Column(unique = true)
     private String stationTag;
 
     @NotNull

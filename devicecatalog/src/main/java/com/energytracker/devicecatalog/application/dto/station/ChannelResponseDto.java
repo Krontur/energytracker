@@ -5,12 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
 public class ChannelResponseDto {
 
     private Long channelId;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private Long version;
     private String channelName;
     private int channelNumber;
     private int channelMode;
@@ -22,5 +27,6 @@ public class ChannelResponseDto {
     private int pFactor;
     private int lonSubChannel;
     private Boolean lonIsActive;
+    private Long stationId;
 
 }

@@ -14,7 +14,7 @@ public class MeteringPointMapper {
                 meteringPoint.getUpdatedAt(),
                 meteringPoint.getParentMeteringPointId(),
                 EnergyMeterMapper.energyMeterDomainToResponseDto(meteringPoint.getEnergyMeter()),
-                StationMapper.channelDomainToDto(meteringPoint.getChannel()),
+                ChannelMapper.channelDomainToDto(meteringPoint.getChannel()),
                 meteringPoint.getLocationName(),
                 meteringPoint.getConnectionDescription(),
                 meteringPoint.getActiveStatus()

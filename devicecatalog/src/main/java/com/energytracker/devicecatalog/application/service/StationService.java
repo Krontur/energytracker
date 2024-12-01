@@ -4,6 +4,7 @@ package com.energytracker.devicecatalog.application.service;
 import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
+import com.energytracker.devicecatalog.application.mapper.ChannelMapper;
 import com.energytracker.devicecatalog.application.port.inbound.station.*;
 import com.energytracker.devicecatalog.application.port.outbound.ChannelRepositoryPort;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
@@ -22,7 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class StationService implements CreateStationUseCase, GetAllStationsUseCase, GetStationByIdUseCase,
-        DeactivateStationByIdUseCase, DeleteStationByIdUseCase, GetChannelsByStationIdUseCase {
+        DeactivateStationByIdUseCase, DeleteStationByIdUseCase, GetChannelsByStationIdUseCase, GetLonActiveChannelsByStationIdUseCase {
 
     private final StationRepositoryPort stationRepositoryPort;
     private final ChannelRepositoryPort channelRepositoryPort;
@@ -110,7 +111,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
         }
         List<ChannelResponseDto> channelResponseDtos = new ArrayList<>();
         channels.forEach(channel -> {
-            channelResponseDtos.add(StationMapper.channelDomainToDto(channel));
+            channelResponseDtos.add(ChannelMapper.channelDomainToDto(channel));
         });
         return channelResponseDtos;
     }
@@ -123,5 +124,19 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
         } catch (Exception e) {
             throw new RuntimeException("Error getting channel with id " + channelId);
         }
+    }
+
+    @Override
+    public List<ChannelResponseDto> getLonActiveChannelsByStationId(Long stationId) {
+        List<Channel> channels = new ArrayList<>();
+        channels = stationRepositoryPort.getLonActiveChannelsByStationId(stationId);
+        if (channels == null || channels.isEmpty()) {
+            return null;
+        }
+        List<ChannelResponseDto> channelResponseDtos = new ArrayList<>();
+        channels.forEach(channel -> {
+            channelResponseDtos.add(ChannelMapper.channelDomainToDto(channel));
+        });
+        return channelResponseDtos;
     }
 }

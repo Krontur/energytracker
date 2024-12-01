@@ -79,4 +79,19 @@ public class StationRepositoryAdapter implements StationRepositoryPort {
         StationEntity stationEntity = jpaStationPort.save(StationPersistenceMapper.stationToEntity(station));
         return StationPersistenceMapper.stationResponseEntityToDomain(stationEntity);
     }
+
+    @Override
+    public List<Channel> getLonActiveChannelsByStationId(Long stationId) {
+        StationEntity stationEntity = jpaStationPort.findById(stationId).orElse(null);
+        if (stationEntity == null) {
+            return null;
+        }
+        List<Channel> channelList = new ArrayList<Channel>();
+        stationEntity.getChannelList().forEach(channelEntity -> {
+            if (channelEntity.getLonIsActive()) {
+                channelList.add(ChannelPersistenceMapper.channelEntityToDomain(channelEntity));
+            }
+        });
+        return channelList;
+    }
 }

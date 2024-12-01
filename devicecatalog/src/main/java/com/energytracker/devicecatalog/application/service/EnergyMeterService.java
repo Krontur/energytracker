@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterRe
 import com.energytracker.devicecatalog.application.mapper.EnergyMeterMapper;
 import com.energytracker.devicecatalog.application.port.inbound.energymeter.*;
 import com.energytracker.devicecatalog.application.port.outbound.EnergyMeterRepositoryPort;
+import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.ws.rs.NotFoundException;
@@ -18,7 +19,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEnergyMetersUseCase,
-        GetEnergyMeterByIdUseCase, DeleteEnergyMeterByIdUseCase, DeactivateEnergyMeterByIdUseCase {
+        GetEnergyMeterByIdUseCase, DeleteEnergyMeterByIdUseCase, DeactivateEnergyMeterByIdUseCase,
+        GetInStockEnergyMetersUseCase, UpdateEnergyMeterUseCase {
 
     private final EnergyMeterRepositoryPort energyMeterRepositoryPort;
 
@@ -87,6 +89,41 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
             throw new OptimisticLockException("Error deactivating energy meter, entity has been modified");
         } catch (Exception e) {
             throw new RuntimeException("Error deactivating energy meter");
+        }
+    }
+
+    @Override
+    public List<EnergyMeterResponseDto> getInStockEnergyMeters() {
+        List<EnergyMeter> energyMeters = energyMeterRepositoryPort.getInStockEnergyMeters();
+        if (energyMeters == null) {
+            return null;
+        }
+        try {
+            List<EnergyMeterResponseDto> energyMeterResponseDtos = new ArrayList<EnergyMeterResponseDto>();
+            energyMeters.forEach(energyMeter -> {
+                energyMeterResponseDtos.add(EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeter));
+            });
+            return energyMeterResponseDtos;
+        } catch (Exception e) {
+            throw new RuntimeException("Error getting in stock energy meters");
+        }
+    }
+
+    @Override
+    public EnergyMeterResponseDto updateEnergyMeter(EnergyMeterResponseDto energyMeterResponseDto) {
+        EnergyMeter energyMeter = energyMeterRepositoryPort.getEnergyMeterById(energyMeterResponseDto.getEnergyMeterId());
+        if(energyMeter == null) {
+            throw new NotFoundException("Energy Meter with id " + energyMeterResponseDto.getEnergyMeterId() + " not found");
+        }
+        energyMeter.setDeviceStatus(DeviceStatus.valueOf(energyMeterResponseDto.getDeviceStatus()));
+        energyMeter.setMaxCurrent(energyMeterResponseDto.getMaxCurrent());
+        energyMeter.setConnectionAddress(energyMeterResponseDto.getConnectionAddress());
+        try {
+            return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.save(energyMeter));
+        } catch (OptimisticLockException e) {
+            throw new OptimisticLockException("Error updating energy meter, entity has been modified");
+        } catch (Exception e) {
+            throw new RuntimeException("Error updating energy meter");
         }
     }
 }

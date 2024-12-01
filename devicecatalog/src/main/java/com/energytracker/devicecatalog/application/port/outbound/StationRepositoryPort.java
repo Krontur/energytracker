@@ -20,4 +20,6 @@ public interface StationRepositoryPort {
     List<Channel> getChannelsByStationId(Long stationId);
 
     Station save(Station station);
+
+    List<Channel> getLonActiveChannelsByStationId(Long stationId);
 }

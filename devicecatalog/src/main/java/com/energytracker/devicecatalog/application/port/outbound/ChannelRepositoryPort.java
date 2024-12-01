@@ -9,4 +9,6 @@ public interface ChannelRepositoryPort {
     Channel getChannelById(Long channelId);
 
     List<Channel> getAllChannels();
+
+    Channel updateChannel(Channel channel);
 }

@@ -23,6 +23,6 @@ public class ChannelDefaultConfig {
 
     private int lonSubChannel = 1;
 
-    private Boolean lonIsActive = true;
+    private Boolean lonIsActive = false;
 
 }

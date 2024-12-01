@@ -79,4 +79,13 @@ public class StationController {
         return new ResponseEntity<>(channels, HttpStatus.OK);
     }
 
+    @GetMapping("/{stationId}/channels/lon-is-active")
+    public ResponseEntity<List<ChannelResponseDto>> getLonActiveChannelsByStationId(@PathVariable Long stationId) {
+        List<ChannelResponseDto> channels = stationService.getLonActiveChannelsByStationId(stationId);
+        if (channels == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(channels, HttpStatus.OK);
+    }
+
 }

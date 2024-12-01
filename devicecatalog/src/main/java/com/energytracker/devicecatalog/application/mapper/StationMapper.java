@@ -83,10 +83,7 @@ public class StationMapper {
 
     public static StationResponseDto stationResponseDomainToDto(Station station) {
         List<ChannelResponseDto> channelResponseDtos = station.getChannelList().stream()
-                .map(channel -> new ChannelResponseDto(channel.getChannelId(), channel.getChannelName(), channel.getChannelNumber(),
-                        channel.getChannelMode(), channel.getChannelLongName(), channel.getEnergyUnit().name(),
-                        channel.getPowerUnit().name(), channel.getURatio(), channel.getIRatio(), channel.getPFactor(),
-                        channel.getLonSubChannel(), channel.getLonIsActive()))
+                .map(channel -> ChannelMapper.channelDomainToDto(channel))
                 .collect(Collectors.toList());
         StationResponseDto stationResponseDto = new StationResponseDto(
                 station.getDeviceId(),
@@ -105,20 +102,4 @@ public class StationMapper {
         return stationResponseDto;
     }
 
-    public static ChannelResponseDto channelDomainToDto(Channel channel) {
-        return new ChannelResponseDto(
-                channel.getChannelId(),
-                channel.getChannelName(),
-                channel.getChannelNumber(),
-                channel.getChannelMode(),
-                channel.getChannelLongName(),
-                channel.getEnergyUnit().name(),
-                channel.getPowerUnit().name(),
-                channel.getURatio(),
-                channel.getIRatio(),
-                channel.getPFactor(),
-                channel.getLonSubChannel(),
-                channel.getLonIsActive()
-        );
-    }
 }

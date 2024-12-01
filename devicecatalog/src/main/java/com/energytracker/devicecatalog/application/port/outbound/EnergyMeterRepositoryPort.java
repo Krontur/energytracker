@@ -17,4 +17,6 @@ public interface EnergyMeterRepositoryPort {
     void deleteEnergyMeterById(Long energyMeterId);
 
     EnergyMeter save(EnergyMeter energyMeter);
+
+    List<EnergyMeter> getInStockEnergyMeters();
 }
