@@ -23,8 +23,6 @@ public class MeteringPointsListenerAdapter implements MeteringPointsListenerPort
     public void receiveMessage(List<MeteringPoint> meteringPoints) {
 
         log.info("Received message: {}", meteringPoints);
-        meteringPointsMessageHandlerPort.receiveMessage(meteringPoints, configLoaderPort.getProperty("meteringpoints.jsonfile.save.location"));
-        log.info("Metering points saved to file");
     }
 
 }

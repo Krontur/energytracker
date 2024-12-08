@@ -1,4 +1,4 @@
-package com.energytracker.consumptionservice.domain.model;
+package com.energytracker.consumptionservice.application.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Consumption {
+public class ConsumptionDto {
 
     private Long consumptionId;
     private Long meteringPointId;
