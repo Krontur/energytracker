@@ -4,8 +4,8 @@ import com.energytracker.consumptionservice.domain.model.MeteringPoint;
 
 import java.util.List;
 
-public interface MeteringPointsListenerPort {
+public interface MeteringPointMessageHandlerPort {
 
-    void receiveMessage(List<MeteringPoint> meteringPoints);
+    void receiveMessage(MeteringPoint meteringPoint, String filePath);
 
 }

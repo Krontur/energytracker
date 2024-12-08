@@ -1,4 +1,4 @@
-package com.energytracker.consumptionservice.infrastructure.configuration;
+package com.energytracker.consumptionservice.infrastructure.adapter.configuration;
 
 import com.energytracker.consumptionservice.application.port.outbound.ConfigLoaderPort;
 import lombok.extern.log4j.Log4j2;

@@ -1,4 +1,4 @@
-package com.energytracker.consumptionservice.infrastructure.configuration;
+package com.energytracker.consumptionservice.infrastructure.adapter.configuration;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -38,28 +38,28 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(consumptionsQueue).to(consumptionsExchange).with(consumptionsRoutingKey);
     }
 
-    @Value("${rabbitmq.queue.meteringpoints}")
-    private String meteringPointsQueueName;
+    @Value("${rabbitmq.queue.new.meteringpoint}")
+    private String newMeteringPointQueueName;
 
-    @Value("${rabbitmq.exchange.meteringpoints}")
-    private String meteringPointsExchangeName;
+    @Value("${rabbitmq.exchange.new.meteringpoint}")
+    private String newMeteringPointExchangeName;
 
-    @Value("${rabbitmq.routing.key.meteringpoints}")
-    private String meteringPointsRoutingKey;
+    @Value("${rabbitmq.routing.key.new.meteringpoint}")
+    private String newMeteringPointRoutingKey;
 
     @Bean
-    public Queue meteringPointsQueue() {
-        return new Queue(meteringPointsQueueName, true);
+    public Queue newMeteringPointQueue() {
+        return new Queue(newMeteringPointQueueName, true);
     }
 
     @Bean
-    public DirectExchange meteringPointsExchange() {
-        return new DirectExchange(meteringPointsExchangeName);
+    public DirectExchange newMeteringPointExchange() {
+        return new DirectExchange(newMeteringPointExchangeName);
     }
 
     @Bean
-    public Binding meteringPointsBinding(Queue meteringPointsQueue, DirectExchange meteringPointsExchange) {
-        return BindingBuilder.bind(meteringPointsQueue).to(meteringPointsExchange).with(meteringPointsRoutingKey);
+    public Binding newMeteringPointBinding(Queue newMeteringPointQueue, DirectExchange newMeteringPointExchange) {
+        return BindingBuilder.bind(newMeteringPointQueue).to(newMeteringPointExchange).with(newMeteringPointRoutingKey);
     }
 
     @Bean

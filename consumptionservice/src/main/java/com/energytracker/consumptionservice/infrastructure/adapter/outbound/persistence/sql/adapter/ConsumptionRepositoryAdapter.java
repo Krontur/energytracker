@@ -28,4 +28,11 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
         }
     return consumptions;
     }
+
+    @Override
+    public Consumption saveConsumption(Consumption consumption) {
+        ConsumptionEntity consumptionEntity = ConsumptionPersistenceMapper.consumptionDomainToEntity(consumption);
+        ConsumptionEntity savedConsumptionEntity = jpaConsumptionPort.save(consumptionEntity);
+        return ConsumptionPersistenceMapper.consumptionEntityToDomain(savedConsumptionEntity);
+    }
 }

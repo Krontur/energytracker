@@ -8,4 +8,6 @@ import java.util.List;
 public interface ConsumptionRepositoryPort {
 
    List<Consumption> findConsumptions(Long meteringPointId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+   Consumption saveConsumption(Consumption consumption);
 }

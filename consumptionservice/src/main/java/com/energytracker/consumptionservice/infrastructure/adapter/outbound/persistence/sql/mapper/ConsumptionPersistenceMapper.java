@@ -14,4 +14,12 @@ public class ConsumptionPersistenceMapper {
         return consumption;
     }
 
+    public static ConsumptionEntity consumptionDomainToEntity(Consumption consumption) {
+        ConsumptionEntity consumptionEntity = new ConsumptionEntity();
+        consumptionEntity.setConsumptionId(consumption.getConsumptionId());
+        consumptionEntity.setMeteringPointId(consumption.getMeteringPointId());
+        consumptionEntity.setConsumptionValue(consumption.getConsumptionValue());
+        consumptionEntity.setConsumptionTimestamp(consumption.getConsumptionTimestamp());
+        return consumptionEntity;
+    }
 }
