@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class MeteringPointEntity {
 
     @Id
+    @Column(name = "metering_point_id", nullable = false)
     private Long meteringPointId;
 
     @Column(name = "station_tag", nullable = false)

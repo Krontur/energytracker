@@ -6,4 +6,5 @@ public interface MeteringPointRepositoryPort {
 
     MeteringPoint saveMeteringPoint(MeteringPoint meteringPoint);
 
+    MeteringPoint deleteMeteringPoint(MeteringPoint meteringPoint);
 }

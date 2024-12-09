@@ -18,7 +18,7 @@ public class ScheduledStationQueryController {
         this.getConsumptionsByAllStationTagsUseCase = getConsumptionsByAllStationTagsUseCase;
     }
 
-    @Scheduled(cron = "0 0/1 * * * ?")
+    @Scheduled(cron = "0 0/15 * * * ?")
     public void getConsumptionsByAllStationTags() {
         String timeStamp;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");

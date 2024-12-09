@@ -16,21 +16,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class MeteringPointListenerAdapter implements MeteringPointListenerPort {
 
-    private final MeteringPointRepositoryPort meteringPointRepositoryPort;
+    private final MeteringPointMessageHandlerPort meteringPointMessageHandlerPort;
 
     @RabbitListener(queues = "${rabbitmq.queue.new.meteringpoint}")
     public void receiveMessage(MeteringPoint meteringPoint) {
         log.info("Received message: {}", meteringPoint);
-        try {
-            MeteringPoint savedMeteringPoint = meteringPointRepositoryPort.saveMeteringPoint(meteringPoint);
-            if (savedMeteringPoint != null) {
-                log.info("Metering point saved: {}", savedMeteringPoint);
-            } else {
-                log.error("Error saving metering point: {}", meteringPoint);
-            }
-        } catch (Exception e) {
-            log.error("Error saving metering point: {}", meteringPoint, e);
-        }
+        meteringPointMessageHandlerPort.receiveMessage(meteringPoint);
     }
 
 }
