@@ -22,8 +22,11 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
     private final JpaConsumptionPort jpaConsumptionPort;
 
     @Override
-    public List<Consumption> findConsumptionsByMeteringPointIdAndInterval(Long meteringPointId, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        List<ConsumptionEntity> consumptionEntities = jpaConsumptionPort.findByMeteringPointIdAndConsumptionTimestampBetween(meteringPointId, startDateTime, endDateTime);
+    public List<Consumption> findConsumptionsByMeteringPointIdAndInterval(Long meteringPointId,
+                                                                          LocalDateTime startDateTime,
+                                                                          LocalDateTime endDateTime) {
+        List<ConsumptionEntity> consumptionEntities = jpaConsumptionPort.findByMeteringPointIdAndConsumptionTimestampBetween(
+                meteringPointId, startDateTime, endDateTime);
         List<Consumption> consumptions = new ArrayList<>();
         if(consumptionEntities != null) {
             consumptionEntities.forEach(consumptionEntity -> consumptions.add(

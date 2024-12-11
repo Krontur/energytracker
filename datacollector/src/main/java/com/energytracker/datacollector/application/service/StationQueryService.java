@@ -1,5 +1,6 @@
 package com.energytracker.datacollector.application.service;
 
+import com.energytracker.datacollector.application.port.inbound.ConsumptionsMessageHandlerPort;
 import com.energytracker.datacollector.application.port.inbound.GetConsumptionsByAllStationTagsUseCase;
 import com.energytracker.datacollector.application.port.outbound.*;
 import com.energytracker.datacollector.domain.model.ConsumptionResult;
@@ -8,8 +9,12 @@ import com.energytracker.datacollector.domain.model.MeteringPointsGroupsByStatio
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -21,7 +26,7 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
     private final StationQueryPort stationQueryPort;
     private final CommandCreatorPort commandCreatorPort;
     private final MeteringPointFileRepositoryPort meteringPointFileRepositoryPort;
-    private final QueueMessagingPort queueMessagingPort;
+    private final ConsumptionsMessageHandlerPort consumptionsMessageHandlerPort;
     private final ConfigLoaderPort configLoaderPort;
     private final ObjectMapper objectMapper;
 
@@ -30,13 +35,13 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
             StationQueryPort stationQueryPort,
             CommandCreatorPort commandCreatorPort,
             MeteringPointFileRepositoryPort meteringPointFileRepositoryPort,
-            QueueMessagingPort queueMessagingPort,
+            ConsumptionsMessageHandlerPort consumptionsMessageHandlerPort,
             ConfigLoaderPort configLoaderPort,
             ObjectMapper objectMapper) {
         this.stationQueryPort = stationQueryPort;
         this.commandCreatorPort = commandCreatorPort;
         this.meteringPointFileRepositoryPort = meteringPointFileRepositoryPort;
-        this.queueMessagingPort = queueMessagingPort;
+        this.consumptionsMessageHandlerPort = consumptionsMessageHandlerPort;
         this.configLoaderPort = configLoaderPort;
         this.objectMapper = objectMapper;
     }
@@ -66,15 +71,7 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
                 }
         );
 
-        try {
-            String consumptionResultsString = objectMapper.writeValueAsString(consumptionResults);
-            log.info("Consumptions by all station tags: {}", consumptionResultsString);
-            log.info("Sending consumptions by all station tags to queue");
-            queueMessagingPort.sendMessage(consumptionResultsString, configLoaderPort.getProperty("rabbitmq.queue.consumptions"));
-        } catch (JsonProcessingException e) {
-            log.error("Error parsing json consumption results: {}", e.getMessage());
-            throw new RuntimeException(e);
-        }
+        consumptionsMessageHandlerPort.sendMessage(consumptionResults, configLoaderPort.getProperty("rabbitmq.queue.consumptions"));
 
     }
 

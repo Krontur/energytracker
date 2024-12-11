@@ -10,4 +10,6 @@ public interface ManageMeteringPointsFileUseCase {
 
     void saveMeteringPointsToFile(List<MeteringPoint> meteringPoints, String filePath);
 
+    void addMeteringPointToFile(MeteringPoint meteringPoint, String filePath);
+
 }

@@ -7,11 +7,7 @@ import com.energytracker.consumptionservice.application.port.inbound.Consumption
 import com.energytracker.consumptionservice.application.port.inbound.GetConsumptionsByMeteringPointIdAndIntervalUseCase;
 import com.energytracker.consumptionservice.application.port.inbound.GetConsumptionsByMeteringPointIdUseCase;
 import com.energytracker.consumptionservice.application.port.outbound.ConsumptionRepositoryPort;
-import com.energytracker.consumptionservice.application.port.outbound.QueueMessagingPort;
 import com.energytracker.consumptionservice.domain.model.Consumption;
-import com.energytracker.consumptionservice.domain.model.MeteringPoint;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -21,16 +17,13 @@ import java.util.List;
 
 @Log4j2
 @Service
-public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCase, GetConsumptionsByMeteringPointIdAndIntervalUseCase, ConsumptionMessageHandlerPort {
+public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCase,
+        GetConsumptionsByMeteringPointIdAndIntervalUseCase, ConsumptionMessageHandlerPort {
 
     private final ConsumptionRepositoryPort consumptionRepositoryPort;
-    private final QueueMessagingPort queueMessagingPort;
-    private final ObjectMapper objectMapper;
 
-    public ConsumptionService(ConsumptionRepositoryPort consumptionRepositoryPort, QueueMessagingPort queueMessagingPort, ObjectMapper objectMapper) {
+    public ConsumptionService(ConsumptionRepositoryPort consumptionRepositoryPort) {
         this.consumptionRepositoryPort = consumptionRepositoryPort;
-        this.queueMessagingPort = queueMessagingPort;
-        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -57,23 +50,25 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
     }
 
     @Override
-    public void receiveMessage(Consumption consumption) {
+    public void receiveMessage(List<Consumption> consumptions) {
 
-        log.info("Received message: {}", consumption);
+        log.info("Received message: {}", consumptions);
 
-        if (consumption == null) {
+        if (consumptions == null) {
             log.warn("Received a null Consumption. Ignoring message.");
             return;
         }
 
         try {
             log.info("Saving consumption to the database...");
-            consumptionRepositoryPort.saveConsumption(consumption);
-            log.info("Consumption saved successfully: {}", consumption);
+            consumptions.forEach( consumption -> {
+                consumptionRepositoryPort.saveConsumption(consumption);
+            });
+            log.info("Consumption saved successfully: {}", consumptions);
         } catch (DataAccessException e) {
-            log.error("Database error occurred while saving consumption: {}", consumption, e);
+            log.error("Database error occurred while saving consumption: {}", consumptions, e);
         } catch (Exception e) {
-            log.error("Unexpected error processing consumption: {}", consumption, e);
+            log.error("Unexpected error processing consumption: {}", consumptions, e);
         }
     }
 }

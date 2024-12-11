@@ -9,8 +9,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Log4j2
 @Component
 @RequiredArgsConstructor
@@ -20,10 +18,10 @@ public class MeteringPointsListenerAdapter implements MeteringPointsListenerPort
     private final ConfigLoaderPort configLoaderPort;
 
     @RabbitListener(queues = "energy-meteringpoints-queue")
-    public void receiveMessage(List<MeteringPoint> meteringPoints) {
+    public void receiveMessage(MeteringPoint meteringPoint) {
 
-        log.info("Received message: {}", meteringPoints);
-        manageMeteringPointsFileUseCase.saveMeteringPointsToFile(meteringPoints, configLoaderPort.getProperty("meteringpoints.jsonfile.save.location"));
+        log.info("Received message: {}", meteringPoint);
+        manageMeteringPointsFileUseCase.addMeteringPointToFile(meteringPoint, configLoaderPort.getProperty("meteringpoints.jsonfile.save.location"));
         log.info("Metering points saved to file");
     }
 

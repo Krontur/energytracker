@@ -1,6 +1,7 @@
 package com.energytracker.devicecatalog.application.dto.station;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CreateStationRequestDto {
 
     public CreateStationRequestDto(String serialNumber, String deviceType, String deviceStatus,

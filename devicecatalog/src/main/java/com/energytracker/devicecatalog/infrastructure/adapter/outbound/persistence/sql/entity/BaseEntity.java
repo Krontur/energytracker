@@ -1,6 +1,7 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.PrePersist;

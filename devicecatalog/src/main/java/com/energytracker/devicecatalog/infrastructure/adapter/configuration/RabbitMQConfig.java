@@ -1,5 +1,6 @@
-package com.energytracker.consumptionservice.infrastructure.adapter.configuration;
+package com.energytracker.devicecatalog.infrastructure.adapter.configuration;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -11,56 +12,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+@Log4j2
 @Configuration
 public class RabbitMQConfig {
-
-    @Value("${rabbitmq.queue.consumptions}")
-    private String consumptionsQueueName;
-
-    @Value("${rabbitmq.exchange.consumptions}")
-    private String consumptionsExchangeName;
-
-    @Value("${rabbitmq.routing.key.consumptions}")
-    private String consumptionsRoutingKey;
-
-    @Bean
-    public Queue consumptionsQueue() {
-        return new Queue(consumptionsQueueName, true);
-    }
-
-    @Bean
-    public DirectExchange consumptionsExchange() {
-        return new DirectExchange(consumptionsExchangeName);
-    }
-
-    @Bean
-    public Binding consumptionsBinding(Queue consumptionsQueue, DirectExchange consumptionsExchange) {
-        return BindingBuilder.bind(consumptionsQueue).to(consumptionsExchange).with(consumptionsRoutingKey);
-    }
-
-    @Value("${rabbitmq.queue.meteringpoint}")
-    private String meteringPointQueueName;
-
-    @Value("${rabbitmq.exchange.meteringpoint}")
-    private String meteringPointExchangeName;
-
-    @Value("${rabbitmq.routing.key.meteringpoint}")
-    private String meteringPointRoutingKey;
-
-    @Bean
-    public Queue meteringPointQueue() {
-        return new Queue(meteringPointQueueName, true);
-    }
-
-    @Bean
-    public DirectExchange meteringPointExchange() {
-        return new DirectExchange(meteringPointExchangeName);
-    }
-
-    @Bean
-    public Binding meteringPointBinding(Queue meteringPointQueue, DirectExchange meteringPointExchange) {
-        return BindingBuilder.bind(meteringPointQueue).to(meteringPointExchange).with(meteringPointRoutingKey);
-    }
 
     @Value("${rabbitmq.queue.new.meteringpoint}")
     private String newMeteringPointQueueName;
@@ -90,6 +44,13 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
+        rabbitTemplate.setConfirmCallback((correlationData, ack, cause) -> {
+            if (ack) {
+                log.info("Message sent and acknowledged.");
+            } else {
+                log.error("Message not delivered: {}", cause);
+            }
+        });
         return rabbitTemplate;
     }
 

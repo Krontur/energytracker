@@ -1,4 +1,4 @@
-package com.energytracker.datacollector.application.port.outbound;
+package com.energytracker.devicecatalog.application.port.outbound;
 
 import org.springframework.amqp.core.Message;
 

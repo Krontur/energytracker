@@ -6,7 +6,13 @@ import com.energytracker.consumptionservice.application.port.outbound.QueueMessa
 import com.energytracker.consumptionservice.domain.model.MeteringPoint;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageProperties;
+import org.springframework.amqp.core.Binding;
 import org.springframework.stereotype.Service;
+
+import java.nio.charset.StandardCharsets;
 
 @Log4j2
 @Service
@@ -15,10 +21,12 @@ public class MeteringPointMessageService implements MeteringPointMessageHandlerP
     private final MeteringPointRepositoryPort meteringPointRepositoryPort;
     private final QueueMessagingPort queueMessagingPort;
     private final ObjectMapper objectMapper;
+    private final Binding meteringPointBinding;
 
-    public MeteringPointMessageService(MeteringPointRepositoryPort meteringPointRepositoryPort, QueueMessagingPort queueMessagingPort) {
+    public MeteringPointMessageService(MeteringPointRepositoryPort meteringPointRepositoryPort, QueueMessagingPort queueMessagingPort, Binding meteringPointBinding) {
         this.meteringPointRepositoryPort = meteringPointRepositoryPort;
         this.queueMessagingPort = queueMessagingPort;
+        this.meteringPointBinding = meteringPointBinding;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -36,8 +44,14 @@ public class MeteringPointMessageService implements MeteringPointMessageHandlerP
             MeteringPoint savedMeteringPoint = handleAction(meteringPoint);
 
             if (savedMeteringPoint != null) {
-                log.info("Metering point processed successfully: {}", savedMeteringPoint);
-                queueMessagingPort.sendMessage(objectMapper.writeValueAsString(savedMeteringPoint), "${rabbitmq.queue.meteringpoint}");
+                String savedMeteringPointString = objectMapper.writeValueAsString(savedMeteringPoint);
+                log.info("Metering point processed successfully: {}", savedMeteringPointString);
+                Message message = MessageBuilder
+                        .withBody(savedMeteringPointString.getBytes(StandardCharsets.UTF_8))
+                        .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                        .build();
+                log.info("Sending Message to Queue: {}", message);
+                queueMessagingPort.sendMessage(meteringPointBinding.getExchange(), meteringPointBinding.getRoutingKey(), message);
             } else {
                 log.error("Failed to process metering point: {}", meteringPoint);
             }

@@ -11,6 +11,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Consumption {
 
+    public Consumption (Long meteringPointId, double consumptionValue, LocalDateTime consumptionTimestamp) {
+        this.meteringPointId = meteringPointId;
+        this.consumptionValue = consumptionValue;
+        this.consumptionTimestamp = consumptionTimestamp;
+    }
+
     private Long consumptionId;
     private Long meteringPointId;
     private double consumptionValue;

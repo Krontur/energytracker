@@ -4,6 +4,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.outbound.persiste
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceStatusEntity;
 import com.energytracker.devicecatalog.infrastructure.adapter.outbound.persistence.sql.entity.DeviceTypeEntity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
