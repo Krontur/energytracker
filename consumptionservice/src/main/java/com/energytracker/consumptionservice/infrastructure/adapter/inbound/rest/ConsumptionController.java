@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -27,9 +28,13 @@ public class ConsumptionController {
     }
 
     @PostMapping
-    public List<ConsumptionDto> getConsumptionsByMeteringPointIdAndInterval(@RequestBody ConsumptionQueryDto consumptionQueryDto) {
-
-        return consumptionService.getConsumptionsByMeteringPointIdAndInterval(consumptionQueryDto);
+    public ResponseEntity<List<ConsumptionDto>> getConsumptionsByMeteringPointIdAndInterval(@RequestBody ConsumptionQueryDto consumptionQueryDto) {
+        List<ConsumptionDto> consumptionDtos = new ArrayList<>();
+        consumptionDtos = consumptionService.getConsumptionsByMeteringPointIdAndInterval(consumptionQueryDto);
+        if ( consumptionDtos == null || consumptionDtos.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(consumptionDtos, HttpStatus.OK);
     }
 
 }

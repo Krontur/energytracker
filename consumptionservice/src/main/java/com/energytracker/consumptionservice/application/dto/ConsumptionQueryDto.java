@@ -1,6 +1,5 @@
 package com.energytracker.consumptionservice.application.dto;
 
-import com.energytracker.consumptionservice.domain.model.IntervalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

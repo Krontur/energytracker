@@ -14,7 +14,7 @@ public class MeteringPointMessageService implements MeteringPointMessageHandlerP
 
     private final MeteringPointRepositoryPort meteringPointRepositoryPort;
     private final QueueMessagingPort queueMessagingPort;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public MeteringPointMessageService(MeteringPointRepositoryPort meteringPointRepositoryPort, QueueMessagingPort queueMessagingPort) {
         this.meteringPointRepositoryPort = meteringPointRepositoryPort;

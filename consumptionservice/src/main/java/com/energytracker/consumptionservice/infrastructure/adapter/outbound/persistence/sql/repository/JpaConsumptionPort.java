@@ -12,4 +12,5 @@ public interface JpaConsumptionPort extends JpaRepository<ConsumptionEntity, Lon
 
     List<ConsumptionEntity> findByMeteringPointIdAndConsumptionTimestampBetween(Long meteringPointId, LocalDateTime start, LocalDateTime end);
 
+    ConsumptionEntity findConsumptionByMeteringPointIdAndConsumptionTimestamp(Long meteringPointId, LocalDateTime consumptionTimestamp);
 }
