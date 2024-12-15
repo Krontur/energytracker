@@ -19,4 +19,6 @@ public interface EnergyMeterRepositoryPort {
     EnergyMeter save(EnergyMeter energyMeter);
 
     List<EnergyMeter> getInStockEnergyMeters();
+
+    EnergyMeter updateEnergyMeter(Long energyMeterId, EnergyMeter energyMeter);
 }

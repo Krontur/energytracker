@@ -49,19 +49,21 @@ public class EnergyMeterPersistenceMapper {
     public static EnergyMeterEntity energyMeterDomainToEntity(
             EnergyMeter energyMeter) {
         List<CalibrationScheduleEntity> calibrationScheduleEntities = new ArrayList<>();
-        energyMeter.getCalibrationScheduleList().forEach(
-                calibrationSchedule -> {
-                    calibrationScheduleEntities.add(
-                            new CalibrationScheduleEntity(
-                                    calibrationSchedule.getNextCalibrationDate(),
-                                    calibrationSchedule.getLastCalibrationDate(),
-                                    calibrationSchedule.getCalibrationFrequencyInYears(),
-                                    calibrationSchedule.getComments(),
-                                    CalibrationStatusEntity.valueOf(calibrationSchedule.getCalibrationStatus().name())
-                            )
-                    );
-                }
-        );
+        if (energyMeter.getCalibrationScheduleList() != null) {
+            energyMeter.getCalibrationScheduleList().forEach(
+                    calibrationSchedule -> {
+                        calibrationScheduleEntities.add(
+                                new CalibrationScheduleEntity(
+                                        calibrationSchedule.getNextCalibrationDate(),
+                                        calibrationSchedule.getLastCalibrationDate(),
+                                        calibrationSchedule.getCalibrationFrequencyInYears(),
+                                        calibrationSchedule.getComments(),
+                                        CalibrationStatusEntity.valueOf(calibrationSchedule.getCalibrationStatus().name())
+                                )
+                        );
+                    }
+            );
+        }
         if(energyMeter.getDeviceId() != null) {
 
             return new EnergyMeterEntity(

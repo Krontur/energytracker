@@ -157,4 +157,18 @@ public class EnergyMeterMapper {
         );
 
     }
+
+    public static CreateEnergyMeterRequestDto energyMeterDomainToCreateRequestDto(EnergyMeter energyMeter) {
+        return new CreateEnergyMeterRequestDto(
+                energyMeter.getSerialNumber(),
+                energyMeter.getDeviceType().name(),
+                energyMeter.getDeviceStatus().name(),
+                energyMeter.getConnectionAddress(),
+                energyMeter.getEnergyMeterType().name(),
+                energyMeter.getReferenceVoltage(),
+                energyMeter.getConnectionType().name(),
+                energyMeter.getMaxCurrent(),
+                energyMeter.getMidApprovalYear()
+        );
+    }
 }

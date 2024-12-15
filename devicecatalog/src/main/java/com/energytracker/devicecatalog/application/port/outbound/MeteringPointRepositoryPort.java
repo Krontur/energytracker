@@ -9,4 +9,8 @@ public interface MeteringPointRepositoryPort {
     List<MeteringPoint> getAllMeteringPoints();
 
     MeteringPoint createMeteringPoint(MeteringPoint meteringPoint);
+
+    MeteringPoint getMeteringPointById(Long meteringPointId);
+
+    MeteringPoint updateMeteringPointById(Long meteringPointId, MeteringPoint meteringPoint);
 }

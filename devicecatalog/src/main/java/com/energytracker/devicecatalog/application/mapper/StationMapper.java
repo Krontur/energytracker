@@ -95,7 +95,6 @@ public class StationMapper {
                 station.getStationTag(),
                 channelResponseDtos
         );
-        System.out.println("StationMapper.stationRequestDomainToDto: " + stationResponseDto);
         return stationResponseDto;
     }
 

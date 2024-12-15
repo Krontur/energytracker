@@ -68,4 +68,28 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
         });
         return energyMeters;
     }
+
+    @Override
+    public EnergyMeter updateEnergyMeter(Long energyMeterId, EnergyMeter energyMeter) {
+        EnergyMeterEntity energyMeterEntity = EnergyMeterPersistenceMapper.energyMeterDomainToEntity(energyMeter);
+        int rowsAffected = jpaEnergyMeterPort.updateEnergyMeterFields(
+                energyMeterId,
+                energyMeterEntity.getSerialNumber(),
+                energyMeterEntity.getEnergyMeterType(),
+                energyMeterEntity.getConnectionType(),
+                energyMeterEntity.getConnectionAddress(),
+                energyMeterEntity.getMaxCurrent(),
+                energyMeterEntity.getReferenceVoltage(),
+                energyMeterEntity.getMidApprovalYear()
+        );
+        if (rowsAffected == 0) {
+            return null;
+        }
+        EnergyMeterEntity updatedEnergyMeterEntity = jpaEnergyMeterPort.findById(energyMeterId).orElse(null);
+        if (updatedEnergyMeterEntity == null) {
+            return null;
+        }
+        return EnergyMeterPersistenceMapper.energyMeterEntityToDomain(updatedEnergyMeterEntity);
+    }
+
 }

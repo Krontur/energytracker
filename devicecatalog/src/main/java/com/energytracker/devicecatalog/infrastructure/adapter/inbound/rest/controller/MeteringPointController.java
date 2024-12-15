@@ -2,6 +2,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 
 import com.energytracker.devicecatalog.application.dto.meteringpoint.CreateMeteringPointRequestDto;
 import com.energytracker.devicecatalog.application.dto.meteringpoint.MeteringPointResponseDto;
+import com.energytracker.devicecatalog.application.mapper.MeteringPointMapper;
 import com.energytracker.devicecatalog.application.service.MeteringPointService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,13 @@ public class MeteringPointController {
     }
 
     @GetMapping("/{meteringPointId}")
-    public String getMeteringPointById() {
-        return "getMeteringPointById";
+    public ResponseEntity<MeteringPointResponseDto> getMeteringPointById(@PathVariable Long meteringPointId) {
+        MeteringPointResponseDto meteringPoint = meteringPointService.getMeteringPointById(meteringPointId);
+        if(meteringPoint == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(meteringPoint, HttpStatus.OK);
+
     }
 
     @PostMapping
@@ -43,6 +49,17 @@ public class MeteringPointController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PatchMapping("/{meteringPointId}")
+    public ResponseEntity<MeteringPointResponseDto> updateMeteringPoint(@PathVariable Long meteringPointId, @RequestBody CreateMeteringPointRequestDto createMeteringPointRequestDto) {
+        try {
+            MeteringPointResponseDto meteringPoint = meteringPointService.updateMeteringPointById(meteringPointId, createMeteringPointRequestDto);
+            return new ResponseEntity<>(meteringPoint, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
 
 }

@@ -15,7 +15,8 @@ public interface JpaStationPort extends JpaRepository<StationEntity, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE StationEntity s SET s.serialNumber = :serialNumber, s.stationName = :stationName," +
-            " s.stationType = :stationType, s.deviceStatus = :deviceStatus, s.stationTag = :stationTag WHERE s.id = :stationId")
+            " s.stationType = :stationType, s.deviceStatus = :deviceStatus, s.stationTag = :stationTag," +
+            " s.updatedAt = CURRENT_TIMESTAMP, s.version = s.version + 1 WHERE s.id = :stationId")
     int updateStationFields(@Param("stationId") Long stationId,
                             @Param("serialNumber") String serialNumber,
                             @Param("stationName") String stationName,

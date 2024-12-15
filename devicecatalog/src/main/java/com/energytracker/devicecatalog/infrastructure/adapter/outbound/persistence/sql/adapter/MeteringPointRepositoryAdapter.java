@@ -36,4 +36,32 @@ public class MeteringPointRepositoryAdapter implements MeteringPointRepositoryPo
         MeteringPointEntity createdMeteringPointEntity = jpaMeteringPointPort.save(meteringPointEntity);
         return MeteringPointPersistenceMapper.meteringPointEntityToDomain(createdMeteringPointEntity);
     }
+
+    @Override
+    public MeteringPoint getMeteringPointById(Long meteringPointId) {
+        MeteringPointEntity meteringPointEntity = jpaMeteringPointPort.findById(meteringPointId).orElse(null);
+        if (meteringPointEntity == null) {
+            return null;
+        }
+        return MeteringPointPersistenceMapper.meteringPointEntityToDomain(meteringPointEntity);
+    }
+
+    @Override
+    public MeteringPoint updateMeteringPointById(Long meteringPointId, MeteringPoint meteringPoint) {
+        MeteringPointEntity meteringPointEntity = MeteringPointPersistenceMapper.meteringPointDomainToEntity(meteringPoint);
+        int rowsAffected = jpaMeteringPointPort.updateMeteringPointFields(
+                meteringPointId,
+                meteringPointEntity.getLocationName(),
+                meteringPointEntity.getConnectionDescription(),
+                meteringPointEntity.getActiveStatus(),
+                meteringPointEntity.getEnergyMeterEntity());
+        if (rowsAffected == 0) {
+            return null;
+        }
+        MeteringPointEntity updatedMeteringPointEntity = jpaMeteringPointPort.findById(meteringPointId).orElse(null);
+        if (updatedMeteringPointEntity == null) {
+            return null;
+        }
+        return MeteringPointPersistenceMapper.meteringPointEntityToDomain(updatedMeteringPointEntity);
+    }
 }

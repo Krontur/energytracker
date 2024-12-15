@@ -74,4 +74,17 @@ public class EnergyMeterController {
         }
         return new ResponseEntity<>(energyMeters, HttpStatus.OK);
     }
+
+    @PatchMapping("/{energyMeterId}")
+    public ResponseEntity<EnergyMeterResponseDto> updateEnergyMeter(
+            @PathVariable Long energyMeterId,
+            @RequestBody CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
+        EnergyMeterResponseDto updatedEnergyMeter = null;
+        if (createEnergyMeterRequestDto != null) {
+            updatedEnergyMeter = energyMeterService.updateEnergyMeter(energyMeterId, createEnergyMeterRequestDto);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(updatedEnergyMeter, HttpStatus.OK);
+    }
 }
