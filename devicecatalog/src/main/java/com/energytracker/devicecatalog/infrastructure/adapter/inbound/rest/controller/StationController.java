@@ -34,6 +34,19 @@ public class StationController {
         return new ResponseEntity<>(createdStation, HttpStatus.CREATED);
     }
 
+    @PatchMapping("/{stationId}")
+    public ResponseEntity<StationResponseDto> updateStation(
+            @PathVariable Long stationId,
+            @RequestBody CreateStationRequestDto createStationRequestDto) {
+        StationResponseDto updatedStation = null;
+        if (createStationRequestDto != null) {
+            updatedStation = stationService.updateStation(stationId, createStationRequestDto);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(updatedStation, HttpStatus.OK);
+    }
+
     @GetMapping
     public ResponseEntity<List<StationResponseDto>> getAllStations() {
         List<StationResponseDto> stations = stationService.getAllStations();

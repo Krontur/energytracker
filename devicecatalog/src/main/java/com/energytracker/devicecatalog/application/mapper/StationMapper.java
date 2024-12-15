@@ -40,7 +40,6 @@ public class StationMapper {
                 createStationRequestDto.getStationTag(),
                 createStationRequestDto.getReadingIntervalInSeconds()
         );
-        System.out.println("StationMapper.createStationRequestDtoToDomain: " + station);
         return station;
     }
 
@@ -54,7 +53,6 @@ public class StationMapper {
                 stationResponseDto.getStationTag(),
                 stationResponseDto.getReadingIntervalInSeconds()
         );
-        System.out.println("StationMapper.stationResponseDtoToDomain: " + station);
         return station;
     }
 
@@ -77,7 +75,6 @@ public class StationMapper {
                 station.getStationTag(),
                 channelRequestDtos
         );
-        System.out.println("StationMapper.stationRequestDomainToDto: " + stationRequestDto);
         return stationRequestDto;
     }
 

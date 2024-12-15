@@ -15,11 +15,16 @@ import jakarta.persistence.OptimisticLockException;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class StationService implements CreateStationUseCase, GetAllStationsUseCase, GetStationByIdUseCase,
@@ -138,5 +143,98 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
             channelResponseDtos.add(ChannelMapper.channelDomainToDto(channel));
         });
         return channelResponseDtos;
+    }
+
+    @Transactional
+    public StationResponseDto updateStation(Long stationId, CreateStationRequestDto createStationRequestDto) {
+
+        Station station = stationRepositoryPort.getStationById(stationId);
+        if (station == null) {
+            throw new NotFoundException("Station with id " + stationId + " not found");
+        }
+        Station checkedStation = checkFields(createStationRequestDto, station);
+        Station updatedStation = stationRepositoryPort.updateStation(checkedStation);
+        return StationMapper.stationResponseDomainToDto(updatedStation);
+    }
+
+    private Station checkFields(CreateStationRequestDto createStationRequestDto, Station station) {
+        Field[] fields = createStationRequestDto.getClass().getDeclaredFields();
+
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                Object dtoValue = field.get(createStationRequestDto);
+
+                if (dtoValue == null) {
+                    log.info("{} is null", field.getName());
+                } else if (dtoValue instanceof String && ((String) dtoValue).trim().isEmpty()) {
+                    log.info("{} is empty", field.getName());
+                } else {
+                    Field entityField = getFieldFromClassHierarchy(station.getClass(), field.getName());
+                    if (entityField != null) {
+                        entityField.setAccessible(true);
+
+                        Object convertedValue = convertValue(dtoValue, entityField.getType());
+                        Object entityValue = entityField.get(station);
+
+                        if (!convertedValue.equals(entityValue)) {
+                            log.info("{} has changed", field.getName());
+                            entityField.set(station, convertedValue);
+                        }
+                    } else {
+                        log.warn("Field {} does not exist in Station or its superclasses", field.getName());
+                    }
+                }
+            } catch (IllegalAccessException e) {
+                log.error("Error accessing fields", e);
+                throw new RuntimeException("Error accessing fields", e);
+            }
+        }
+        return station;
+    }
+
+
+    private Field getFieldFromClassHierarchy(Class<?> clazz, String fieldName) {
+        Map<String, String> FIELD_NAME_MAP = new HashMap<>();
+        FIELD_NAME_MAP.put("stationId", "deviceId");
+
+        String entityFieldName = FIELD_NAME_MAP.getOrDefault(fieldName, fieldName);
+
+        while (clazz != null) {
+            try {
+                return clazz.getDeclaredField(entityFieldName);
+            } catch (NoSuchFieldException e) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        return null;
+    }
+
+    private Object convertValue(Object value, Class<?> targetType) {
+        if (value == null || targetType.isInstance(value)) {
+            return value;
+        }
+
+        if (targetType.isEnum() && value instanceof String) {
+            return Enum.valueOf((Class<Enum>) targetType, (String) value);
+        }
+
+        if (targetType == Integer.class || targetType == int.class) {
+            return Integer.valueOf(value.toString());
+        }
+
+        if (targetType == Long.class || targetType == long.class) {
+            return Long.valueOf(value.toString());
+        }
+
+        if (targetType == Double.class || targetType == double.class) {
+            return Double.valueOf(value.toString());
+        }
+
+        if (targetType == Boolean.class || targetType == boolean.class) {
+            return Boolean.valueOf(value.toString());
+        }
+
+        throw new IllegalArgumentException("Cannot convert value " + value + " to type " + targetType);
     }
 }

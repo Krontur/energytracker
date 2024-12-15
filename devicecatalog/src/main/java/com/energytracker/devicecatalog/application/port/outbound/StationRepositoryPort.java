@@ -22,4 +22,6 @@ public interface StationRepositoryPort {
     Station save(Station station);
 
     List<Channel> getLonActiveChannelsByStationId(Long stationId);
+
+    Station updateStation(Station station);
 }
