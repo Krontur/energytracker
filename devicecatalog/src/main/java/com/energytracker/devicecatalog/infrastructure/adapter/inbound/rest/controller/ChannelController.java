@@ -30,4 +30,17 @@ public class ChannelController {
         }
     }
 
+    @PostMapping()
+    public ResponseEntity<ChannelResponseDto> updateChannel(
+            @RequestBody ChannelResponseDto channelResponseDto) {
+        try {
+            ChannelResponseDto updatedChannel = channelService.updateChannel(channelResponseDto);
+            return new ResponseEntity<>(updatedChannel, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

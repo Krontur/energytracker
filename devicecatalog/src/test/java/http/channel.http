@@ -1,5 +1,23 @@
 ### Get channel by id ###
-GET http://localhost:8088/api/v1/channels/74
+GET http://localhost:8080/api/v1/channels/74
 
 ### Get channels by lonIsActive status ###
-GET http://localhost:8088/api/v1/channels/lon-is-active
+GET http://localhost:8080/api/v1/channels/lon-is-active
+
+### Post channel ###
+POST http://localhost:8080/api/v1/channels
+Content-Type: application/json
+
+{
+  "channelId": 25,
+  "channelName": "Name 15",
+  "channelNumber": 15,
+  "channelMode": 0,
+  "channelLongName": "Long name 15",
+  "energyUnit": "KWH",
+  "powerUnit": "KW",
+  "lonSubChannel": 1,
+  "lonIsActive": false,
+  "uratio": 10,
+  "iratio": 15
+}
