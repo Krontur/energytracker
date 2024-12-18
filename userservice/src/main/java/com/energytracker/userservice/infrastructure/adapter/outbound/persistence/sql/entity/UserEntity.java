@@ -9,11 +9,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Table(name = "user_account")
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
@@ -47,5 +50,8 @@ public class UserEntity {
     private LocalDate updatedDate;
 
     private String profilePicturePath;
+
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private List<TokenEntity> tokens;
 
 }

@@ -1,11 +1,14 @@
 package com.energytracker.userservice;
 
-import jakarta.activation.DataSource;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @TestPropertySource(locations="classpath:test-application.properties")
@@ -13,10 +16,15 @@ import org.springframework.test.context.TestPropertySource;
 class UserserviceApplicationTests {
 
 	@MockBean
-	private DataSource dataSource;
+	private PasswordEncoder passwordEncoder;
+
+	@MockBean(name = "userDetailsServiceImpl")
+	private UserDetailsService userDetailsService;
 
 	@Test
 	void contextLoads() {
+		assertNotNull(passwordEncoder);
+		assertNotNull(userDetailsService);
 	}
 
 }

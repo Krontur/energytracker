@@ -1,6 +1,7 @@
 package com.energytracker.userservice.application.mapper;
 
 import com.energytracker.userservice.application.dto.CreateUserRequestDto;
+import com.energytracker.userservice.application.dto.UserResponseDto;
 import com.energytracker.userservice.domain.model.Role;
 import com.energytracker.userservice.domain.model.User;
 
@@ -30,5 +31,19 @@ public class UserMapper {
             createUserRequestDto.setIsActive(user.getIsActive());
             createUserRequestDto.setProfilePicturePath(user.getProfilePicturePath());
             return createUserRequestDto;
+    }
+
+    public static User userResponseDtoToDomain(UserResponseDto userResponseDto) {
+
+            User user = new User();
+
+            user.setUserAccountId(userResponseDto.getUserAccountId());
+            user.setEmail(userResponseDto.getEmail());
+            user.setFullName(userResponseDto.getFullName());
+            user.setPassword(userResponseDto.getPassword());
+            user.setRole(Role.valueOf(userResponseDto.getRole()));
+            user.setIsActive(userResponseDto.getIsActive());
+            user.setProfilePicturePath(userResponseDto.getProfilePicturePath());
+            return user;
     }
 }

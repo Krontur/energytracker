@@ -49,4 +49,9 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
         return UserPersistenceMapper.userResponseEntityToDto(user);
     }
 
+    @Override
+    public UserResponseDto getUserByEmail(String email) {
+        return null;
+    }
+
 }

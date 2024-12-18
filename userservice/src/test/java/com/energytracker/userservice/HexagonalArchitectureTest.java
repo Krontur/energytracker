@@ -15,6 +15,7 @@ public class HexagonalArchitectureTest {
     static final ArchRule hexagonal_architecture_is_respected = onionArchitecture()
             .domainModels("..domain.model..", "..domain.exception..")
             .applicationServices("..application..")
+            .adapter("configuration", "..infrastructure.adapter.configuration..")
             .adapter("persistence", "..infrastructure.adapter.outbound..")
             .adapter("rest", "..infrastructure.adapter.inbound..")
             .allowEmptyShould(true);

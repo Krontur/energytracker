@@ -1,10 +1,12 @@
 package com.energytracker.userservice.application.dto;
 
 
+import com.energytracker.userservice.domain.model.Token;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor

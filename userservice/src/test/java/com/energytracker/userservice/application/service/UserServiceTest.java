@@ -8,17 +8,23 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 public class UserServiceTest {
 
     @Mock
     private UserRepositoryPort userRepositoryPort;
+
+    @Mock
+    private PasswordEncoder passwordEncoder;
 
     @InjectMocks
     private UserService userService;
@@ -27,6 +33,7 @@ public class UserServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
         assertNotNull(userRepositoryPort);
+        when(passwordEncoder.encode("password")).thenReturn("mockedPassword");
     }
 
     @Test
@@ -50,7 +57,7 @@ public class UserServiceTest {
                 LocalDate.now(),
                 createUserRequestDto.getProfilePicturePath());
 
-        when(userRepositoryPort.createUser(createUserRequestDto)).thenReturn(userResponseDto);
+        when(userRepositoryPort.createUser(any())).thenReturn(userResponseDto);
 
         UserResponseDto result = userService.createUser(createUserRequestDto);
 

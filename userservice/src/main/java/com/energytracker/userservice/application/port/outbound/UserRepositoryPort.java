@@ -16,4 +16,6 @@ public interface UserRepositoryPort {
     List<UserResponseDto> getAllUsers();
 
     UserResponseDto getUserById(Long userId);
+
+    UserResponseDto getUserByEmail(String email);
 }

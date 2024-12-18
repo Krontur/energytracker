@@ -7,10 +7,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -35,12 +37,17 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setUp() {
+
         MockitoAnnotations.openMocks(this);
+        when(passwordEncoder.encode(any(CharSequence.class))).thenReturn("mockedPassword");
     }
 
     @Test
@@ -59,7 +66,7 @@ public class UserControllerTest {
                 1L,
                 createUserRequestRestDto.getEmail(),
                 createUserRequestRestDto.getFullName(),
-                createUserRequestRestDto.getPassword(),
+                null,
                 createUserRequestRestDto.getRole(),
                 createUserRequestRestDto.getIsActive(),
                 LocalDate.now(),
@@ -76,7 +83,6 @@ public class UserControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.email").value(createUserRequestRestDto.getEmail()))
                         .andExpect(jsonPath("$.fullName").value(createUserRequestRestDto.getFullName()))
-                        .andExpect(jsonPath("$.password").value(createUserRequestRestDto.getPassword()))
                         .andExpect(jsonPath("$.role").value(createUserRequestRestDto.getRole()))
                         .andExpect(jsonPath("$.isActive").value(createUserRequestRestDto.getIsActive()))
                         .andExpect(jsonPath("$.profilePicturePath").value(createUserRequestRestDto.getProfilePicturePath()));
