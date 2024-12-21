@@ -5,6 +5,7 @@ import com.energytracker.userservice.application.port.outbound.TokenRepositoryPo
 import com.energytracker.userservice.domain.model.Token;
 import com.energytracker.userservice.domain.model.TokenType;
 import com.energytracker.userservice.domain.model.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -71,4 +72,32 @@ public class JwtService implements JwtManageUseCase {
         return Keys.hmacShaKeyFor(secretKeyBytes);
     }
 
+    public String getEmailFromToken(String token) {
+        Claims jwtToken = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return jwtToken.getSubject();
+    }
+
+    public boolean isValidToken(String token, User user) {
+
+        String email = getEmailFromToken(token);
+        return email.equals(user.getEmail()) && !isTokenExpired(token);
+
+    }
+
+    private boolean isTokenExpired(String token) {
+        return getExpirationDateFromToken(token).before(new Date());
+    }
+
+    private Date getExpirationDateFromToken(String token) {
+        Claims jwtToken = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return jwtToken.getExpiration();
+    }
 }

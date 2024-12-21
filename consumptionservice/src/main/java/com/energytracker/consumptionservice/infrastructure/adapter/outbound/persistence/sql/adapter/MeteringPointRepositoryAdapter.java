@@ -5,6 +5,7 @@ import com.energytracker.consumptionservice.domain.model.MeteringPoint;
 import com.energytracker.consumptionservice.infrastructure.adapter.outbound.persistence.sql.entity.MeteringPointEntity;
 import com.energytracker.consumptionservice.infrastructure.adapter.outbound.persistence.sql.mapper.MeteringPointPersistenceMapper;
 import com.energytracker.consumptionservice.infrastructure.adapter.outbound.persistence.sql.repository.JpaMeteringPointPort;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
@@ -12,13 +13,10 @@ import java.util.Optional;
 
 @Log4j2
 @Repository
+@RequiredArgsConstructor
 public class MeteringPointRepositoryAdapter implements MeteringPointRepositoryPort {
 
     private final JpaMeteringPointPort jpaMeteringPointPort;
-
-    public MeteringPointRepositoryAdapter(JpaMeteringPointPort jpaMeteringPointPort) {
-        this.jpaMeteringPointPort = jpaMeteringPointPort;
-    }
 
     @Override
     public MeteringPoint saveMeteringPoint(MeteringPoint meteringPoint) {

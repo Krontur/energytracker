@@ -51,4 +51,15 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
         ConsumptionEntity savedConsumptionEntity = jpaConsumptionPort.save(newConsumptionEntity);
         return ConsumptionPersistenceMapper.consumptionEntityToDomain(savedConsumptionEntity);
     }
+
+    @Override
+    public List<Consumption> findConsumptionsByMeteringPointId(Long meteringPointId) {
+        List<ConsumptionEntity> consumptionEntities = jpaConsumptionPort.findByMeteringPointId(meteringPointId);
+        List<Consumption> consumptions = new ArrayList<>();
+        if(consumptionEntities != null) {
+            consumptionEntities.forEach(consumptionEntity -> consumptions.add(
+                    ConsumptionPersistenceMapper.consumptionEntityToDomain(consumptionEntity)));
+        }
+        return consumptions;
+    }
 }

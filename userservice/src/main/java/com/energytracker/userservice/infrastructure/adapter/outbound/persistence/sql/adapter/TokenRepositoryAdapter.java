@@ -19,17 +19,6 @@ public class TokenRepositoryAdapter implements TokenRepositoryPort {
     private final JpaTokenRepositoryPort jpaTokenRepositoryPort;
 
     @Override
-    public Token login(LoginRequest loginRequest) {
-        return null;
-    }
-
-
-    @Override
-    public void logout(String token) {
-
-    }
-
-    @Override
     public Token save(Token token) {
         TokenEntity tokenEntity = TokenPersistenceMapper.tokenDomainToEntity(token);
         TokenEntity savedTokenEntity = jpaTokenRepositoryPort.save(tokenEntity);
@@ -50,6 +39,12 @@ public class TokenRepositoryAdapter implements TokenRepositoryPort {
         );
         jpaTokenRepositoryPort.saveAll(validUserTokenEntities);
 
+    }
+
+    @Override
+    public Token findByToken(String token) {
+        TokenEntity tokenEntity = jpaTokenRepositoryPort.findByToken(token);
+        return TokenPersistenceMapper.tokenEntityToDomain(tokenEntity);
     }
 
 

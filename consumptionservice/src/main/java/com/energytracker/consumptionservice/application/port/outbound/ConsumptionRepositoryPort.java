@@ -10,4 +10,6 @@ public interface ConsumptionRepositoryPort {
    List<Consumption> findConsumptionsByMeteringPointIdAndInterval(Long meteringPointId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
    Consumption saveConsumption(Consumption consumption);
+
+   List<Consumption> findConsumptionsByMeteringPointId(Long meteringPointId);
 }

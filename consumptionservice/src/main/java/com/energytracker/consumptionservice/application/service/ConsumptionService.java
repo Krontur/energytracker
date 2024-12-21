@@ -8,6 +8,7 @@ import com.energytracker.consumptionservice.application.port.inbound.GetConsumpt
 import com.energytracker.consumptionservice.application.port.inbound.GetConsumptionsByMeteringPointIdUseCase;
 import com.energytracker.consumptionservice.application.port.outbound.ConsumptionRepositoryPort;
 import com.energytracker.consumptionservice.domain.model.Consumption;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -17,14 +18,11 @@ import java.util.List;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCase,
         GetConsumptionsByMeteringPointIdAndIntervalUseCase, ConsumptionMessageHandlerPort {
 
     private final ConsumptionRepositoryPort consumptionRepositoryPort;
-
-    public ConsumptionService(ConsumptionRepositoryPort consumptionRepositoryPort) {
-        this.consumptionRepositoryPort = consumptionRepositoryPort;
-    }
 
     @Override
     public List<ConsumptionDto> getConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
@@ -46,7 +44,19 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
 
     @Override
     public List<ConsumptionDto> getConsumptionsByMeteringPointId(Long meteringPointId) {
-        return List.of();
+        List<ConsumptionDto> consumptionDtos = new ArrayList<>();
+        if (meteringPointId != null) {
+            List<Consumption> consumptions = consumptionRepositoryPort.findConsumptionsByMeteringPointId(meteringPointId);
+            log.info("Finding Consumptions by MeteringPointId");
+            if (consumptions != null) {
+                consumptions.forEach(
+                        consumption -> consumptionDtos.add(
+                                ConsumptionMapper.consumptionDomainToDto(consumption)
+                        )
+                );
+            }
+        }
+        return consumptionDtos;
     }
 
     @Override

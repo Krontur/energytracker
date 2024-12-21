@@ -46,9 +46,10 @@ public class UserPersistenceMapper {
 
     public static UserEntity userDomainToEntity(User user) {
         List<TokenEntity> tokenEntityList = new ArrayList<>();
-        user.getTokens().forEach(token -> tokenEntityList.add(
-                TokenPersistenceMapper.tokenDomainToEntity(token)));
-
+        if (user.getTokens() != null) {
+            user.getTokens().forEach(token -> tokenEntityList.add(
+                    TokenPersistenceMapper.tokenDomainToEntity(token)));
+        }
         UserEntity userEntity = new UserEntity(
                 user.getUserAccountId(),
                 user.getEmail(),

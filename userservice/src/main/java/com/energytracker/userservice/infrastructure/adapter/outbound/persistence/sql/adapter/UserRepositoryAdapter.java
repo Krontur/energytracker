@@ -51,7 +51,10 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public UserResponseDto getUserByEmail(String email) {
-        return null;
+        UserEntity user = jpaUserRepositoryPort.findByEmail(email).orElseThrow(
+                () -> new RuntimeException("User with email " + email + " not found")
+        );
+        return UserPersistenceMapper.userResponseEntityToDto(user);
     }
 
 }

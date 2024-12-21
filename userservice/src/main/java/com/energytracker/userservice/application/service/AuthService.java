@@ -6,8 +6,11 @@ import com.energytracker.userservice.application.port.inbound.AuthenticateUserUs
 import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
 import com.energytracker.userservice.application.port.inbound.GetUserByEmailUseCase;
 import com.energytracker.userservice.application.port.outbound.TokenRepositoryPort;
+import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
 import com.energytracker.userservice.domain.model.Token;
+import com.energytracker.userservice.domain.model.TokenType;
 import com.energytracker.userservice.domain.model.User;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,8 +22,8 @@ import java.util.List;
 public class AuthService implements AuthenticateUserUseCase {
 
     private final TokenRepositoryPort tokenRepositoryPort;
+    private final UserRepositoryPort userRepositoryPort;
     private final CreateUserUseCase createUserUseCase;
-    private final GetUserByEmailUseCase getUserByEmailUseCase;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
@@ -32,7 +35,7 @@ public class AuthService implements AuthenticateUserUseCase {
                         loginRequestDto.getPassword()
                 )
         );
-        User user = getUserByEmailUseCase.getUserByEmail(loginRequestDto.getEmail());
+        User user = UserMapper.userResponseDtoToDomain(userRepositoryPort.getUserByEmail(loginRequestDto.getEmail()));
         if (user == null) {
             return null;
         }
@@ -45,15 +48,16 @@ public class AuthService implements AuthenticateUserUseCase {
 
     @Override
     public void logout(String token) {
-
+        Token userToken = tokenRepositoryPort.findByToken(token);
+        if (userToken != null) {
+            userToken.setRevoked(true);
+            userToken.setExpired(true);
+            tokenRepositoryPort.save(userToken);
+        }
     }
 
     @Override
-    public boolean isValidToken(String token) {
-        return false;
-    }
-
-    @Override
+    @Transactional
     public TokenResponseDto register(RegisterRequestDto registerRequestDto) {
         CreateUserRequestDto createUserRequestDto = new CreateUserRequestDto(
                 registerRequestDto.getEmail(),
@@ -77,7 +81,27 @@ public class AuthService implements AuthenticateUserUseCase {
 
     @Override
     public TokenResponseDto refreshToken(String authorizationHeader) {
-        return null;
+        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Invalid Bearer token");
+        }
+        String refreshToken = authorizationHeader.substring(7);
+        String userEmail = jwtService.getEmailFromToken(refreshToken);
+
+        if (userEmail == null) {
+            throw new IllegalArgumentException("Invalid token");
+        }
+
+        User user = UserMapper.userResponseDtoToDomain(userRepositoryPort.getUserByEmail(userEmail));
+        if (user == null) {
+            throw new IllegalArgumentException("User not found");
+        }
+        if (!jwtService.isValidToken(refreshToken, user)) {
+            throw new IllegalArgumentException("Invalid refresh token");
+        }
+        String newAccessToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        jwtService.saveToken(newAccessToken, user);
+        return new TokenResponseDto(newAccessToken, refreshToken);
     }
 
     private void revokeAllUserTokens(User user) {

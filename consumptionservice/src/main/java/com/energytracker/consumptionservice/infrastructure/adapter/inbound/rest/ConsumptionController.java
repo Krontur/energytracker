@@ -21,9 +21,12 @@ public class ConsumptionController {
         this.consumptionService = consumptionService;
     }
 
-    @GetMapping("/{meteringPointId}")
+    @GetMapping("/metering-point/{meteringPointId}")
     public ResponseEntity<List<ConsumptionDto>> getConsumptionsByMeteringPointId(@PathVariable Long meteringPointId) {
         List<ConsumptionDto> consumptionsDto = consumptionService.getConsumptionsByMeteringPointId(meteringPointId);
+        if (consumptionsDto == null || consumptionsDto.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(consumptionsDto, HttpStatus.OK);
     }
 

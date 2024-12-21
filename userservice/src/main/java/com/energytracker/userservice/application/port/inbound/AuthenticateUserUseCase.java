@@ -11,8 +11,6 @@ public interface AuthenticateUserUseCase {
 
     void logout(String token);
 
-    boolean isValidToken(String token);
-
     TokenResponseDto refreshToken(String authHeader);
 
     TokenResponseDto register(RegisterRequestDto registerRequestDto);
