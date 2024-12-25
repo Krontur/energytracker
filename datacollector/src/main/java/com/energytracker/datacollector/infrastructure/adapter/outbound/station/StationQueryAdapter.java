@@ -6,6 +6,8 @@ import com.energytracker.datacollector.domain.model.Command;
 import com.energytracker.datacollector.infrastructure.adapter.outbound.connection.TCPConnection;
 import org.springframework.stereotype.Repository;
 
+import java.net.SocketException;
+
 @Repository
 public class StationQueryAdapter implements StationQueryPort {
 

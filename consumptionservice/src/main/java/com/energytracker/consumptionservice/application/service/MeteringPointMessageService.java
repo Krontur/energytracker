@@ -11,6 +11,7 @@ import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.core.Binding;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;
 
@@ -31,6 +32,7 @@ public class MeteringPointMessageService implements MeteringPointMessageHandlerP
     }
 
     @Override
+    @Transactional
     public void receiveMessage(MeteringPoint meteringPoint) {
 
         log.info("Received message: {}", meteringPoint);
@@ -74,12 +76,18 @@ public class MeteringPointMessageService implements MeteringPointMessageHandlerP
 
     private MeteringPoint handleAddAction(MeteringPoint meteringPoint) {
         log.info("Handling ADD action for metering point: {}", meteringPoint);
-        return meteringPointRepositoryPort.saveMeteringPoint(meteringPoint);
+        MeteringPoint addedMeteringPoint = meteringPointRepositoryPort.saveMeteringPoint(meteringPoint);
+        addedMeteringPoint.setActionType(meteringPoint.getActionType());
+        log.info("Metering point added successfully: {}", addedMeteringPoint);
+        return addedMeteringPoint;
     }
 
     private MeteringPoint handleDeleteAction(MeteringPoint meteringPoint) {
         log.info("Handling DELETE action for metering point: {}", meteringPoint);
-        return meteringPointRepositoryPort.deleteMeteringPoint(meteringPoint);
+        MeteringPoint deletedMeteringPoint = meteringPointRepositoryPort.deleteMeteringPoint(meteringPoint);
+        deletedMeteringPoint.setActionType(meteringPoint.getActionType());
+        log.info("Metering point deleted successfully: {}", deletedMeteringPoint);
+        return deletedMeteringPoint;
     }
 
 }

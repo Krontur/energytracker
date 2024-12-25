@@ -1,6 +1,5 @@
 package com.energytracker.datacollector.domain.model;
 
-import com.netflix.spectator.api.Meter;
 import lombok.Data;
 
 import java.time.LocalDateTime;

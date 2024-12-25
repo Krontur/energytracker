@@ -6,15 +6,11 @@ import com.energytracker.datacollector.application.port.outbound.*;
 import com.energytracker.datacollector.domain.model.ConsumptionResult;
 import com.energytracker.datacollector.domain.model.MeteringPoint;
 import com.energytracker.datacollector.domain.model.MeteringPointsGroupsByStationTag;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageBuilder;
-import org.springframework.amqp.core.MessageProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -22,37 +18,37 @@ import java.util.List;
 
 @Service
 @Log4j2
+@RequiredArgsConstructor
 public class StationQueryService implements GetConsumptionsByAllStationTagsUseCase {
     private final StationQueryPort stationQueryPort;
     private final CommandCreatorPort commandCreatorPort;
     private final MeteringPointFileRepositoryPort meteringPointFileRepositoryPort;
     private final ConsumptionsMessageHandlerPort consumptionsMessageHandlerPort;
-    private final ConfigLoaderPort configLoaderPort;
-    private final ObjectMapper objectMapper;
 
+    @Value("${external.meteringpoints.jsonfile.save.location}")
+    private String meteringPointsFileLocation;
 
-    public StationQueryService(
-            StationQueryPort stationQueryPort,
-            CommandCreatorPort commandCreatorPort,
-            MeteringPointFileRepositoryPort meteringPointFileRepositoryPort,
-            ConsumptionsMessageHandlerPort consumptionsMessageHandlerPort,
-            ConfigLoaderPort configLoaderPort,
-            ObjectMapper objectMapper) {
-        this.stationQueryPort = stationQueryPort;
-        this.commandCreatorPort = commandCreatorPort;
-        this.meteringPointFileRepositoryPort = meteringPointFileRepositoryPort;
-        this.consumptionsMessageHandlerPort = consumptionsMessageHandlerPort;
-        this.configLoaderPort = configLoaderPort;
-        this.objectMapper = objectMapper;
-    }
+    @Value("${simulation.without.stations}")
+    private boolean simulationWithoutStations;
 
+    @Value("${rabbitmq.queue.consumptions}")
+    private String consumptionsQueueName;
 
     public void getConsumptionsByAllStationTags(String timeStamp) {
 
+        List<MeteringPoint> meteringPointList = meteringPointFileRepositoryPort.loadMeteringPointsFromFile(
+                meteringPointsFileLocation);
+
+        if (simulationWithoutStations) {
+            log.info("Simulation without stations");
+            List<ConsumptionResult> simulatedConsumptionResults;
+            simulatedConsumptionResults = simulateConsumptionResults(meteringPointList, timeStamp);
+            consumptionsMessageHandlerPort.sendMessage(simulatedConsumptionResults, consumptionsQueueName);
+            return;
+        }
+
         log.info("Getting consumptions by all station tags");
         List<ConsumptionResult> consumptionResults = new ArrayList<>();
-        List<MeteringPoint> meteringPointList = meteringPointFileRepositoryPort.loadMeteringPointsFromFile(
-                configLoaderPort.getProperty("meteringpoints.jsonfile.save.location"));
 
         MeteringPointsGroupsByStationTag meteringPointsGroupByStationTag = new MeteringPointsGroupsByStationTag(meteringPointList);
         meteringPointsGroupByStationTag.getMeteringPointsGroupsByStationTag().forEach(
@@ -71,7 +67,7 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
                 }
         );
 
-        consumptionsMessageHandlerPort.sendMessage(consumptionResults, configLoaderPort.getProperty("rabbitmq.queue.consumptions"));
+        consumptionsMessageHandlerPort.sendMessage(consumptionResults, consumptionsQueueName);
 
     }
 
@@ -102,6 +98,18 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
             }
         } catch (Exception e) {
             log.error("Error parsing consumption results: {}", e.getMessage());
+        }
+        return consumptionResults;
+    }
+
+    private List<ConsumptionResult> simulateConsumptionResults(List<MeteringPoint> meteringPoints, String timeStamp) {
+        List<ConsumptionResult> consumptionResults = new ArrayList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
+        double consumption;
+        for (MeteringPoint meteringPoint : meteringPoints) {
+            consumption = Math.random() * 100;
+            ConsumptionResult consumptionResult = new ConsumptionResult(meteringPoint, LocalDateTime.parse(timeStamp, formatter), consumption);
+            consumptionResults.add(consumptionResult);
         }
         return consumptionResults;
     }

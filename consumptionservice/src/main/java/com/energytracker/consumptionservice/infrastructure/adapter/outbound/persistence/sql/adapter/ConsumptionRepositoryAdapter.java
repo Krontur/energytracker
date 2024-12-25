@@ -1,5 +1,9 @@
 package com.energytracker.consumptionservice.infrastructure.adapter.outbound.persistence.sql.adapter;
 
+import com.energytracker.consumptionservice.application.dto.DailyConsumptionDto;
+import com.energytracker.consumptionservice.application.dto.MonthlyConsumptionDto;
+import com.energytracker.consumptionservice.application.dto.YearlyConsumptionDto;
+import com.energytracker.consumptionservice.application.mapper.ConsumptionMapper;
 import com.energytracker.consumptionservice.application.port.outbound.ConsumptionRepositoryPort;
 import com.energytracker.consumptionservice.domain.model.Consumption;
 import com.energytracker.consumptionservice.infrastructure.adapter.outbound.persistence.sql.entity.ConsumptionEntity;
@@ -10,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +30,7 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
     public List<Consumption> findConsumptionsByMeteringPointIdAndInterval(Long meteringPointId,
                                                                           LocalDateTime startDateTime,
                                                                           LocalDateTime endDateTime) {
-        List<ConsumptionEntity> consumptionEntities = jpaConsumptionPort.findByMeteringPointIdAndConsumptionTimestampBetween(
+        List<ConsumptionEntity> consumptionEntities = jpaConsumptionPort.findConsumptionEntitiesByMeteringPointIdAndConsumptionTimestampBetweenOrderByConsumptionTimestampAsc(
                 meteringPointId, startDateTime, endDateTime);
         List<Consumption> consumptions = new ArrayList<>();
         if(consumptionEntities != null) {
@@ -62,4 +67,42 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
         }
         return consumptions;
     }
+
+    @Override
+    public List<Consumption> findDailyConsumptionsByMeteringPointId(Long meteringPointId, LocalDate startDate, LocalDate endDate) {
+        List<DailyConsumptionDto> dailyConsumptionDtos = jpaConsumptionPort.findDailyConsumptionByMeteringPointId(
+                meteringPointId, startDate, endDate);
+        List<Consumption> consumptions = new ArrayList<>();
+        if(dailyConsumptionDtos != null) {
+            dailyConsumptionDtos.forEach(dailyConsumptionDto -> consumptions.add(
+                    ConsumptionMapper.consumptionDailyDtoToDomain(dailyConsumptionDto)));
+        }
+        return consumptions;
+    }
+
+    @Override
+    public List<Consumption> findMonthlyConsumptionsByMeteringPointId(Long meteringPointId, LocalDate startDate, LocalDate endDate) {
+        List<MonthlyConsumptionDto> monthlyConsumptionDtos = jpaConsumptionPort.findMonthlyConsumptionByMeteringPointId(
+                meteringPointId, startDate.atStartOfDay(), endDate.atStartOfDay());
+        List<Consumption> consumptions = new ArrayList<>();
+        if(monthlyConsumptionDtos != null) {
+            monthlyConsumptionDtos.forEach(monthlyConsumptionDto -> consumptions.add(
+                    ConsumptionMapper.consumptionMonthlyDtoToDomain(monthlyConsumptionDto)));
+        }
+        return consumptions;
+    }
+
+    @Override
+    public List<Consumption> findYearlyConsumptionsByMeteringPointId(Long meteringPointId, int startYear, int endYear) {
+        List<YearlyConsumptionDto> yearlyConsumptionDtos = jpaConsumptionPort.findYearlyConsumptionByMeteringPointId(
+                meteringPointId, LocalDateTime.of(startYear, 1, 1, 0, 0), LocalDateTime.of(endYear, 12, 31, 23, 59));
+        List<Consumption> consumptions = new ArrayList<>();
+        if(yearlyConsumptionDtos != null) {
+            yearlyConsumptionDtos.forEach(yearlyConsumptionDto -> consumptions.add(
+                    ConsumptionMapper.consumptionYearlyDtoToDomain(yearlyConsumptionDto)));
+        }
+        return consumptions;
+    }
+
+
 }

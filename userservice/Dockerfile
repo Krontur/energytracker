@@ -1,4 +1,5 @@
-FROM eclipse-temurin:17-jdk-jammy as builder
-MAINTAINER "Oscar G. Tur"
-COPY target/userservice.jar /app/userservice.jar
-ENTRYPOINT ["java", "-jar", "/app/userservice.jar"]
+FROM openjdk:17-jdk-alpine
+WORKDIR /app
+COPY target/userservice-0.0.1-SNAPSHOT.jar userservice.jar
+EXPOSE 8083
+ENTRYPOINT ["java", "-jar", "userservice.jar"]

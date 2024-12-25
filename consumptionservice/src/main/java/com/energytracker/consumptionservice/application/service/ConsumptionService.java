@@ -1,7 +1,6 @@
 package com.energytracker.consumptionservice.application.service;
 
-import com.energytracker.consumptionservice.application.dto.ConsumptionDto;
-import com.energytracker.consumptionservice.application.dto.ConsumptionQueryDto;
+import com.energytracker.consumptionservice.application.dto.*;
 import com.energytracker.consumptionservice.application.mapper.ConsumptionMapper;
 import com.energytracker.consumptionservice.application.port.inbound.ConsumptionMessageHandlerPort;
 import com.energytracker.consumptionservice.application.port.inbound.GetConsumptionsByMeteringPointIdAndIntervalUseCase;
@@ -15,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Log4j2
 @Service
@@ -26,10 +26,36 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
 
     @Override
     public List<ConsumptionDto> getConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
+
+            switch (queryDto.getIntervalType()) {
+                case "INTERVAL":
+                    log.info("Finding Consumptions by MeteringPointId and Interval");
+                    return getIntervalConsumptionsByMeteringPointIdAndInterval(queryDto);
+                case "DAILY":
+                    log.info("Finding Daily Consumptions by MeteringPointId");
+                    return getDailyConsumptionsByMeteringPointIdAndInterval(queryDto);
+                case "MONTHLY":
+                    log.info("Finding Monthly Consumptions by MeteringPointId");
+                    return getMonthlyConsumptionsByMeteringPointIdAndInterval(queryDto);
+                case "YEARLY":
+                    log.info("Finding Yearly Consumptions by MeteringPointId");
+                    return getYearlyConsumptionsByMeteringPointIdAndInterval(queryDto);
+                default:
+                    log.warn("Invalid Interval Type: {}", queryDto.getIntervalType());
+                    return new ArrayList<>();
+            }
+    }
+
+    @Override
+    public List<ConsumptionDto> getIntervalConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
         List<ConsumptionDto> consumptionDtos = new ArrayList<>();
         if (queryDto != null) {
-            List<Consumption> consumptions = consumptionRepositoryPort.findConsumptionsByMeteringPointIdAndInterval(queryDto.getMeteringPointId(), queryDto.getStartDateTime(), queryDto.getEndDateTime());
+            List<Consumption> consumptions = null;
+            consumptions = consumptionRepositoryPort.findConsumptionsByMeteringPointIdAndInterval(
+                    queryDto.getMeteringPointId(), queryDto.getStartDateTime(), queryDto.getEndDateTime());
             log.info("Finding Consumptions by MeteringPointId and Interval");
+
+
             if (consumptions != null) {
                 consumptions.forEach(
                         consumption -> consumptionDtos.add(
@@ -38,6 +64,51 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
                 );
             }
 
+        }
+        return consumptionDtos;
+    }
+
+    @Override
+    public List<ConsumptionDto> getDailyConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
+        List<Consumption> consumptions = consumptionRepositoryPort.findDailyConsumptionsByMeteringPointId(
+                queryDto.getMeteringPointId(), queryDto.getStartDateTime().toLocalDate(), queryDto.getEndDateTime().toLocalDate());
+        List<ConsumptionDto> consumptionDtos = new ArrayList<>();
+        if (consumptions != null) {
+            consumptions.forEach(
+                    consumption -> consumptionDtos.add(
+                            ConsumptionMapper.consumptionDomainToDto(consumption)
+                    )
+            );
+        }
+        return consumptionDtos;
+    }
+
+    @Override
+    public List<ConsumptionDto> getMonthlyConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
+        List<Consumption> consumptions = consumptionRepositoryPort.findMonthlyConsumptionsByMeteringPointId(
+                queryDto.getMeteringPointId(), queryDto.getStartDateTime().toLocalDate(), queryDto.getEndDateTime().toLocalDate());
+        List<ConsumptionDto> consumptionDtos = new ArrayList<>();
+        if (consumptions != null) {
+            consumptions.forEach(
+                    consumption -> consumptionDtos.add(
+                            ConsumptionMapper.consumptionDomainToDto(consumption)
+                    )
+            );
+        }
+        return consumptionDtos;
+    }
+
+    @Override
+    public List<ConsumptionDto> getYearlyConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
+        List<Consumption> consumptions = consumptionRepositoryPort.findYearlyConsumptionsByMeteringPointId(
+                queryDto.getMeteringPointId(), queryDto.getStartDateTime().getYear(), queryDto.getEndDateTime().getYear());
+        List<ConsumptionDto> consumptionDtos = new ArrayList<>();
+        if (consumptions != null) {
+            consumptions.forEach(
+                    consumption -> consumptionDtos.add(
+                            ConsumptionMapper.consumptionDomainToDto(consumption)
+                    )
+            );
         }
         return consumptionDtos;
     }

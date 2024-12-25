@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class MeteringPointResponseToConsumptionServiceDto {
 
+    private String actionType;
     private Long MeteringPointId;
     private String stationTag;
     private int channelNumber;

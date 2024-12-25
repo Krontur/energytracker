@@ -12,4 +12,5 @@ public interface ManageMeteringPointsFileUseCase {
 
     void addMeteringPointToFile(MeteringPoint meteringPoint, String filePath);
 
+    void deleteMeteringPointFromFile(MeteringPoint meteringPoint, String property);
 }

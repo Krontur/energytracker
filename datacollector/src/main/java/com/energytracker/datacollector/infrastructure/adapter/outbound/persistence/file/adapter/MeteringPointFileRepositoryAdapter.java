@@ -2,7 +2,6 @@ package com.energytracker.datacollector.infrastructure.adapter.outbound.persiste
 
 import com.energytracker.datacollector.application.port.outbound.MeteringPointFileRepositoryPort;
 import com.energytracker.datacollector.domain.model.MeteringPoint;
-import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -72,4 +71,5 @@ public class MeteringPointFileRepositoryAdapter implements MeteringPointFileRepo
             throw new RuntimeException("Unexpected error while saving metering points", e);
         }
     }
+
 }

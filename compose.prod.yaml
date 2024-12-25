@@ -1,13 +1,23 @@
+networks:
+  energytracker-network:
+    name: energytracker-network
+    driver: bridge
+
 services:
   postgres:
+    networks:
+      - energytracker-network
     image: 'postgres:latest'
     environment:
-      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_DB=test_db'
       - 'POSTGRES_PASSWORD=secret'
       - 'POSTGRES_USER=myuser'
     ports:
-      - '5432'
+      - '5432:5432'
+
   rabbitmq:
+    networks:
+      - energytracker-network
     image: 'rabbitmq:3-management'
     environment:
       - 'RABBITMQ_DEFAULT_PASS=secret'
@@ -15,7 +25,10 @@ services:
     ports:
       - '5672:5672'
       - '15672:15672'
+
   pgadmin:
+    networks:
+      - energytracker-network
     image: 'dpage/pgadmin4'
     environment:
       - 'PGADMIN_DEFAULT_EMAIL=admin@example.com'
@@ -24,3 +37,135 @@ services:
         - '5050:80'
     depends_on:
       - postgres
+
+  userservice:
+    networks:
+      - energytracker-network
+    build:
+      context: ./userservice
+      dockerfile: Dockerfile
+    container_name: userservice-container
+    environment:
+      - SPRING_APPLICATION_NAME=userservice
+      - SERVER_PORT=8083
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/test_db
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_JPA_SCHEMA=users
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_SECURITY_USERNAME=admin
+      - SPRING_SECURITY_PASSWORD=securepassword
+      - SPRING_SECURITY_ROLES=ADMIN
+      - JWT_SECRET=EG8Btg19LnnP9ympNkVNakFP0B20HPqIucqzExaeBVE=
+      - JWT_EXPIRATION_TIME=86400000
+      - JWT_REFRESH_EXPIRATION_TIME=604800000
+    ports:
+      - '8083:8083'
+    depends_on:
+      - postgres
+
+  datacollector:
+    networks:
+      - energytracker-network
+    build:
+      context: ./datacollector
+      dockerfile: Dockerfile
+    container_name: datacollector-container
+    environment:
+      - SPRING_APPLICATION_NAME=datacollector
+      - SERVER_PORT=8081
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=myuser
+      - SPRING_RABBITMQ_PASSWORD=secret
+      - RABBITMQ_QUEUE_CONSUMPTIONS=energy-consumptions-queue
+      - RABBITMQ_EXCHANGE_CONSUMPTIONS=energy-consumptions-exchange
+      - RABBITMQ_ROUTING_KEY_CONSUMPTIONS=energy-consumptions-routing-key
+      - RABBITMQ_QUEUE_METERINGPOINT=energy-meteringpoint-queue
+      - RABBITMQ_EXCHANGE_METERINGPOINT=energy-meteringpoint-exchange
+      - RABBITMQ_ROUTING_KEY_METERINGPOINT=energy-meteringpoint-routing-key
+      - EXTERNAL_CONFIG_PATH=/config/config.ini
+      - EXTERNAL_METERINGPOINTS_JSONFILE_SAVE_LOCATION=/app/data/meteringpoints.json
+      - SIMULATION_WITHOUT_STATIONS=true
+    volumes:
+      - ./datacollector/src/main/config/config.ini:/config/config.ini
+      - ./datacollector/src/main/data/meteringpoints.json:/app/data/meteringpoints.json
+    ports:
+      - "8081:8081"
+    depends_on:
+      - rabbitmq
+
+  consumptionservice:
+    networks:
+      - energytracker-network
+    build:
+      context: ./consumptionservice
+      dockerfile: Dockerfile
+    container_name: consumptionservice-container
+    environment:
+      - SPRING_APPLICATION_NAME=consumptionservice
+      - SERVER_PORT=8082
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/test_db
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_JPA_SCHEMA=consumptions
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=myuser
+      - SPRING_RABBITMQ_PASSWORD=secret
+      - RABBITMQ_QUEUE_CONSUMPTIONS=energy-consumptions-queue
+      - RABBITMQ_EXCHANGE_CONSUMPTIONS=energy-consumptions-exchange
+      - RABBITMQ_ROUTING_KEY_CONSUMPTIONS=energy-consumptions-routing-key
+      - RABBITMQ_QUEUE_METERINGPOINT=energy-meteringpoint-queue
+      - RABBITMQ_EXCHANGE_METERINGPOINT=energy-meteringpoint-exchange
+      - RABBITMQ_ROUTING_KEY_METERINGPOINT=energy-meteringpoint-routing-key
+      - RABBITMQ_QUEUE_NEW_METERINGPOINT=energy-newmeteringpoint-queue
+      - RABBITMQ_EXCHANGE_NEW_METERINGPOINT=energy-newmeteringpoint-exchange
+      - RABBITMQ_ROUTING_KEY_NEW_METERINGPOINT=energy-newmeteringpoint-routing-key
+      - SPRING_SECURITY_USERNAME=admin
+      - SPRING_SECURITY_PASSWORD=securepassword
+      - SPRING_SECURITY_ROLES=ADMIN
+      - EXTERNAL_CONFIG_PATH=/config/config.ini
+    volumes:
+      - ./consumptionservice/src/main/config/config.ini:/config/config.ini
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  devicecatalog:
+    networks:
+      - energytracker-network
+    build:
+      context: ./devicecatalog
+      dockerfile: Dockerfile
+    container_name: devicecatalog-container
+    environment:
+      - SPRING_APPLICATION_NAME=devicecatalog
+      - SERVER_PORT=8080
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/test_db
+      - SPRING_DATASOURCE_USERNAME=myuser
+      - SPRING_DATASOURCE_PASSWORD=secret
+      - SPRING_JPA_SCHEMA=devices
+      - SPRING_RABBITMQ_HOST=rabbitmq
+      - SPRING_RABBITMQ_PORT=5672
+      - SPRING_RABBITMQ_USERNAME=myuser
+      - SPRING_RABBITMQ_PASSWORD=secret
+      - RABBITMQ_QUEUE_METERINGPOINT=energy-newmeteringpoint-queue
+      - RABBITMQ_EXCHANGE_METERINGPOINT=energy-newmeteringpoint-exchange
+      - RABBITMQ_ROUTING_KEY_METERINGPOINT=energy-newmeteringpoint-routing-key
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_SECURITY_USERNAME=admin
+      - SPRING_SECURITY_PASSWORD=securepassword
+      - SPRING_SECURITY_ROLES=ADMIN
+      - EXTERNAL_CONFIG_PATH=/config/config.ini
+    volumes:
+      - ./devicecatalog/src/main/config/config.ini:/config/config.ini
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - rabbitmq

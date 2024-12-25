@@ -80,6 +80,7 @@ public class MeteringPointService implements GetAllMeteringPointsUseCase, Create
 
         MeteringPointResponseToConsumptionServiceDto meteringPointResponseToConsumptionServiceDto =
                 new MeteringPointResponseToConsumptionServiceDto(
+                        "ADD",
                         createdMeteringPoint.getMeteringPointId(),
                         stationService.getStationById(createdMeteringPoint.getChannel().getStationId()).getStationTag(),
                         createdMeteringPoint.getChannel().getChannelNumber()
@@ -122,6 +123,17 @@ public class MeteringPointService implements GetAllMeteringPointsUseCase, Create
             MeteringPoint meteringPoint = meteringPointRepositoryPort.getMeteringPointById(meteringPointId);
             MeteringPoint checkedMeteringPoint = checkFields(createMeteringPointRequestDto, meteringPoint);
             MeteringPoint updatedMeteringPoint = meteringPointRepositoryPort.updateMeteringPointById(meteringPointId, checkedMeteringPoint);
+            if(!updatedMeteringPoint.getActiveStatus()) {
+                MeteringPointResponseToConsumptionServiceDto meteringPointResponseToConsumptionServiceDto =
+                        new MeteringPointResponseToConsumptionServiceDto(
+                                "DELETE",
+                                updatedMeteringPoint.getMeteringPointId(),
+                                stationService.getStationById(updatedMeteringPoint.getChannel().getStationId()).getStationTag(),
+                                updatedMeteringPoint.getChannel().getChannelNumber()
+                        );
+
+                sendMeteringPointMessageToQueue(meteringPointResponseToConsumptionServiceDto);
+            }
             return MeteringPointMapper.meteringPointDomainToResponseDto(updatedMeteringPoint);
         } catch (Exception e) {
             log.error("Error updating metering point by id: {}", e.getMessage(), e);

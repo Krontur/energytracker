@@ -3,7 +3,6 @@ package com.energytracker.datacollector.application.service;
 import com.energytracker.datacollector.application.port.inbound.ManageMeteringPointsFileUseCase;
 import com.energytracker.datacollector.application.port.outbound.MeteringPointFileRepositoryPort;
 import com.energytracker.datacollector.domain.model.MeteringPoint;
-import com.netflix.spectator.api.Meter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
@@ -30,8 +29,8 @@ public class MeteringPointsPersistenceService implements ManageMeteringPointsFil
         if (Paths.get(filePath).toFile().exists()) {
             return meteringPointFileRepositoryPort.loadMeteringPointsFromFile(filePath);
         } else {
-            log.error("File does not exist");
-            throw new IllegalArgumentException("File does not exist");
+            log.error("Loading File::: File does not exist {}", filePath);
+            throw new IllegalArgumentException("Loading File::: File does not exist " + filePath);
         }
     }
 
@@ -62,6 +61,7 @@ public class MeteringPointsPersistenceService implements ManageMeteringPointsFil
         }
 
         meteringPoints.add(new MeteringPoint(
+                meteringPoint.getActionType(),
                 meteringPoint.getMeteringPointId(),
                 meteringPoint.getStationTag(),
                 meteringPoint.getChannelNumber()
@@ -69,6 +69,20 @@ public class MeteringPointsPersistenceService implements ManageMeteringPointsFil
 
         saveMeteringPointsToFile(meteringPoints, filePath);
         log.info("MeteringPoint with ID {} added successfully.", meteringPoint.getMeteringPointId());
+    }
+
+    @Override
+    public void deleteMeteringPointFromFile(MeteringPoint meteringPoint, String property) {
+        List<MeteringPoint> meteringPoints = loadMeteringPointsFromFile(property);
+        boolean isDeleted = meteringPoints.removeIf(existing ->
+                existing.getMeteringPointId().equals(meteringPoint.getMeteringPointId()));
+        if (isDeleted) {
+            saveMeteringPointsToFile(meteringPoints, property);
+            log.info("MeteringPoint with ID {} deleted successfully.", meteringPoint.getMeteringPointId());
+        } else {
+            log.warn("MeteringPoint with ID {} not found in the file. Skipping deletion.", meteringPoint.getMeteringPointId());
+            throw new IllegalArgumentException("MeteringPoint with ID " + meteringPoint.getMeteringPointId() + " not found in the file. Skipping deletion.");
+        }
     }
 
 }

@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Log4j2
@@ -66,5 +68,20 @@ public class MeteringPointRepositoryAdapter implements MeteringPointRepositoryPo
             log.error("Error deleting MeteringPoint: {}", meteringPoint, e);
             throw new RuntimeException("Error deleting MeteringPoint: " + meteringPoint, e);
         }
+    }
+
+    @Override
+    public List<MeteringPoint> getAllMeteringPoints() {
+        List<MeteringPointEntity> meteringPointEntities = jpaMeteringPointPort.findAll();
+        if (meteringPointEntities == null || meteringPointEntities.isEmpty()) {
+            log.warn("No MeteringPoints found");
+            return List.of();
+        }
+        List<MeteringPoint> meteringPoints = new ArrayList<>();
+        meteringPointEntities.forEach(meteringPointEntity -> {
+            meteringPoints.add(MeteringPointPersistenceMapper.meteringPointEntityToDomain(meteringPointEntity));
+        });
+
+        return meteringPoints;
     }
 }

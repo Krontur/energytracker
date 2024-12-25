@@ -98,6 +98,9 @@ public class TCPConnection implements ConnectionPort {
             }
         } catch (SocketTimeoutException e) {
             log.warn("Exceeded Timeout: {}", e.getMessage());
+        } catch (IOException e) {
+            log.error("Error receiving data: {}", e.getMessage());
+            throw e;
         }
 
         return receivedData.toString();

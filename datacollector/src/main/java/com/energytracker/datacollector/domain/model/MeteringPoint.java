@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MeteringPoint {
 
+    private ActionType actionType;
     private Long meteringPointId;
     private String stationTag;
     private int channelNumber;

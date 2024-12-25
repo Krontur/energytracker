@@ -1,2 +1,22 @@
 ### Get all consumptions by metering point id ###
 GET http://localhost:8082/api/v1/consumptions/metering-point/56
+
+### Get consumptions by metering point id and interval ###
+POST http://localhost:8082/api/v1/consumptions/metering-point/interval
+Content-Type: application/json
+
+{
+  "meteringPointId": 683,
+  "intervalType": "INTERVAL",
+  "startDateTime": "2024-12-11T15:45:00",
+  "endDateTime": "2024-12-25T21:35:00"
+}
+
+### Get Metering Points ###
+GET http://localhost:8082/api/v1/metering-points
+
+### Get Consumptions by Metering Point Id and Interval Type ###
+POST http://localhost:8082/api/v1/consumptions/metering-point/interval
+Content-Type: application/json
+
+{"meteringPointId":681,"intervalType":"INTERVAL","startDateTime":"2024-12-24T00:00:00","endDateTime":"2024-12-25T20:41:59"}

@@ -2,12 +2,8 @@ package com.energytracker.userservice.infrastructure.adapter.outbound.persistenc
 
 import com.energytracker.userservice.application.dto.CreateUserRequestDto;
 import com.energytracker.userservice.application.dto.UserResponseDto;
-import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.dto.CreateUserRequestPersistenceDto;
-import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.dto.UserResponsePersistenceDto;
 import com.energytracker.userservice.infrastructure.adapter.outbound.persistence.sql.entity.UserEntity;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

@@ -2,9 +2,6 @@ package com.energytracker.consumptionservice.infrastructure.adapter.inbound.mess
 
 import com.energytracker.consumptionservice.application.port.inbound.MeteringPointListenerPort;
 import com.energytracker.consumptionservice.application.port.inbound.MeteringPointMessageHandlerPort;
-import com.energytracker.consumptionservice.application.port.outbound.ConfigLoaderPort;
-import com.energytracker.consumptionservice.application.port.outbound.ConsumptionRepositoryPort;
-import com.energytracker.consumptionservice.application.port.outbound.MeteringPointRepositoryPort;
 import com.energytracker.consumptionservice.domain.model.MeteringPoint;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

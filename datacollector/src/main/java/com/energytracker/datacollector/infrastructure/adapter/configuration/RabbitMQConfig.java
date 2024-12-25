@@ -38,29 +38,30 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(consumptionsQueue).to(consumptionsExchange).with(consumptionsRoutingKey);
     }
 
-    @Value("${rabbitmq.queue.meteringpoints}")
-    private String meteringPointsQueueName;
+    @Value("${rabbitmq.queue.meteringpoint}")
+    private String meteringPointQueueName;
 
-    @Value("${rabbitmq.exchange.meteringpoints}")
-    private String meteringPointsExchangeName;
+    @Value("${rabbitmq.exchange.meteringpoint}")
+    private String meteringPointExchangeName;
 
-    @Value("${rabbitmq.routing.key.meteringpoints}")
-    private String meteringPointsRoutingKey;
+    @Value("${rabbitmq.routing.key.meteringpoint}")
+    private String meteringPointRoutingKey;
 
     @Bean
-    public Queue meteringPointsQueue() {
-        return new Queue(meteringPointsQueueName, true);
+    public Queue meteringPointQueue() {
+        return new Queue(meteringPointQueueName, true);
     }
 
     @Bean
-    public DirectExchange meteringPointsExchange() {
-        return new DirectExchange(meteringPointsExchangeName);
+    public DirectExchange meteringPointExchange() {
+        return new DirectExchange(meteringPointExchangeName);
     }
 
     @Bean
-    public Binding meteringPointsBinding(Queue meteringPointsQueue, DirectExchange meteringPointsExchange) {
-        return BindingBuilder.bind(meteringPointsQueue).to(meteringPointsExchange).with(meteringPointsRoutingKey);
+    public Binding meteringPointBinding(Queue meteringPointQueue, DirectExchange meteringPointExchange) {
+        return BindingBuilder.bind(meteringPointQueue).to(meteringPointExchange).with(meteringPointRoutingKey);
     }
+
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
