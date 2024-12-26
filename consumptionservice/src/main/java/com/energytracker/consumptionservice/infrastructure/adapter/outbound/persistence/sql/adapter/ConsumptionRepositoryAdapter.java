@@ -13,6 +13,7 @@ import jakarta.persistence.EntityExistsException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,6 +42,7 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
     }
 
     @Override
+    @Transactional
     public Consumption saveConsumption(Consumption consumption) {
         if (consumption == null) {
             log.error("NullPointerException, Parameter consumption is null");

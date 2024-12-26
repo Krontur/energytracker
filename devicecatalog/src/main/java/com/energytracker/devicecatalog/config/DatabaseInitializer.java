@@ -17,6 +17,7 @@ import com.energytracker.devicecatalog.application.port.inbound.station.GetLonAc
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
@@ -33,11 +34,13 @@ import static org.springframework.amqp.core.QueueBuilder.LeaderLocator.random;
 @DependsOn({"energyMeterService", "stationService", "meteringPointService"})
 public class DatabaseInitializer implements CommandLineRunner {
 
+    @Value("${demo.init}")
+    private boolean demoInit;
+
     private final CreateEnergyMeterUseCase createEnergyMeterUseCase;
     private final CreateStationUseCase createStationUseCase;
     private final CreateMeteringPointUseCase createMeteringPointUseCase;
     private final GetAllEnergyMetersUseCase getAllEnergyMetersUseCase;
-    private final GetLonActiveChannelsByStationIdUseCase getLonActiveChannelsByStationIdUseCase;
     private final GetChannelsByStationIdUseCase getChannelsByStationIdUseCase;
     private final GetAllStationsUseCase getAllStationsUseCase;
 
@@ -100,6 +103,13 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        initializeDatabase();
+        try {
+            if (demoInit) {
+                initializeDatabase();
+            }
+        } catch (Exception e) {
+            log.error("Error initializing database: {}", e.getMessage());
+            throw new RuntimeException("Error initializing database", e);
+        }
     }
 }

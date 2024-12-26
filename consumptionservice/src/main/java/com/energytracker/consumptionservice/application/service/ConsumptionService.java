@@ -27,23 +27,28 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
     @Override
     public List<ConsumptionDto> getConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
 
-            switch (queryDto.getIntervalType()) {
-                case "INTERVAL":
-                    log.info("Finding Consumptions by MeteringPointId and Interval");
-                    return getIntervalConsumptionsByMeteringPointIdAndInterval(queryDto);
-                case "DAILY":
-                    log.info("Finding Daily Consumptions by MeteringPointId");
-                    return getDailyConsumptionsByMeteringPointIdAndInterval(queryDto);
-                case "MONTHLY":
-                    log.info("Finding Monthly Consumptions by MeteringPointId");
-                    return getMonthlyConsumptionsByMeteringPointIdAndInterval(queryDto);
-                case "YEARLY":
-                    log.info("Finding Yearly Consumptions by MeteringPointId");
-                    return getYearlyConsumptionsByMeteringPointIdAndInterval(queryDto);
-                default:
-                    log.warn("Invalid Interval Type: {}", queryDto.getIntervalType());
-                    return new ArrayList<>();
+        return switch (queryDto.getIntervalType()) {
+            case "INTERVAL" -> {
+                log.info("Finding Consumptions by MeteringPointId and Interval");
+                yield getIntervalConsumptionsByMeteringPointIdAndInterval(queryDto);
             }
+            case "DAILY" -> {
+                log.info("Finding Daily Consumptions by MeteringPointId");
+                yield getDailyConsumptionsByMeteringPointIdAndInterval(queryDto);
+            }
+            case "MONTHLY" -> {
+                log.info("Finding Monthly Consumptions by MeteringPointId");
+                yield getMonthlyConsumptionsByMeteringPointIdAndInterval(queryDto);
+            }
+            case "YEARLY" -> {
+                log.info("Finding Yearly Consumptions by MeteringPointId");
+                yield getYearlyConsumptionsByMeteringPointIdAndInterval(queryDto);
+            }
+            default -> {
+                log.warn("Invalid Interval Type: {}", queryDto.getIntervalType());
+                yield new ArrayList<>();
+            }
+        };
     }
 
     @Override
@@ -53,7 +58,6 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
             List<Consumption> consumptions = null;
             consumptions = consumptionRepositoryPort.findConsumptionsByMeteringPointIdAndInterval(
                     queryDto.getMeteringPointId(), queryDto.getStartDateTime(), queryDto.getEndDateTime());
-            log.info("Finding Consumptions by MeteringPointId and Interval");
 
 
             if (consumptions != null) {

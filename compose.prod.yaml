@@ -59,6 +59,7 @@ services:
       - JWT_SECRET=EG8Btg19LnnP9ympNkVNakFP0B20HPqIucqzExaeBVE=
       - JWT_EXPIRATION_TIME=86400000
       - JWT_REFRESH_EXPIRATION_TIME=604800000
+      - DEMO_INIT=true
     ports:
       - '8083:8083'
     depends_on:
@@ -128,6 +129,7 @@ services:
       - SPRING_SECURITY_PASSWORD=securepassword
       - SPRING_SECURITY_ROLES=ADMIN
       - EXTERNAL_CONFIG_PATH=/config/config.ini
+      - DEMO_INIT=true
     volumes:
       - ./consumptionservice/src/main/config/config.ini:/config/config.ini
     ports:
@@ -162,6 +164,7 @@ services:
       - SPRING_SECURITY_PASSWORD=securepassword
       - SPRING_SECURITY_ROLES=ADMIN
       - EXTERNAL_CONFIG_PATH=/config/config.ini
+      - DEMO_INIT=true
     volumes:
       - ./devicecatalog/src/main/config/config.ini:/config/config.ini
     ports:

@@ -19,4 +19,9 @@ GET http://localhost:8082/api/v1/metering-points
 POST http://localhost:8082/api/v1/consumptions/metering-point/interval
 Content-Type: application/json
 
-{"meteringPointId":681,"intervalType":"INTERVAL","startDateTime":"2024-12-24T00:00:00","endDateTime":"2024-12-25T20:41:59"}
+{
+  "meteringPointId":681,
+  "intervalType":"DAY",
+  "startDateTime":"2024-12-12T00:00:00",
+  "endDateTime":"2024-12-20T23:59:59"
+}
