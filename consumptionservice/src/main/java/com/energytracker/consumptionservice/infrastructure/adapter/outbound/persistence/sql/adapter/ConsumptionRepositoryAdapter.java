@@ -60,6 +60,33 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
     }
 
     @Override
+    @Transactional
+    public List<Consumption> saveAllConsumptions(List<Consumption> consumptions) {
+        List<Consumption> savedConsumptions = new ArrayList<>();
+
+        if (consumptions == null || consumptions.isEmpty()) {
+            log.error("Parameter consumptions is null or empty");
+            return savedConsumptions;
+        }
+        List<ConsumptionEntity> newConsumptionEntities = new ArrayList<>();
+        consumptions.forEach(consumption -> {
+            boolean exists = jpaConsumptionPort.existsByMeteringPointIdAndConsumptionTimestamp(
+                    consumption.getMeteringPointId(), consumption.getConsumptionTimestamp());
+            if (exists) {
+                log.error("Consumption already exists: {} at {}", consumption.getMeteringPointId(), consumption.getConsumptionTimestamp());
+                throw new EntityExistsException("Consumption already exists for: " + consumption.getMeteringPointId());
+            }
+            ConsumptionEntity consumptionEntity = ConsumptionPersistenceMapper.consumptionDomainToEntity(consumption);
+            newConsumptionEntities.add(consumptionEntity);
+        });
+        List<ConsumptionEntity> savedEntities = jpaConsumptionPort.saveAll(newConsumptionEntities);
+        savedEntities.forEach(entity -> savedConsumptions.add(ConsumptionPersistenceMapper.consumptionEntityToDomain(entity)));
+        return savedConsumptions;
+    }
+
+
+
+    @Override
     public List<Consumption> findConsumptionsByMeteringPointId(Long meteringPointId) {
         List<ConsumptionEntity> consumptionEntities = jpaConsumptionPort.findByMeteringPointId(meteringPointId);
         List<Consumption> consumptions = new ArrayList<>();
@@ -71,7 +98,7 @@ public class ConsumptionRepositoryAdapter implements ConsumptionRepositoryPort {
     }
 
     @Override
-    public List<Consumption> findDailyConsumptionsByMeteringPointId(Long meteringPointId, LocalDate startDate, LocalDate endDate) {
+    public List<Consumption> findDailyConsumptionsByMeteringPointId(Long meteringPointId, LocalDateTime startDate, LocalDateTime endDate) {
         List<DailyConsumptionDto> dailyConsumptionDtos = jpaConsumptionPort.findDailyConsumptionByMeteringPointId(
                 meteringPointId, startDate, endDate);
         List<Consumption> consumptions = new ArrayList<>();

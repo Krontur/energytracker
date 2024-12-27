@@ -75,7 +75,7 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
     @Override
     public List<ConsumptionDto> getDailyConsumptionsByMeteringPointIdAndInterval(ConsumptionQueryDto queryDto) {
         List<Consumption> consumptions = consumptionRepositoryPort.findDailyConsumptionsByMeteringPointId(
-                queryDto.getMeteringPointId(), queryDto.getStartDateTime().toLocalDate(), queryDto.getEndDateTime().toLocalDate());
+                queryDto.getMeteringPointId(), queryDto.getStartDateTime(), queryDto.getEndDateTime());
         List<ConsumptionDto> consumptionDtos = new ArrayList<>();
         if (consumptions != null) {
             consumptions.forEach(
@@ -146,9 +146,7 @@ public class ConsumptionService implements GetConsumptionsByMeteringPointIdUseCa
 
         try {
             log.info("Saving consumption to the database...");
-            consumptions.forEach( consumption -> {
-                consumptionRepositoryPort.saveConsumption(consumption);
-            });
+            consumptionRepositoryPort.saveAllConsumptions(consumptions);
             log.info("Consumption saved successfully: {}", consumptions);
         } catch (DataAccessException e) {
             log.error("Database error occurred while saving consumption: {}", consumptions, e);

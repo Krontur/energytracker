@@ -18,10 +18,17 @@ public class ScheduledStationQueryController {
         this.getConsumptionsByAllStationTagsUseCase = getConsumptionsByAllStationTagsUseCase;
     }
 
-    @Scheduled(cron = "0 0/15 * * * ?")
+    @Scheduled(cron = "0 0,15,30,45 * * * ?", zone = "Europe/Berlin")
     public void getConsumptionsByAllStationTags() {
         String timeStamp;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
+        while (LocalDateTime.now().getMinute() % 15 != 0 ) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                log.error("Thread interrupted: {}", e.getMessage());
+            }
+        }
         timeStamp = LocalDateTime.now().format(formatter);
         log.info("Scheduled task started at the time: {}", timeStamp);
         getConsumptionsByAllStationTagsUseCase.getConsumptionsByAllStationTags(timeStamp);

@@ -86,16 +86,16 @@ services:
       - RABBITMQ_QUEUE_METERINGPOINT=energy-meteringpoint-queue
       - RABBITMQ_EXCHANGE_METERINGPOINT=energy-meteringpoint-exchange
       - RABBITMQ_ROUTING_KEY_METERINGPOINT=energy-meteringpoint-routing-key
-      - EXTERNAL_CONFIG_PATH=/config/config.ini
+      - EXTERNAL_CONFIG_PATH=config/config.ini
       - EXTERNAL_METERINGPOINTS_JSONFILE_SAVE_LOCATION=/app/data/meteringpoints.json
       - SIMULATION_WITHOUT_STATIONS=true
-    volumes:
-      - ./datacollector/src/main/config/config.ini:/config/config.ini
-      - ./datacollector/src/main/data/meteringpoints.json:/app/data/meteringpoints.json
+      - DEMO_INIT=true
+      - DOCKER_COMPOSE_ENABLED=true
     ports:
       - "8081:8081"
     depends_on:
       - rabbitmq
+      - consumptionservice
 
   consumptionservice:
     networks:
@@ -128,15 +128,15 @@ services:
       - SPRING_SECURITY_USERNAME=admin
       - SPRING_SECURITY_PASSWORD=securepassword
       - SPRING_SECURITY_ROLES=ADMIN
-      - EXTERNAL_CONFIG_PATH=/config/config.ini
+      - EXTERNAL_CONFIG_PATH=config/config.ini
       - DEMO_INIT=true
-    volumes:
-      - ./consumptionservice/src/main/config/config.ini:/config/config.ini
+      - DOCKER_COMPOSE_ENABLED=true
     ports:
       - "8082:8082"
     depends_on:
       - postgres
       - rabbitmq
+      - devicecatalog
 
   devicecatalog:
     networks:
@@ -163,12 +163,12 @@ services:
       - SPRING_SECURITY_USERNAME=admin
       - SPRING_SECURITY_PASSWORD=securepassword
       - SPRING_SECURITY_ROLES=ADMIN
-      - EXTERNAL_CONFIG_PATH=/config/config.ini
+      - EXTERNAL_CONFIG_PATH=config/config.ini
       - DEMO_INIT=true
-    volumes:
-      - ./devicecatalog/src/main/config/config.ini:/config/config.ini
+      - DOCKER_COMPOSE_ENABLED=true
     ports:
       - "8080:8080"
     depends_on:
       - postgres
       - rabbitmq
+      - userservice

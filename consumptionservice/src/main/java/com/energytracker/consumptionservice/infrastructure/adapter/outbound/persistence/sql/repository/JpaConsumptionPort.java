@@ -32,21 +32,33 @@ public interface JpaConsumptionPort extends JpaRepository<ConsumptionEntity, Lon
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
-    @Query("SELECT NEW com.energytracker.consumptionservice.application.dto.DailyConsumptionDto(" +
-            "c.meteringPointId, CAST(c.consumptionTimestamp AS date), CAST(c.consumptionTimestamp AS date), SUM(c.consumptionValue)) " +
-            "FROM ConsumptionEntity c " +
-            "WHERE c.meteringPointId = :meteringPointId AND c.consumptionTimestamp BETWEEN :startDate AND :endDate " +
-            "GROUP BY c.meteringPointId, CAST(c.consumptionTimestamp AS date) " +
-            "ORDER BY CAST(c.consumptionTimestamp AS date)")
+    @Query(value = """
+            SELECT
+                new com.energytracker.consumptionservice.application.dto.DailyConsumptionDto(
+                    c.meteringPointId,
+                    CAST(c.consumptionTimestamp AS DATE),
+                    CAST(c.consumptionTimestamp AS DATE),
+                    SUM(c.consumptionValue)
+                )
+            FROM
+                ConsumptionEntity c
+            WHERE
+                c.meteringPointId = :meteringPointId
+              AND c.consumptionTimestamp BETWEEN :startDate AND :endDate
+            GROUP BY
+                c.meteringPointId, CAST(c.consumptionTimestamp AS DATE)
+            ORDER BY
+                CAST(c.consumptionTimestamp AS DATE)
+            """)
     List<DailyConsumptionDto> findDailyConsumptionByMeteringPointId(
             @Param("meteringPointId") Long meteringPointId,
-            @Param("startDate") LocalDate startDate,
-            @Param("endDate") LocalDate endDate);
+            @Param("startDate") LocalDateTime startDate,
+            @Param("endDate") LocalDateTime endDate);
 
     @Query("SELECT NEW com.energytracker.consumptionservice.application.dto.MonthlyConsumptionDto(" +
             "c.meteringPointId, " +
-            "EXTRACT(YEAR FROM c.consumptionTimestamp), " +
             "EXTRACT(MONTH FROM c.consumptionTimestamp), " +
+            "EXTRACT(YEAR FROM c.consumptionTimestamp), " +
             "SUM(c.consumptionValue)) " +
             "FROM ConsumptionEntity c " +
             "WHERE c.meteringPointId = :meteringPointId " +
@@ -73,4 +85,5 @@ public interface JpaConsumptionPort extends JpaRepository<ConsumptionEntity, Lon
             @Param("startDate") LocalDateTime startDate,
             @Param("endDate") LocalDateTime endDate);
 
+    boolean existsByMeteringPointIdAndConsumptionTimestamp(Long meteringPointId, LocalDateTime consumptionTimestamp);
 }

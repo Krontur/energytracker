@@ -10,6 +10,9 @@ import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.retry.backoff.ExponentialBackOffPolicy;
+import org.springframework.retry.policy.SimpleRetryPolicy;
+import org.springframework.retry.support.RetryTemplate;
 
 @Configuration
 public class RabbitMQConfig {
@@ -67,7 +70,25 @@ public class RabbitMQConfig {
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jackson2JsonMessageConverter());
+        rabbitTemplate.setRetryTemplate(retryTemplate());
         return rabbitTemplate;
+    }
+
+    @Bean
+    public RetryTemplate retryTemplate() {
+        RetryTemplate retryTemplate = new RetryTemplate();
+
+        ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
+        backOffPolicy.setInitialInterval(500);
+        backOffPolicy.setMultiplier(2.0);
+        backOffPolicy.setMaxInterval(10000);
+        retryTemplate.setBackOffPolicy(backOffPolicy);
+
+        SimpleRetryPolicy retryPolicy = new SimpleRetryPolicy();
+        retryPolicy.setMaxAttempts(5);
+        retryTemplate.setRetryPolicy(retryPolicy);
+
+        return retryTemplate;
     }
 
     @Bean

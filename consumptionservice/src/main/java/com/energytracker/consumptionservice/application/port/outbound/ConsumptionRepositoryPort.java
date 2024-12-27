@@ -14,9 +14,11 @@ public interface ConsumptionRepositoryPort {
 
    List<Consumption> findConsumptionsByMeteringPointId(Long meteringPointId);
 
-   List<Consumption> findDailyConsumptionsByMeteringPointId(Long meteringPointId, LocalDate startDate, LocalDate endDate);
+   List<Consumption> findDailyConsumptionsByMeteringPointId(Long meteringPointId, LocalDateTime startDate, LocalDateTime endDate);
 
    List<Consumption> findMonthlyConsumptionsByMeteringPointId(Long meteringPointId, LocalDate startDate, LocalDate endDate);
 
    List<Consumption> findYearlyConsumptionsByMeteringPointId(Long meteringPointId, int startYear, int endYear);
+
+   List<Consumption> saveAllConsumptions(List<Consumption> consumptions);
 }

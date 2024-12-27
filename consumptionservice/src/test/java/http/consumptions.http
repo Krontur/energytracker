@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "meteringPointId":681,
-  "intervalType":"DAY",
-  "startDateTime":"2024-12-12T00:00:00",
-  "endDateTime":"2024-12-20T23:59:59"
+  "intervalType":"DAILY",
+  "startDateTime":"2024-12-22T00:00:00",
+  "endDateTime":"2024-12-25T23:59:59"
 }
