@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/channels")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -23,6 +25,18 @@ public class ChannelController {
         try {
             ChannelResponseDto channel = channelService.getChannelById(channelId);
             return new ResponseEntity<>(channel, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<ChannelResponseDto>> getAllChannels() {
+        try {
+            List<ChannelResponseDto> channelResponseDtoList = channelService.getAllChannels();
+            return new ResponseEntity<>(channelResponseDtoList, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception e) {

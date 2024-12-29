@@ -24,7 +24,7 @@ public class EnergyMeterController {
     public ResponseEntity<EnergyMeterResponseDto> createEnergyMeter(
             @RequestBody CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
 
-        EnergyMeterResponseDto createdEnergyMeter = null;
+        EnergyMeterResponseDto createdEnergyMeter;
         if (createEnergyMeterRequestDto != null) {
             createdEnergyMeter = energyMeterService.createEnergyMeter(createEnergyMeterRequestDto);
         } else {
@@ -79,7 +79,7 @@ public class EnergyMeterController {
     public ResponseEntity<EnergyMeterResponseDto> updateEnergyMeter(
             @PathVariable Long energyMeterId,
             @RequestBody CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
-        EnergyMeterResponseDto updatedEnergyMeter = null;
+        EnergyMeterResponseDto updatedEnergyMeter;
         if (createEnergyMeterRequestDto != null) {
             updatedEnergyMeter = energyMeterService.updateEnergyMeter(energyMeterId, createEnergyMeterRequestDto);
         } else {

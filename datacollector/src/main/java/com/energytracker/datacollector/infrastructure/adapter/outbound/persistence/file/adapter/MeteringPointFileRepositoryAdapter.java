@@ -37,6 +37,7 @@ public class MeteringPointFileRepositoryAdapter implements MeteringPointFileRepo
                 log.warn("File not found: {}. Please check the path or create the file.", filePath);
                 throw new FileNotFoundException("File not found: " + filePath);
             }
+            log.info("Loaded file: {}", resource);
             return objectMapper.readValue(resource.getInputStream(), new TypeReference<List<MeteringPoint>>() {});
         } catch (FileNotFoundException e) {
             log.error("File not found: {}", filePath, e);

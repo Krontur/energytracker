@@ -6,6 +6,7 @@ import com.energytracker.datacollector.application.port.outbound.*;
 import com.energytracker.datacollector.domain.model.ConsumptionResult;
 import com.energytracker.datacollector.domain.model.MeteringPoint;
 import com.energytracker.datacollector.domain.model.MeteringPointsGroupsByStationTag;
+import jakarta.ws.rs.core.NoContentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,7 +35,7 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
     @Value("${rabbitmq.queue.consumptions}")
     private String consumptionsQueueName;
 
-    public void getConsumptionsByAllStationTags(String timeStamp) {
+    public void getConsumptionsByAllStationTags(String timeStamp) throws NoContentException {
 
         List<MeteringPoint> meteringPointList = meteringPointFileRepositoryPort.loadMeteringPointsFromFile(
                 meteringPointsFileLocation);
@@ -43,7 +44,11 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
             log.info("Simulation without stations");
             List<ConsumptionResult> simulatedConsumptionResults;
             simulatedConsumptionResults = simulateConsumptionResults(meteringPointList, timeStamp);
-            consumptionsMessageHandlerPort.sendMessage(simulatedConsumptionResults, consumptionsQueueName);
+            try {
+                consumptionsMessageHandlerPort.sendMessage(simulatedConsumptionResults, consumptionsQueueName);
+            } catch (NoContentException e) {
+                throw new RuntimeException("No content to send" + e.getMessage());
+            }
             return;
         }
 
@@ -71,7 +76,7 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
 
     }
 
-    private List<ConsumptionResult> parseConsumptionResults(String rawResult, List<MeteringPoint> meteringPoints, String timeStamp) {
+    public List<ConsumptionResult> parseConsumptionResults(String rawResult, List<MeteringPoint> meteringPoints, String timeStamp) {
         List<ConsumptionResult> consumptionResults = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
 
@@ -102,7 +107,7 @@ public class StationQueryService implements GetConsumptionsByAllStationTagsUseCa
         return consumptionResults;
     }
 
-    private List<ConsumptionResult> simulateConsumptionResults(List<MeteringPoint> meteringPoints, String timeStamp) {
+    public List<ConsumptionResult> simulateConsumptionResults(List<MeteringPoint> meteringPoints, String timeStamp) {
         List<ConsumptionResult> consumptionResults = new ArrayList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm:ss");
         double consumption;

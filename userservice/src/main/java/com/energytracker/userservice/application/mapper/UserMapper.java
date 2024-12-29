@@ -10,7 +10,6 @@ public class UserMapper {
     public static User createUserRequestDtoToDomain(CreateUserRequestDto createUserRequestDto) {
 
         User user = new User();
-
         user.setEmail(createUserRequestDto.getEmail());
         user.setFullName(createUserRequestDto.getFullName());
         user.setPassword(createUserRequestDto.getPassword());

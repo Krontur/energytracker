@@ -1,5 +1,7 @@
 package com.energytracker.datacollector.infrastructure.adapter.configuration;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -14,7 +16,9 @@ import org.springframework.retry.backoff.ExponentialBackOffPolicy;
 import org.springframework.retry.policy.SimpleRetryPolicy;
 import org.springframework.retry.support.RetryTemplate;
 
+@Log4j2
 @Configuration
+@RequiredArgsConstructor
 public class RabbitMQConfig {
 
     @Value("${rabbitmq.queue.consumptions}")
@@ -25,6 +29,16 @@ public class RabbitMQConfig {
 
     @Value("${rabbitmq.routing.key.consumptions}")
     private String consumptionsRoutingKey;
+
+    @Value("${rabbitmq.queue.meteringpoint}")
+    private String meteringPointQueueName;
+
+    @Value("${rabbitmq.exchange.meteringpoint}")
+    private String meteringPointExchangeName;
+
+    @Value("${rabbitmq.routing.key.meteringpoint}")
+    private String meteringPointRoutingKey;
+
 
     @Bean
     public Queue consumptionsQueue() {
@@ -41,15 +55,6 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(consumptionsQueue).to(consumptionsExchange).with(consumptionsRoutingKey);
     }
 
-    @Value("${rabbitmq.queue.meteringpoint}")
-    private String meteringPointQueueName;
-
-    @Value("${rabbitmq.exchange.meteringpoint}")
-    private String meteringPointExchangeName;
-
-    @Value("${rabbitmq.routing.key.meteringpoint}")
-    private String meteringPointRoutingKey;
-
     @Bean
     public Queue meteringPointQueue() {
         return new Queue(meteringPointQueueName, true);
@@ -65,7 +70,6 @@ public class RabbitMQConfig {
         return BindingBuilder.bind(meteringPointQueue).to(meteringPointExchange).with(meteringPointRoutingKey);
     }
 
-
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
@@ -79,7 +83,7 @@ public class RabbitMQConfig {
         RetryTemplate retryTemplate = new RetryTemplate();
 
         ExponentialBackOffPolicy backOffPolicy = new ExponentialBackOffPolicy();
-        backOffPolicy.setInitialInterval(500);
+        backOffPolicy.setInitialInterval(2000);
         backOffPolicy.setMultiplier(2.0);
         backOffPolicy.setMaxInterval(10000);
         retryTemplate.setBackOffPolicy(backOffPolicy);
@@ -95,4 +99,5 @@ public class RabbitMQConfig {
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
+
 }

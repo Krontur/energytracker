@@ -2,6 +2,8 @@ package com.energytracker.userservice.infrastructure.config;
 
 import com.energytracker.userservice.application.dto.CreateUserRequestDto;
 import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
+import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,10 +19,10 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Value("${demo.init}")
     private boolean demoInit;
 
-    private final CreateUserUseCase createUserUseCase;
+    private final UserRepositoryPort userRepositoryPort;
 
-    public DatabaseInitializer(@Qualifier("userService") CreateUserUseCase createUserUseCase) {
-        this.createUserUseCase = createUserUseCase;
+    public DatabaseInitializer(UserRepositoryPort userRepositoryPort) {
+        this.userRepositoryPort = userRepositoryPort;
         log.info("DatabaseInitializer created");
     }
 
@@ -31,10 +33,10 @@ public class DatabaseInitializer implements CommandLineRunner {
             boolean isActive;
             if(i % 2 == 0){ role = "ADMIN"; } else { role = "USER"; }
             if(i % 2 == 0){ isActive = true; } else { isActive = false; }
-            createUserUseCase.createUser(new CreateUserRequestDto(
+            userRepositoryPort.createUser(new CreateUserRequestDto(
                     "user" + i + "@example.com",
                     "User" + i,
-                    "password",
+                    "password" + i*23,
                     role,
                     isActive,
                     "path/to/avatar" + i

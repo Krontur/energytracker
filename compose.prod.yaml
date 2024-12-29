@@ -90,6 +90,7 @@ services:
       - EXTERNAL_METERINGPOINTS_JSONFILE_SAVE_LOCATION=/app/data/meteringpoints.json
       - SIMULATION_WITHOUT_STATIONS=true
       - DEMO_INIT=true
+      - DEMO_INIT_DATABASE_MONTHS=2
       - DOCKER_COMPOSE_ENABLED=true
     ports:
       - "8081:8081"

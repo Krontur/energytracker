@@ -37,15 +37,15 @@ public class ConsumptionsMessageService implements ConsumptionsMessageHandlerPor
     }
 
     @Override
-    public void sendMessage(List<ConsumptionResult> consumptionResultList, String queueName) {
+    public void sendMessage(List<ConsumptionResult> consumptionResultList, String queueName) throws NoContentException {
 
         List<ConsumptionResponseDto> consumptionResponseDtos = new ArrayList<>();
+        if (consumptionResultList == null || consumptionResultList.isEmpty()) {
+            log.warn("Parameter consumptionResultList is null or empty");
+            throw new NoContentException("Parameter consumptionResultList is null or empty");
+        }
 
         try {
-            if (consumptionResultList == null || consumptionResultList.isEmpty()) {
-                log.warn("Parameter consumptionResultList is null or empty");
-                throw new NoContentException("Parameter consumptionResultList is null or empty");
-            }
             log.info("Mapping consumptions result list to response dto");
             consumptionResultList.forEach( consumptionResult -> {
                 consumptionResponseDtos.add(
@@ -65,10 +65,6 @@ public class ConsumptionsMessageService implements ConsumptionsMessageHandlerPor
         } catch (JsonProcessingException e) {
             log.error("Error converting consumption result list to JSON: {}", e.getMessage());
             throw new RuntimeException("Failed to serialize consumption results", e);
-        } catch (NoContentException e) {
-            log.warn(e);
-        } catch (Exception e){
-
         }
     }
 

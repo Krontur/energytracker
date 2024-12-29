@@ -23,7 +23,7 @@ public class AuthController {
         if (tokenResponseDto == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
-        return new ResponseEntity<>(tokenResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(tokenResponseDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

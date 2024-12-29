@@ -4,11 +4,11 @@ import com.energytracker.datacollector.application.port.inbound.ConsumptionsMess
 import com.energytracker.datacollector.application.port.outbound.MeteringPointFileRepositoryPort;
 import com.energytracker.datacollector.domain.model.ConsumptionResult;
 import com.energytracker.datacollector.domain.model.MeteringPoint;
+import jakarta.ws.rs.core.NoContentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +16,20 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
 @Log4j2
 @Component
 @DependsOn("rabbitTemplate")
 @RequiredArgsConstructor
-public class DatabaseInitializer implements ApplicationListener<ApplicationReadyEvent> {
+public class DatabaseInitializer implements CommandLineRunner {
 
     @Value("${demo.init}")
     private boolean demoInit;
+
+    @Value("${demo.init.database.reading.months}")
+    private int minusMonths;
 
     @Value("${external.meteringpoints.jsonfile.save.location}")
     private String meteringPointsJsonFileLocation;
@@ -36,33 +40,34 @@ public class DatabaseInitializer implements ApplicationListener<ApplicationReady
     private final ConsumptionsMessageHandlerPort consumptionsMessageHandlerPort;
     private final MeteringPointFileRepositoryPort meteringPointFileRepositoryPort;
 
-    private void initializeDatabase() {
-
-        List<MeteringPoint> meteringPoints = meteringPointFileRepositoryPort.loadMeteringPointsFromFile(meteringPointsJsonFileLocation);
-        if (meteringPoints == null || meteringPoints.isEmpty()) {
-            return;
-        }
-        for (LocalDateTime date = LocalDateTime.now().minusMonths(1).truncatedTo(ChronoUnit.DAYS);
-             date.isBefore(LocalDateTime.now().truncatedTo(ChronoUnit.DAYS)); date = date.plusDays(1)) {
-            List<ConsumptionResult> consumptionResultList = new ArrayList<>();
-            for (LocalDateTime day = date, endOfDay = date.plusDays(1);
-                 day.isBefore(endOfDay); day = day.plusMinutes(15)) {
-                for (MeteringPoint meteringPoint : meteringPoints) {
-                    ConsumptionResult consumption = new ConsumptionResult(
-                            meteringPoint,
-                            day,
-                            Math.random() * 100
-                    );
-                    consumptionResultList.add(consumption);
+    private void initializeAsync() {
+        CompletableFuture.runAsync(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        List<MeteringPoint> meteringPoints = meteringPointFileRepositoryPort.loadMeteringPointsFromFile(meteringPointsJsonFileLocation);
+                        while (meteringPoints.isEmpty() || meteringPoints.size() < 10
+                        ){
+                            try {
+                                TimeUnit.SECONDS.sleep(10);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                            log.info("Metering Point not loaded, retry...");
+                            meteringPoints = meteringPointFileRepositoryPort.loadMeteringPointsFromFile(meteringPointsJsonFileLocation);
+                        }
+                        try {
+                            initializeDatabaseMonthly(meteringPoints, minusMonths);
+                        } catch (NoContentException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                 }
-            }
-            consumptionsMessageHandlerPort.sendMessage(consumptionResultList, consumptionsQueue);
-        }
+        );
     }
 
-    private void initializeDatabaseMonthly(int minusMonths) {
+    private void initializeDatabaseMonthly(List<MeteringPoint> meteringPoints, int minusMonths) throws NoContentException {
 
-        List<MeteringPoint> meteringPoints = meteringPointFileRepositoryPort.loadMeteringPointsFromFile(meteringPointsJsonFileLocation);
         if (meteringPoints == null || meteringPoints.isEmpty()) {
             return;
         }
@@ -94,18 +99,10 @@ public class DatabaseInitializer implements ApplicationListener<ApplicationReady
         }
     }
 
-
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
-        log.info("Application ready event received, sleeping for 45 seconds");
-        try {
-            TimeUnit.SECONDS.sleep(45);
-            if (demoInit){
-                log.info("Initializing database consumptions");
-                initializeDatabaseMonthly(2);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+    public void run(String... args) throws Exception {
+        if (demoInit) {
+            initializeAsync();
         }
     }
 }

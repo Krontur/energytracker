@@ -27,7 +27,11 @@ public class UserService implements CreateUserUseCase, GetAllUsersUseCase, GetUs
     public UserResponseDto createUser(CreateUserRequestDto createUserRequestDto) {
 
         User user = UserMapper.createUserRequestDtoToDomain(createUserRequestDto);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if (user.getPassword() != null || passwordEncoder != null){
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        } else {
+            throw new IllegalArgumentException("Password or password encoder is null");
+        }
 
         if(userRepositoryPort.existsByEmail(user.getEmail())) {
             throw new IllegalArgumentException("Email already exists");

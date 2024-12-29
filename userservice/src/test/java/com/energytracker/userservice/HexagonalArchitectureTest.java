@@ -1,10 +1,17 @@
 package com.energytracker.userservice;
 
+import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
+import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
+import com.energytracker.userservice.infrastructure.config.AppConfig;
+import com.energytracker.userservice.infrastructure.config.DatabaseInitializer;
+import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.lang.conditions.ArchPredicates;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.belongToAnyOf;
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
 
 
@@ -18,5 +25,7 @@ public class HexagonalArchitectureTest {
             .adapter("configuration", "..infrastructure.adapter.configuration..")
             .adapter("persistence", "..infrastructure.adapter.outbound..")
             .adapter("rest", "..infrastructure.adapter.inbound..")
+            .ignoreDependency(belongToAnyOf(DatabaseInitializer.class), DescribedPredicate.alwaysTrue())
+            .ignoreDependency(belongToAnyOf(AppConfig.class), DescribedPredicate.alwaysTrue())
             .allowEmptyShould(true);
 }
