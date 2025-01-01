@@ -5,14 +5,17 @@ import com.energytracker.userservice.application.dto.RegisterRequestDto;
 import com.energytracker.userservice.application.dto.TokenResponseDto;
 import com.energytracker.userservice.application.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Log4j2
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class AuthController {
 
     private final AuthService authService;
@@ -29,6 +32,7 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> authenticate(@RequestBody LoginRequestDto loginRequestDto) {
         TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
+        log.info("Token response: {}", tokenResponseDto);
         if (tokenResponseDto == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

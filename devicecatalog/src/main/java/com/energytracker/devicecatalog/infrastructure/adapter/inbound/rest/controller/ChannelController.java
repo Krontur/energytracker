@@ -3,8 +3,10 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.service.ChannelService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,14 +14,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/channels")
 @CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class ChannelController {
 
     private final ChannelService channelService;
 
-    public ChannelController(ChannelService channelService) {
-        this.channelService = channelService;
-    }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{channelId}")
     public ResponseEntity<ChannelResponseDto> getChannelById(@PathVariable Long channelId) {
         try {
@@ -32,6 +32,7 @@ public class ChannelController {
         }
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping()
     public ResponseEntity<List<ChannelResponseDto>> getAllChannels() {
         try {
@@ -44,6 +45,7 @@ public class ChannelController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping()
     public ResponseEntity<ChannelResponseDto> updateChannel(
             @RequestBody ChannelResponseDto channelResponseDto) {

@@ -10,6 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.Map;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class JwtService implements JwtManageUseCase {
@@ -43,7 +45,7 @@ public class JwtService implements JwtManageUseCase {
 
     @Override
     public void saveToken(String token, User user) {
-
+        log.info("Saving token for user with email: {}", user.getEmail());
         Token toSaveToken = new Token(
                 null,
                 token,
@@ -57,9 +59,10 @@ public class JwtService implements JwtManageUseCase {
     }
 
     private String buildToken(User user, Long experationTime) {
+        log.info("Building token for user with email: {}", user.getEmail());
         return Jwts.builder()
                 .id(user.getUserAccountId().toString())
-                .claims(Map.of("role", user.getRole().name(), "fullName", user.getFullName()))
+                .claims(Map.of("role", user.getRole().name(), "fullName", user.getFullName(), "isEnabled", user.isEnabled()))
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + experationTime))
@@ -68,36 +71,53 @@ public class JwtService implements JwtManageUseCase {
     }
 
     private SecretKey getSigningKey() {
-        byte[] secretKeyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(secretKeyBytes);
+        try {
+            byte[] secretKeyBytes = Decoders.BASE64.decode(secretKey);
+            return Keys.hmacShaKeyFor(secretKeyBytes);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalStateException("Invalid Base64-encoded secret key", e);
+        }
     }
 
+    @Override
     public String getEmailFromToken(String token) {
-        Claims jwtToken = Jwts.parser()
+        Claims claims = Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-        return jwtToken.getSubject();
+        return claims.getSubject();
     }
 
+    private Date getExpirationDateFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSigningKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.getExpiration();
+    }
+
+
+    @Override
     public boolean isValidToken(String token, User user) {
-
-        String email = getEmailFromToken(token);
-        return email.equals(user.getEmail()) && !isTokenExpired(token);
-
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            String email = claims.getSubject();
+            return email.equals(user.getEmail()) && !isTokenExpired(token);
+        } catch (Exception e) {
+            log.error("Token validation failed: {}", e.getMessage());
+            return false;
+        }
     }
+
 
     private boolean isTokenExpired(String token) {
         return getExpirationDateFromToken(token).before(new Date());
     }
 
-    private Date getExpirationDateFromToken(String token) {
-        Claims jwtToken = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-        return jwtToken.getExpiration();
-    }
 }

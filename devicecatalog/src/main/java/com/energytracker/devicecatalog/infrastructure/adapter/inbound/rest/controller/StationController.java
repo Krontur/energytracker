@@ -5,8 +5,10 @@ import com.energytracker.devicecatalog.application.dto.station.CreateStationRequ
 import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
 import com.energytracker.devicecatalog.application.service.StationService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,14 +16,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/stations")
 @CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class StationController {
 
     private final StationService stationService;
 
-    public StationController(StationService stationService) {
-        this.stationService = stationService;
-    }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<StationResponseDto> createStation(
             @RequestBody CreateStationRequestDto createStationRequestDto) {
@@ -34,6 +34,7 @@ public class StationController {
         return new ResponseEntity<>(createdStation, HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{stationId}")
     public ResponseEntity<StationResponseDto> updateStation(
             @PathVariable Long stationId,
@@ -47,6 +48,7 @@ public class StationController {
         return new ResponseEntity<>(updatedStation, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<StationResponseDto>> getAllStations() {
         List<StationResponseDto> stations = stationService.getAllStations();
@@ -56,6 +58,7 @@ public class StationController {
         return new ResponseEntity<>(stations, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{stationId}")
     public ResponseEntity<StationResponseDto> getStationById(@PathVariable Long stationId) {
         try {
@@ -68,12 +71,14 @@ public class StationController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{stationId}")
     public ResponseEntity<Void> deleteStationById(@PathVariable Long stationId) {
         stationService.deleteStationById(stationId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{stationId}/deactivate")
     public ResponseEntity<StationResponseDto> deactivateStation(@PathVariable Long stationId) {
         StationResponseDto station = stationService.deactivateStationById(stationId);
@@ -83,6 +88,7 @@ public class StationController {
         return new ResponseEntity<>(station, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{stationId}/channels")
     public ResponseEntity<List<ChannelResponseDto>> getChannelsByStationId(@PathVariable Long stationId) {
         List<ChannelResponseDto> channels = stationService.getChannelsByStationId(stationId);
@@ -92,6 +98,7 @@ public class StationController {
         return new ResponseEntity<>(channels, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{stationId}/channels/lon-is-active")
     public ResponseEntity<List<ChannelResponseDto>> getLonActiveChannelsByStationId(@PathVariable Long stationId) {
         List<ChannelResponseDto> channels = stationService.getLonActiveChannelsByStationId(stationId);

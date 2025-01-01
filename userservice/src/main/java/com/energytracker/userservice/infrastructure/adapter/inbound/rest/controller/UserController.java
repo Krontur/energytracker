@@ -6,6 +6,7 @@ import com.energytracker.userservice.application.service.UserService;
 import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.CreateUserRequestRestDto;
 import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.UserResponseRestDto;
 import com.energytracker.userservice.infrastructure.adapter.inbound.rest.mapper.UserRestMapper;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j2
 @RestController
 @RequestMapping("/api/v1/users")
 @CrossOrigin(origins = "http://localhost:5173")
@@ -32,6 +34,7 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserResponseRestDto>> getAllUsers() {
+        log.info("Getting all users");
         List<UserResponseDto> users = userService.getAllUsers();
         List<UserResponseRestDto> userResponseRestDtos = new ArrayList<UserResponseRestDto>();
         users.forEach(user -> userResponseRestDtos.add(UserRestMapper.userResponseFromDtoToRestDto(user)));

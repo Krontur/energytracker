@@ -4,8 +4,10 @@ import com.energytracker.devicecatalog.application.dto.meteringpoint.CreateMeter
 import com.energytracker.devicecatalog.application.dto.meteringpoint.MeteringPointResponseDto;
 import com.energytracker.devicecatalog.application.mapper.MeteringPointMapper;
 import com.energytracker.devicecatalog.application.service.MeteringPointService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,14 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/metering-points")
 @CrossOrigin(origins = "http://localhost:5173")
+@RequiredArgsConstructor
 public class MeteringPointController {
 
     private final MeteringPointService meteringPointService;
 
-    public MeteringPointController(MeteringPointService meteringPointService) {
-        this.meteringPointService = meteringPointService;
-    }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<MeteringPointResponseDto>> getMeteringPoints() {
         List<MeteringPointResponseDto> meteringPoints = meteringPointService.getAllMeteringPoints();
@@ -30,6 +30,7 @@ public class MeteringPointController {
         return new ResponseEntity<>(meteringPoints, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{meteringPointId}")
     public ResponseEntity<MeteringPointResponseDto> getMeteringPointById(@PathVariable Long meteringPointId) {
         MeteringPointResponseDto meteringPoint = meteringPointService.getMeteringPointById(meteringPointId);
@@ -40,6 +41,7 @@ public class MeteringPointController {
 
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<MeteringPointResponseDto> createMeteringPoint(@RequestBody CreateMeteringPointRequestDto createMeteringPointRequestDto) {
         try {
@@ -50,6 +52,7 @@ public class MeteringPointController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{meteringPointId}")
     public ResponseEntity<MeteringPointResponseDto> updateMeteringPoint(@PathVariable Long meteringPointId, @RequestBody CreateMeteringPointRequestDto createMeteringPointRequestDto) {
         try {

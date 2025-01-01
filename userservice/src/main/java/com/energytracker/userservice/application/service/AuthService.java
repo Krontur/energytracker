@@ -10,11 +10,13 @@ import com.energytracker.userservice.domain.model.Token;
 import com.energytracker.userservice.domain.model.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AuthService implements AuthenticateUserUseCase {
@@ -27,6 +29,7 @@ public class AuthService implements AuthenticateUserUseCase {
 
     @Override
     public TokenResponseDto login(LoginRequestDto loginRequestDto) {
+        log.info("Login request for user with email: {}", loginRequestDto.getEmail());
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequestDto.getEmail(),
@@ -37,9 +40,12 @@ public class AuthService implements AuthenticateUserUseCase {
         if (user == null) {
             return null;
         }
+        log.info("User with email: {} authenticated", loginRequestDto.getEmail());
         String token = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
+        log.info("Token generated for user with email: {}", loginRequestDto.getEmail());
+        log.info("Generated token: {}", token);
         jwtService.saveToken(token, user);
         return new TokenResponseDto(token, refreshToken);
     }

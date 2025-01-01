@@ -19,10 +19,10 @@ public class DatabaseInitializer implements CommandLineRunner {
     @Value("${demo.init}")
     private boolean demoInit;
 
-    private final UserRepositoryPort userRepositoryPort;
+    private final CreateUserUseCase createUserUseCase;
 
-    public DatabaseInitializer(UserRepositoryPort userRepositoryPort) {
-        this.userRepositoryPort = userRepositoryPort;
+    public DatabaseInitializer(CreateUserUseCase createUserUseCase) {
+        this.createUserUseCase = createUserUseCase;
         log.info("DatabaseInitializer created");
     }
 
@@ -33,7 +33,7 @@ public class DatabaseInitializer implements CommandLineRunner {
             boolean isActive;
             if(i % 2 == 0){ role = "ADMIN"; } else { role = "USER"; }
             if(i % 2 == 0){ isActive = true; } else { isActive = false; }
-            userRepositoryPort.createUser(new CreateUserRequestDto(
+            createUserUseCase.createUser(new CreateUserRequestDto(
                     "user" + i + "@example.com",
                     "User" + i,
                     "password" + i*23,

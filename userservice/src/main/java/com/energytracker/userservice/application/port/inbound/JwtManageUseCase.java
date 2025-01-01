@@ -10,4 +10,8 @@ public interface JwtManageUseCase {
 
     void saveToken(String token, User user);
 
+    String getEmailFromToken(String token);
+
+    boolean isValidToken(String token, User user);
+
 }
