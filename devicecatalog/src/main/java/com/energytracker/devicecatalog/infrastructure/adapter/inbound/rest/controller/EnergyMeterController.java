@@ -3,8 +3,6 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
 import com.energytracker.devicecatalog.application.service.EnergyMeterService;
-import com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.util.JwtTokenProvider;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -22,7 +20,6 @@ import java.util.List;
 public class EnergyMeterController {
 
     private final EnergyMeterService energyMeterService;
-    private final JwtTokenProvider jwtTokenProvider;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping

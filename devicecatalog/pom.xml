@@ -6,7 +6,7 @@
 		<groupId>com.oscartur</groupId>
 		<artifactId>energytracker</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath> <!-- Ruta al POM raíz -->
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>com.energytracker</groupId>
 	<artifactId>devicecatalog</artifactId>

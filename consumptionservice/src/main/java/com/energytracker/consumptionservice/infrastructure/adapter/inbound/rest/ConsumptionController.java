@@ -6,6 +6,7 @@ import com.energytracker.consumptionservice.application.service.ConsumptionServi
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class ConsumptionController {
 
     private final ConsumptionService consumptionService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/metering-point/{meteringPointId}")
     public ResponseEntity<List<ConsumptionDto>> getConsumptionsByMeteringPointId(@PathVariable Long meteringPointId) {
         List<ConsumptionDto> consumptionsDto = consumptionService.getConsumptionsByMeteringPointId(meteringPointId);
@@ -28,6 +30,7 @@ public class ConsumptionController {
         return new ResponseEntity<>(consumptionsDto, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @PostMapping("/metering-point/interval")
     public ResponseEntity<List<ConsumptionDto>> getConsumptionsByMeteringPointIdAndInterval(@RequestBody ConsumptionQueryDto consumptionQueryDto) {
         List<ConsumptionDto> consumptionDtos = new ArrayList<>();

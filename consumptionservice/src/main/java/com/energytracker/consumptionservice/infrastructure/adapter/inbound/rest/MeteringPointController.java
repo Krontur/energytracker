@@ -4,6 +4,7 @@ import com.energytracker.consumptionservice.application.dto.MeteringPointDto;
 import com.energytracker.consumptionservice.application.service.MeteringPointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ public class MeteringPointController {
 
     private final MeteringPointService meteringPointService;
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<MeteringPointDto>> getMeteringPoints() {
         List<MeteringPointDto> meteringPointDtos = meteringPointService.getAllMeteringPoints();
@@ -27,5 +29,4 @@ public class MeteringPointController {
         }
         return ResponseEntity.ok(meteringPointDtos);
     }
-
 }
