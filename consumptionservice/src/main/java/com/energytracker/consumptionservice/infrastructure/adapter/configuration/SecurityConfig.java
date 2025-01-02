@@ -30,6 +30,10 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(authorizeRequests ->
                         authorizeRequests
+                                .requestMatchers("/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources/**",
+                                        "/webjars/**").permitAll()
                                 .requestMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN"))
                 .cors(cors -> {})
                 .csrf(AbstractHttpConfigurer::disable)
