@@ -32,8 +32,7 @@ public class SecurityConfig {
                                 .requestMatchers("/swagger-ui/**",
                                         "/v3/api-docs/**",
                                         "/swagger-resources/**",
-                                        "/webjars/**").permitAll()
-                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                        "/webjars/** ", "/api/v1/auth/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/api/v1/**").hasRole("ADMIN"))
                 .cors(cors -> {})
