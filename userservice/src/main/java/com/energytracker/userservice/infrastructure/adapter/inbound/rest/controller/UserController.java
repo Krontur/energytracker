@@ -17,7 +17,7 @@ import java.util.List;
 @Log4j2
 @RestController
 @RequestMapping("/api/v1/users")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${cors.origin.url}")
 public class UserController {
 
     private final UserService userService;
@@ -44,6 +44,9 @@ public class UserController {
     public ResponseEntity<UserResponseRestDto> createUser(@RequestBody CreateUserRequestRestDto createUserRequestRestDto) {
         UserResponseDto createdUser = userService.createUser(UserRestMapper.createUserRequestFromRestDtoToDto(
                 createUserRequestRestDto));
+        if (createdUser == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(UserRestMapper.userResponseFromDtoToRestDto(createdUser), HttpStatus.CREATED);
     }
 

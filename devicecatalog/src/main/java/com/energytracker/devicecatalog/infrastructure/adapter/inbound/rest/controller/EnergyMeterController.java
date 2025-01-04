@@ -15,7 +15,7 @@ import java.util.List;
 @Log4j2
 @RestController
 @RequestMapping("/api/v1/meters")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${cors.origin.url}")
 @RequiredArgsConstructor
 public class EnergyMeterController {
 

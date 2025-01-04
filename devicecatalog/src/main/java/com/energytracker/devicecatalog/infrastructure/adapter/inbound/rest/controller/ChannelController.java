@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/channels")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${cors.origin.url}")
 @RequiredArgsConstructor
 public class ChannelController {
 

@@ -60,6 +60,7 @@ services:
       - JWT_EXPIRATION_TIME=86400000
       - JWT_REFRESH_EXPIRATION_TIME=604800000
       - DEMO_INIT=true
+      - CORS_ORIGIN_URL=http://srv685512.hstgr.cloud:5173
     ports:
       - '8083:8083'
     depends_on:
@@ -133,6 +134,7 @@ services:
       - DEMO_INIT=true
       - DOCKER_COMPOSE_ENABLED=true
       - JWT_SECRET=EG8Btg19LnnP9ympNkVNakFP0B20HPqIucqzExaeBVE=
+      - CORS_ORIGIN_URL=http://srv685512.hstgr.cloud:5173
     ports:
       - "8082:8082"
     depends_on:
@@ -169,6 +171,7 @@ services:
       - DEMO_INIT=true
       - DOCKER_COMPOSE_ENABLED=true
       - JWT_SECRET=EG8Btg19LnnP9ympNkVNakFP0B20HPqIucqzExaeBVE=
+      - CORS_ORIGIN_URL=http://srv685512.hstgr.cloud:5173
     ports:
       - "8080:8080"
     depends_on:

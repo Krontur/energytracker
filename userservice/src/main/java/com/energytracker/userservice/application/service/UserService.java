@@ -24,6 +24,7 @@ public class UserService implements CreateUserUseCase, GetAllUsersUseCase, GetUs
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
+    @Override
     public UserResponseDto createUser(CreateUserRequestDto createUserRequestDto) {
 
         User user = UserMapper.createUserRequestDtoToDomain(createUserRequestDto);
@@ -40,6 +41,7 @@ public class UserService implements CreateUserUseCase, GetAllUsersUseCase, GetUs
         return userRepositoryPort.createUser(UserMapper.createUserRequestDomainToDto(user));
     }
 
+    @Override
     public List<UserResponseDto> getAllUsers() {
         return userRepositoryPort.getAllUsers();
     }

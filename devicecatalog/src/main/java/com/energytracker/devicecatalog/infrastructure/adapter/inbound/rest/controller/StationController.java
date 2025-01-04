@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/stations")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "${cors.origin.url}")
 @RequiredArgsConstructor
 public class StationController {
 

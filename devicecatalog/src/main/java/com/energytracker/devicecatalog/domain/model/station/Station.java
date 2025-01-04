@@ -3,6 +3,7 @@ package com.energytracker.devicecatalog.domain.model.station;
 import com.energytracker.devicecatalog.domain.model.Device;
 import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.DeviceType;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +16,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class Station extends Device {
+
+    int NUMBER_OF_CHANNELS = 64;
 
     public Station(
             Long deviceId,
@@ -54,8 +57,8 @@ public class Station extends Device {
         this.stationType = stationType;
         this.stationTag = stationTag;
         this.readingIntervalInSeconds = readingIntervalInSeconds;
-        initializeDefaultChannels(64);
-    };
+        initializeDefaultChannels(NUMBER_OF_CHANNELS);
+    }
 
     private String stationName;
 
