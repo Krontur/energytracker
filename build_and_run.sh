@@ -1,11 +1,33 @@
 #!/bin/bash
 
+set -e  # Salir si ocurre algún error
+
 # Microservicios a construir
 services=("consumptionservice" "datacollector" "devicecatalog" "userservice")
 
-echo "Starting build process for microservices..."
+echo "Starting build and setup process for microservices..."
 
-# Iterar sobre cada microservicio y ejecutar el comando de Maven Wrapper
+# 1. Configurar permisos para build_and_run.sh
+echo "Setting execute permissions for build_and_run.sh files..."
+for service in "${services[@]}"; do
+  if [ -f "$service/build_and_run.sh" ]; then
+    chmod 755 "$service/build_and_run.sh"
+    echo "Permissions set for $service/build_and_run.sh"
+  else
+    echo "build_and_run.sh not found in $service"
+  fi
+done
+
+# Configurar permisos en la raíz
+if [ -f "./build_and_run.sh" ]; then
+  chmod 755 "./build_and_run.sh"
+  echo "Permissions set for root/build_and_run.sh"
+else
+  echo "build_and_run.sh not found in root"
+fi
+
+# 2. Construir microservicios con Maven Wrapper
+echo "Building microservices..."
 for service in "${services[@]}"; do
   echo "Building $service..."
   if [ -d "$service" ]; then
@@ -25,11 +47,9 @@ done
 
 echo "Build process completed successfully!"
 
-# Levantar los contenedores con Docker Compose
+# 3. Levantar los contenedores con Docker Compose
 echo "Starting Docker Compose..."
 docker-compose -f ./compose.prod.yaml up --build
-
-# Verificar si Docker Compose se ejecutó correctamente
 if [ $? -ne 0 ]; then
   echo "Docker Compose failed to start. Exiting..."
   exit 1
