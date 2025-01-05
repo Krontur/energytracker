@@ -1,21 +1,29 @@
 package com.energytracker.devicecatalog.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 public class WebConfig {
+
+    @Value("${cors.origin.url}")
+    private String corsOriginUrl;
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
+            final List<String> origins = Arrays.asList(corsOriginUrl.split(","));
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/api/**")
-                        .allowedOrigins("${cors.origin.url}")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                        .allowedOrigins(origins.toArray(new String[0]))
+                        .allowedMethods("GET", "POST", "PATCH", "HEAD", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
             }

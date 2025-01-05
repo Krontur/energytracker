@@ -12,6 +12,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import com.energytracker.consumptionservice.infrastructure.adapter.inbound.rest.filter.JwtAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 
 @Configuration
@@ -21,6 +22,7 @@ import com.energytracker.consumptionservice.infrastructure.adapter.inbound.rest.
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final CorsConfigurationSource corsConfigurer;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -35,7 +37,7 @@ public class SecurityConfig {
                                         "/swagger-resources/**",
                                         "/webjars/**").permitAll()
                                 .requestMatchers("/api/v1/**").hasAnyRole("USER", "ADMIN"))
-                .cors(cors -> {})
+                .cors(cors -> cors.configurationSource(corsConfigurer))
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .addFilterBefore(jwtAuthenticationFilter,  UsernamePasswordAuthenticationFilter.class);
