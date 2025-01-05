@@ -60,6 +60,7 @@ public class MeteringPointService implements GetAllMeteringPointsUseCase, Create
         });
         return meteringPointResponseDtos;
     }
+
     @Override
     @Transactional
     public MeteringPointResponseDto createMeteringPoint(CreateMeteringPointRequestDto createMeteringPointRequestDto) {

@@ -10,6 +10,7 @@ import com.energytracker.devicecatalog.domain.model.DeviceStatus;
 import com.energytracker.devicecatalog.domain.model.energymeter.EnergyMeter;
 import com.energytracker.devicecatalog.domain.model.station.Station;
 import jakarta.persistence.OptimisticLockException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -117,98 +118,77 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
     }
 
     @Override
-    public EnergyMeterResponseDto updateEnergyMeter(Long energyMeterId, CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
+    public EnergyMeterResponseDto updateEnergyMeter(Long energyMeterId, @Valid CreateEnergyMeterRequestDto requestDto) {
         EnergyMeter energyMeter = energyMeterRepositoryPort.getEnergyMeterById(energyMeterId);
-        if(energyMeter == null) {
+        if (energyMeter == null) {
             throw new NotFoundException("Energy Meter with id " + energyMeterId + " not found");
         }
+
         try {
-            EnergyMeter checkedEnergyMeter = checkFields(createEnergyMeterRequestDto, energyMeter);
-            return EnergyMeterMapper.energyMeterDomainToResponseDto(energyMeterRepositoryPort.updateEnergyMeter(energyMeterId, checkedEnergyMeter));
+            log.info("Updating energy meter with ID: {}", energyMeterId);
+            checkFields(requestDto, energyMeter);
+
+            EnergyMeter updatedEnergyMeter = energyMeterRepositoryPort.updateEnergyMeter(energyMeterId, energyMeter);
+            log.info("Energy meter updated successfully.");
+            return EnergyMeterMapper.energyMeterDomainToResponseDto(updatedEnergyMeter);
         } catch (OptimisticLockException e) {
-            throw new OptimisticLockException("Error updating energy meter, entity has been modified");
+            log.error("Optimistic lock exception while updating energy meter", e);
+            throw new OptimisticLockException("Entity has been modified", e);
         } catch (Exception e) {
-            throw new RuntimeException("Error updating energy meter");
+            log.error("Error updating energy meter", e);
+            throw new RuntimeException("Error updating energy meter", e);
         }
     }
 
-    private EnergyMeter checkFields(CreateEnergyMeterRequestDto createEnergyMeterRequestDto, EnergyMeter energyMeter) {
-        Field[] fields = createEnergyMeterRequestDto.getClass().getDeclaredFields();
+    private void checkFields(CreateEnergyMeterRequestDto requestDto, EnergyMeter energyMeter) {
+        Field[] fields = requestDto.getClass().getDeclaredFields();
+        Map<String, String> fieldNameMap = Map.of("energyMeterId", "deviceId"); // Mapeo de campos
 
         for (Field field : fields) {
             field.setAccessible(true);
             try {
-                Object dtoValue = field.get(createEnergyMeterRequestDto);
-
-                if (dtoValue == null) {
-                    log.info("{} is null", field.getName());
-                } else if (dtoValue instanceof String && ((String) dtoValue).trim().isEmpty()) {
-                    log.info("{} is empty", field.getName());
-                } else {
-                    Field entityField = getFieldFromClassHierarchy(energyMeter.getClass(), field.getName());
+                Object dtoValue = field.get(requestDto);
+                if (dtoValue != null && !(dtoValue instanceof String && ((String) dtoValue).trim().isEmpty())) {
+                    Field entityField = getFieldFromClassHierarchy(energyMeter.getClass(), field.getName(), fieldNameMap);
                     if (entityField != null) {
-                        entityField.setAccessible(true);
-
                         Object convertedValue = convertValue(dtoValue, entityField.getType());
-                        Object entityValue = entityField.get(energyMeter);
-
-                        if (!convertedValue.equals(entityValue)) {
-                            log.info("{} has changed", field.getName());
+                        if (!convertedValue.equals(entityField.get(energyMeter))) {
+                            log.info("Field '{}' has changed. Updating value...", field.getName());
                             entityField.set(energyMeter, convertedValue);
                         }
-                    } else {
-                        log.warn("Field {} does not exist in Station or its superclasses", field.getName());
                     }
                 }
             } catch (IllegalAccessException e) {
-                log.error("Error accessing fields", e);
-                throw new RuntimeException("Error accessing fields", e);
+                log.warn("Error accessing or setting field: {}", field.getName(), e);
             }
         }
-        return energyMeter;
     }
 
-
-    private Field getFieldFromClassHierarchy(Class<?> clazz, String fieldName) {
-        Map<String, String> FIELD_NAME_MAP = new HashMap<>();
-        FIELD_NAME_MAP.put("energyMeterId", "deviceId");
-
-        String entityFieldName = FIELD_NAME_MAP.getOrDefault(fieldName, fieldName);
+    private Field getFieldFromClassHierarchy(Class<?> clazz, String fieldName, Map<String, String> fieldNameMap) {
+        String entityFieldName = fieldNameMap.getOrDefault(fieldName, fieldName);
 
         while (clazz != null) {
             try {
-                return clazz.getDeclaredField(entityFieldName);
+                Field field = clazz.getDeclaredField(entityFieldName);
+                field.setAccessible(true);
+                return field;
             } catch (NoSuchFieldException e) {
+                log.debug("Field '{}' not found in class '{}'. Checking superclass...", entityFieldName, clazz.getName());
                 clazz = clazz.getSuperclass();
             }
         }
-        return null;
+
+        log.error("Field '{}' not found in class hierarchy starting from '{}'", entityFieldName, clazz.getName());
+        throw new IllegalArgumentException("Field '" + fieldName + "' not found in class hierarchy.");
     }
 
     private Object convertValue(Object value, Class<?> targetType) {
-        if (value == null || targetType.isInstance(value)) {
-            return value;
-        }
+        if (value == null || targetType.isInstance(value)) return value;
 
-        if (targetType.isEnum() && value instanceof String) {
-            return Enum.valueOf((Class<Enum>) targetType, (String) value);
-        }
-
-        if (targetType == Integer.class || targetType == int.class) {
-            return Integer.valueOf(value.toString());
-        }
-
-        if (targetType == Long.class || targetType == long.class) {
-            return Long.valueOf(value.toString());
-        }
-
-        if (targetType == Double.class || targetType == double.class) {
-            return Double.valueOf(value.toString());
-        }
-
-        if (targetType == Boolean.class || targetType == boolean.class) {
-            return Boolean.valueOf(value.toString());
-        }
+        if (targetType.isEnum()) return Enum.valueOf((Class<Enum>) targetType, value.toString().toUpperCase());
+        if (targetType == Integer.class || targetType == int.class) return Integer.parseInt(value.toString());
+        if (targetType == Long.class || targetType == long.class) return Long.parseLong(value.toString());
+        if (targetType == Boolean.class || targetType == boolean.class) return Boolean.parseBoolean(value.toString());
 
         throw new IllegalArgumentException("Cannot convert value " + value + " to type " + targetType);
     }
