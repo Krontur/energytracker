@@ -20,7 +20,6 @@ public class WebConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // Separar los orígenes desde la variable de configuración
         List<String> origins = Arrays.asList(corsOriginUrl.split(","));
         configuration.setAllowedOrigins(origins);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "HEAD", "OPTIONS"));
@@ -28,7 +27,6 @@ public class WebConfig {
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);
 
-        // Registrar la configuración de CORS
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;

@@ -52,7 +52,7 @@ public class DatabaseInitializer implements CommandLineRunner {
                 createEnergyMeterUseCase.createEnergyMeter(new CreateEnergyMeterRequestDto(
                         UUID.randomUUID().toString(),
                         "ENERGY_METER",
-                        "IN_STOCK",
+                        "INSTALLED",
                         "OSNF9NSDFSDIN" + i * 100,
                         "DIGITAL",
                         400,
