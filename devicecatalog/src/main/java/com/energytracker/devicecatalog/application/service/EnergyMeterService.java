@@ -127,7 +127,7 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
         try {
             log.info("Updating energy meter with ID: {}", energyMeterId);
             checkFields(requestDto, energyMeter);
-
+            energyMeter.setDeviceStatus(DeviceStatus.INSTALLED);
             EnergyMeter updatedEnergyMeter = energyMeterRepositoryPort.updateEnergyMeter(energyMeterId, energyMeter);
             log.info("Energy meter updated successfully.");
             return EnergyMeterMapper.energyMeterDomainToResponseDto(updatedEnergyMeter);
@@ -142,7 +142,7 @@ public class EnergyMeterService  implements CreateEnergyMeterUseCase, GetAllEner
 
     private void checkFields(CreateEnergyMeterRequestDto requestDto, EnergyMeter energyMeter) {
         Field[] fields = requestDto.getClass().getDeclaredFields();
-        Map<String, String> fieldNameMap = Map.of("energyMeterId", "deviceId"); // Mapeo de campos
+        Map<String, String> fieldNameMap = Map.of("energyMeterId", "deviceId");
 
         for (Field field : fields) {
             field.setAccessible(true);
