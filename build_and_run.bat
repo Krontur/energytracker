@@ -26,7 +26,7 @@ echo Build process completed successfully!
 
 :: Levantar los contenedores con Docker Compose
 echo Starting Docker Compose...
-docker-compose -f .\compose.prod.yaml up --build
+docker-compose -f .\compose.prod.yaml up --build -d
 
 :: Verificar si Docker Compose se ejecutó correctamente
 if errorlevel 1 (

@@ -7,18 +7,18 @@ services=("consumptionservice" "datacollector" "devicecatalog" "userservice")
 
 echo "Starting build and setup process for microservices..."
 
-# 1. Configurar permisos para build_and_run.sh
-echo "Setting execute permissions for build_and_run.sh files..."
+# 1. Configurar permisos para mvnw
+echo "Setting execute permissions for mvnw files..."
 for service in "${services[@]}"; do
-  if [ -f "$service/build_and_run.sh" ]; then
-    chmod 755 "$service/build_and_run.sh"
-    echo "Permissions set for $service/build_and_run.sh"
+  if [ -f "$service/mvnw" ]; then
+    chmod 755 "$service/mvnw"
+    echo "Permissions set for $service/mvnw"
   else
-    echo "build_and_run.sh not found in $service"
+    echo "mvnw not found in $service"
   fi
 done
 
-# Configurar permisos en la raíz
+# Configurar permisos en la raíz para build_and_run.sh (si es necesario)
 if [ -f "./build_and_run.sh" ]; then
   chmod 755 "./build_and_run.sh"
   echo "Permissions set for root/build_and_run.sh"
@@ -49,7 +49,7 @@ echo "Build process completed successfully!"
 
 # 3. Levantar los contenedores con Docker Compose
 echo "Starting Docker Compose..."
-docker-compose -f ./compose.prod.yaml up --build
+docker-compose -f ./compose.prod.yaml up --build -d
 if [ $? -ne 0 ]; then
   echo "Docker Compose failed to start. Exiting..."
   exit 1
