@@ -71,7 +71,8 @@ public class MeteringPointService implements GetAllMeteringPointsUseCase, Create
 
         meteringPoint.getEnergyMeter().setDeviceStatus(DeviceStatus.INSTALLED);
         energyMeterService.updateEnergyMeter(meteringPoint.getEnergyMeter().getDeviceId(), EnergyMeterMapper.energyMeterDomainToCreateRequestDto(meteringPoint.getEnergyMeter()));
-
+        log.info("Energy meter status updated to INSTALLED for metering point: {}", meteringPoint.getMeteringPointId());
+        log.info("Energy meter status: {}", meteringPoint.getEnergyMeter().getDeviceStatus());
         meteringPoint.setChannel(stationService.getChannelById(createMeteringPointRequestDto.getChannelId()));
         meteringPoint.getChannel().setLonIsActive(true);
         channelService.updateChannel(ChannelMapper.channelDomainToDto(meteringPoint.getChannel()));
