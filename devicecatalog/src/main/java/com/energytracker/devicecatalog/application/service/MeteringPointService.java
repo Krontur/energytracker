@@ -60,36 +60,55 @@ public class MeteringPointService implements GetAllMeteringPointsUseCase, Create
         });
         return meteringPointResponseDtos;
     }
-
     @Override
     @Transactional
     public MeteringPointResponseDto createMeteringPoint(CreateMeteringPointRequestDto createMeteringPointRequestDto) {
+        try {
+            log.info("Starting process to create metering point...");
 
-        MeteringPoint meteringPoint = MeteringPointMapper.createMeteringPointRequestDtoToDomain(createMeteringPointRequestDto);
-        meteringPoint.setEnergyMeter(EnergyMeterMapper.energyMeterResponseDtoToDomain(energyMeterService.getEnergyMeterById(
-                createMeteringPointRequestDto.getEnergyMeterId())));
+            log.info("Mapping CreateMeteringPointRequestDto to MeteringPoint domain object...");
+            MeteringPoint meteringPoint = MeteringPointMapper.createMeteringPointRequestDtoToDomain(createMeteringPointRequestDto);
 
-        meteringPoint.getEnergyMeter().setDeviceStatus(DeviceStatus.INSTALLED);
-        energyMeterService.updateEnergyMeter(meteringPoint.getEnergyMeter().getDeviceId(), EnergyMeterMapper.energyMeterDomainToCreateRequestDto(meteringPoint.getEnergyMeter()));
-        log.info("Energy meter status updated to INSTALLED for metering point: {}", meteringPoint.getMeteringPointId());
-        log.info("Energy meter status: {}", meteringPoint.getEnergyMeter().getDeviceStatus());
-        meteringPoint.setChannel(stationService.getChannelById(createMeteringPointRequestDto.getChannelId()));
-        meteringPoint.getChannel().setLonIsActive(true);
-        channelService.updateChannel(ChannelMapper.channelDomainToDto(meteringPoint.getChannel()));
+            log.info("Fetching energy meter with ID: {}", createMeteringPointRequestDto.getEnergyMeterId());
+            meteringPoint.setEnergyMeter(EnergyMeterMapper.energyMeterResponseDtoToDomain(
+                    energyMeterService.getEnergyMeterById(createMeteringPointRequestDto.getEnergyMeterId())));
+            log.info("Setting energy meter status to INSTALLED...");
+            meteringPoint.getEnergyMeter().setDeviceStatus(DeviceStatus.INSTALLED);
+            log.info("Updating energy meter...");
+            energyMeterService.updateEnergyMeter(
+                    meteringPoint.getEnergyMeter().getDeviceId(),
+                    EnergyMeterMapper.energyMeterDomainToCreateRequestDto(meteringPoint.getEnergyMeter())
+            );
 
-        MeteringPoint createdMeteringPoint = meteringPointRepositoryPort.createMeteringPoint(meteringPoint);
+            log.info("Fetching channel with ID: {}", createMeteringPointRequestDto.getChannelId());
+            meteringPoint.setChannel(stationService.getChannelById(createMeteringPointRequestDto.getChannelId()));
+            log.info("Activating channel...");
+            meteringPoint.getChannel().setLonIsActive(true);
+            log.info("Updating channel...");
+            channelService.updateChannel(ChannelMapper.channelDomainToDto(meteringPoint.getChannel()));
 
-        MeteringPointResponseToConsumptionServiceDto meteringPointResponseToConsumptionServiceDto =
-                new MeteringPointResponseToConsumptionServiceDto(
-                        "ADD",
-                        createdMeteringPoint.getMeteringPointId(),
-                        stationService.getStationById(createdMeteringPoint.getChannel().getStationId()).getStationTag(),
-                        createdMeteringPoint.getChannel().getChannelNumber()
-                );
+            log.info("Creating metering point in the database...");
+            MeteringPoint createdMeteringPoint = meteringPointRepositoryPort.createMeteringPoint(meteringPoint);
 
-        sendMeteringPointMessageToQueue(meteringPointResponseToConsumptionServiceDto);
+            log.info("Preparing message for RabbitMQ...");
+            MeteringPointResponseToConsumptionServiceDto meteringPointResponseToConsumptionServiceDto =
+                    new MeteringPointResponseToConsumptionServiceDto(
+                            "ADD",
+                            createdMeteringPoint.getMeteringPointId(),
+                            stationService.getStationById(createdMeteringPoint.getChannel().getStationId()).getStationTag(),
+                            createdMeteringPoint.getChannel().getChannelNumber()
+                    );
 
-        return MeteringPointMapper.meteringPointDomainToResponseDto(createdMeteringPoint);
+            log.info("Sending message to RabbitMQ: {}", meteringPointResponseToConsumptionServiceDto);
+            sendMeteringPointMessageToQueue(meteringPointResponseToConsumptionServiceDto);
+
+            log.info("Mapping MeteringPoint to response DTO...");
+            return MeteringPointMapper.meteringPointDomainToResponseDto(createdMeteringPoint);
+
+        } catch (Exception e) {
+            log.error("Error creating metering point: {}", e.getMessage(), e);
+            throw e;
+        }
     }
 
     private void sendMeteringPointMessageToQueue(MeteringPointResponseToConsumptionServiceDto messageDto) {

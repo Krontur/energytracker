@@ -46,60 +46,74 @@ public class DatabaseInitializer implements CommandLineRunner {
 
     private void initializeDatabase() {
         log.info("Initializing database devices");
+
         for (int i = 0; i < 10; i++) {
-            log.info("Creating device {}", i);
-            createEnergyMeterUseCase.createEnergyMeter(new CreateEnergyMeterRequestDto(
-                    UUID.randomUUID().toString(),
-                    "ENERGY_METER",
-                    "IN_STOCK",
-                    "OSNF9NSDFSDIN" + i*100,
-                    "DIGITAL",
-                    400,
-                    "LON",
-                    40,
-                    2023
-            ));
+            try {
+                createEnergyMeterUseCase.createEnergyMeter(new CreateEnergyMeterRequestDto(
+                        UUID.randomUUID().toString(),
+                        "ENERGY_METER",
+                        "IN_STOCK",
+                        "OSNF9NSDFSDIN" + i * 100,
+                        "DIGITAL",
+                        400,
+                        "LON",
+                        40,
+                        2023
+                ));
+            } catch (Exception e) {
+                log.error("Failed to create energy meter {}: {}", i, e.getMessage());
+            }
         }
 
         for (int i = 10; i < 20; i++) {
-            log.info("Creating station {}", i);
-            String deviceStatus = i%2 == 0 ? "IN_STOCK" : "INSTALLED";
-            String stationType = i%2 == 0 ? "U1601" : "U1604";
-            createStationUseCase.createStation(new CreateStationRequestDto(
-                    "serialNumber" + i,
-                    "STATION",
-                    deviceStatus,
-                    "Station number " + i,
-                    stationType,
-                    "A" + i,
-                    900
-            ));
+            try {
+                String deviceStatus = i % 2 == 0 ? "IN_STOCK" : "INSTALLED";
+                String stationType = i % 2 == 0 ? "U1601" : "U1604";
+                createStationUseCase.createStation(new CreateStationRequestDto(
+                        "serialNumber" + i,
+                        "STATION",
+                        deviceStatus,
+                        "Station number " + i,
+                        stationType,
+                        "A" + i,
+                        900
+                ));
+            } catch (Exception e) {
+                log.error("Failed to create station {}: {}", i, e.getMessage());
+            }
         }
-
 
         List<EnergyMeterResponseDto> energyMeters = getAllEnergyMetersUseCase.getAllEnergyMeters();
         List<StationResponseDto> stations = getAllStationsUseCase.getAllStations();
         for (int i = 20; i < 30; i++) {
-            log.info("Creating metering point {}", i);
-            List<ChannelResponseDto> channels = getChannelsByStationIdUseCase.getChannelsByStationId(stations.get(i-20).getStationId());
-            List<ChannelResponseDto> availableChannels = new ArrayList<>();
-            channels.forEach( channelResponseDto -> {
-                if (!channelResponseDto.getLonIsActive()) {
-                    availableChannels.add(channelResponseDto);
+            try {
+                List<ChannelResponseDto> channels = getChannelsByStationIdUseCase.getChannelsByStationId(stations.get(i - 20).getStationId());
+                List<ChannelResponseDto> availableChannels = new ArrayList<>();
+                channels.forEach(channelResponseDto -> {
+                    if (!channelResponseDto.getLonIsActive()) {
+                        availableChannels.add(channelResponseDto);
+                    }
+                });
+                if (availableChannels.isEmpty()) {
+                    log.warn("No available channels for station {}", stations.get(i - 20).getStationId());
+                    continue;
                 }
-            });
-            MeteringPointResponseDto meteringPointResponseDto = createMeteringPointUseCase.createMeteringPoint(
-                    new CreateMeteringPointRequestDto(
-                            "Building " + i,
-                            "Connection point " + i,
-                            null,
-                            energyMeters.get(i-20).getEnergyMeterId(),
-                            availableChannels.get(i-20).getChannelId(),
-                            true
-                    ));
-            log.info("Created metering point {}", meteringPointResponseDto);
+                MeteringPointResponseDto meteringPointResponseDto = createMeteringPointUseCase.createMeteringPoint(
+                        new CreateMeteringPointRequestDto(
+                                "Building " + i,
+                                "Connection point " + i,
+                                null,
+                                energyMeters.get(i - 20).getEnergyMeterId(),
+                                availableChannels.get(0).getChannelId(),
+                                true
+                        ));
+                log.info("Created metering point {}", meteringPointResponseDto);
+            } catch (Exception e) {
+                log.error("Failed to create metering point {}: {}", i, e.getMessage());
+            }
         }
     }
+
 
     @Override
     public void run(String... args) throws Exception {
