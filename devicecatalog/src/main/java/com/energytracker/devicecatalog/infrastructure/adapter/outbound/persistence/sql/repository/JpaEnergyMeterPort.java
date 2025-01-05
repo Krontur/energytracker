@@ -22,7 +22,7 @@ public interface JpaEnergyMeterPort extends JpaRepository<EnergyMeterEntity, Lon
     @Transactional
     @Query("UPDATE EnergyMeterEntity e SET e.serialNumber = :serialNumber, e.energyMeterType = :energyMeterType," +
             " e.connectionType = :connectionType, e.connectionAddress = :connectionAddress, e.maxCurrent = :maxCurrent," +
-            " e.referenceVoltage = :referenceVoltage, e.midApprovalYear = :midApprovalYear," +
+            " e.referenceVoltage = :referenceVoltage, e.midApprovalYear = :midApprovalYear, e.deviceStatus = :deviceStatus" +
             " e.updatedAt = CURRENT_TIMESTAMP, e.version = e.version + 1 WHERE e.id = :energyMeterId")
     int updateEnergyMeterFields(Long energyMeterId,
                                 String serialNumber,
@@ -31,5 +31,6 @@ public interface JpaEnergyMeterPort extends JpaRepository<EnergyMeterEntity, Lon
                                 String connectionAddress,
                                 int maxCurrent,
                                 int referenceVoltage,
-                                int midApprovalYear);
+                                int midApprovalYear,
+                                DeviceStatusEntity deviceStatus);
 }

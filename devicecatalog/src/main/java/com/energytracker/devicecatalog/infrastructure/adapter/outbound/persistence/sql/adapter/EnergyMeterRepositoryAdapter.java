@@ -80,7 +80,8 @@ public class EnergyMeterRepositoryAdapter implements EnergyMeterRepositoryPort {
                 energyMeterEntity.getConnectionAddress(),
                 energyMeterEntity.getMaxCurrent(),
                 energyMeterEntity.getReferenceVoltage(),
-                energyMeterEntity.getMidApprovalYear()
+                energyMeterEntity.getMidApprovalYear(),
+                energyMeterEntity.getDeviceStatus()
         );
         if (rowsAffected == 0) {
             return null;
