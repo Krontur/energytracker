@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDt
 import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
 import com.energytracker.devicecatalog.application.mapper.ChannelMapper;
+import com.energytracker.devicecatalog.application.port.inbound.station.UpdateStationByStationIdUseCase;
 import com.energytracker.devicecatalog.application.port.inbound.station.*;
 import com.energytracker.devicecatalog.application.port.outbound.ChannelRepositoryPort;
 import com.energytracker.devicecatalog.application.port.outbound.StationRepositoryPort;
@@ -28,7 +29,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class StationService implements CreateStationUseCase, GetAllStationsUseCase, GetStationByIdUseCase,
-        DeactivateStationByIdUseCase, DeleteStationByIdUseCase, GetChannelsByStationIdUseCase, GetLonActiveChannelsByStationIdUseCase {
+        DeactivateStationByIdUseCase, DeleteStationByIdUseCase, GetChannelsByStationIdUseCase,
+        GetLonActiveChannelsByStationIdUseCase, UpdateStationByStationIdUseCase {
 
     private final StationRepositoryPort stationRepositoryPort;
     private final ChannelRepositoryPort channelRepositoryPort;
@@ -146,6 +148,7 @@ public class StationService implements CreateStationUseCase, GetAllStationsUseCa
     }
 
     @Transactional
+    @Override
     public StationResponseDto updateStation(Long stationId, CreateStationRequestDto createStationRequestDto) {
 
         Station station = stationRepositoryPort.getStationById(stationId);

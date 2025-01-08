@@ -2,7 +2,8 @@ package com.energytracker.consumptionservice.infrastructure.adapter.inbound.rest
 
 import com.energytracker.consumptionservice.application.dto.ConsumptionDto;
 import com.energytracker.consumptionservice.application.dto.ConsumptionQueryDto;
-import com.energytracker.consumptionservice.application.service.ConsumptionService;
+import com.energytracker.consumptionservice.application.port.inbound.GetConsumptionsByMeteringPointIdAndIntervalUseCase;
+import com.energytracker.consumptionservice.application.port.inbound.GetConsumptionsByMeteringPointIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ConsumptionController {
 
-    private final ConsumptionService consumptionService;
+    private final GetConsumptionsByMeteringPointIdUseCase getConsumptionsByMeteringPointIdUseCase;
+    private final GetConsumptionsByMeteringPointIdAndIntervalUseCase getConsumptionsByMeteringPointIdAndIntervalUseCase;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/metering-point/{meteringPointId}")
     public ResponseEntity<List<ConsumptionDto>> getConsumptionsByMeteringPointId(@PathVariable Long meteringPointId) {
-        List<ConsumptionDto> consumptionsDto = consumptionService.getConsumptionsByMeteringPointId(meteringPointId);
+        List<ConsumptionDto> consumptionsDto = getConsumptionsByMeteringPointIdUseCase.getConsumptionsByMeteringPointId(meteringPointId);
         if (consumptionsDto == null || consumptionsDto.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -34,7 +36,7 @@ public class ConsumptionController {
     @PostMapping("/metering-point/interval")
     public ResponseEntity<List<ConsumptionDto>> getConsumptionsByMeteringPointIdAndInterval(@RequestBody ConsumptionQueryDto consumptionQueryDto) {
         List<ConsumptionDto> consumptionDtos = new ArrayList<>();
-        consumptionDtos = consumptionService.getConsumptionsByMeteringPointIdAndInterval(consumptionQueryDto);
+        consumptionDtos = getConsumptionsByMeteringPointIdAndIntervalUseCase.getConsumptionsByMeteringPointIdAndInterval(consumptionQueryDto);
         if ( consumptionDtos == null || consumptionDtos.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

@@ -4,6 +4,7 @@ import com.energytracker.devicecatalog.application.config.TestSecurityConfig;
 import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
+import com.energytracker.devicecatalog.application.port.inbound.JwtManageUseCase;
 import com.energytracker.devicecatalog.application.service.StationService;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +42,9 @@ public class StationControllerTest {
 
     @MockBean
     private StationService stationService;
+
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
 
     @Autowired
     private ObjectMapper objectMapper;

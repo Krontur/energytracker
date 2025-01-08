@@ -1,6 +1,7 @@
 package com.energytracker.devicecatalog;
 
 import com.energytracker.devicecatalog.config.DatabaseInitializer;
+import com.energytracker.devicecatalog.config.SecurityConfig;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -22,5 +23,6 @@ public class HexagonalArchitectureTest {
             .adapter("persistence", "..infrastructure.adapter.outbound..")
             .adapter("rest", "..infrastructure.adapter.inbound..")
             .ignoreDependency(belongToAnyOf(DatabaseInitializer.class), DescribedPredicate.alwaysTrue())
+            .ignoreDependency(belongToAnyOf(SecurityConfig.class), DescribedPredicate.alwaysTrue())
             .allowEmptyShould(true);
 }

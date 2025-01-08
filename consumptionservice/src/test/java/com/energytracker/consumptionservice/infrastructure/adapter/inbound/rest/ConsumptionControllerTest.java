@@ -3,6 +3,7 @@ package com.energytracker.consumptionservice.infrastructure.adapter.inbound.rest
 import com.energytracker.consumptionservice.application.config.TestSecurityConfig;
 import com.energytracker.consumptionservice.application.dto.ConsumptionDto;
 import com.energytracker.consumptionservice.application.dto.ConsumptionQueryDto;
+import com.energytracker.consumptionservice.application.port.inbound.JwtManageUseCase;
 import com.energytracker.consumptionservice.application.service.ConsumptionService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +40,9 @@ public class ConsumptionControllerTest {
 
     @MockBean
     private ConsumptionService consumptionService;
+
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
 
     @Autowired
     private ObjectMapper objectMapper;

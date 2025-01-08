@@ -3,6 +3,7 @@ package com.energytracker.consumptionservice.infrastructure.adapter.inbound.rest
 
 import com.energytracker.consumptionservice.application.config.TestSecurityConfig;
 import com.energytracker.consumptionservice.application.dto.MeteringPointDto;
+import com.energytracker.consumptionservice.application.port.inbound.JwtManageUseCase;
 import com.energytracker.consumptionservice.application.service.MeteringPointService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,9 @@ public class MeteringPointControllerTest {
 
     @MockBean
     private MeteringPointService meteringPointService;
+
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
 
     MeteringPointDto meteringPointDto;
 

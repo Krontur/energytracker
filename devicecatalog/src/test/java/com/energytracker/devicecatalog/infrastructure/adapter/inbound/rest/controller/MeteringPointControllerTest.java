@@ -5,6 +5,7 @@ import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterRe
 import com.energytracker.devicecatalog.application.dto.meteringpoint.CreateMeteringPointRequestDto;
 import com.energytracker.devicecatalog.application.dto.meteringpoint.MeteringPointResponseDto;
 import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
+import com.energytracker.devicecatalog.application.port.inbound.JwtManageUseCase;
 import com.energytracker.devicecatalog.application.service.MeteringPointService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,9 @@ public class MeteringPointControllerTest {
 
     @MockBean
     private MeteringPointService meteringPointService;
+
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
 
     @Autowired
     private ObjectMapper objectMapper;

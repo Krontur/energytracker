@@ -3,7 +3,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.dto.station.CreateStationRequestDto;
 import com.energytracker.devicecatalog.application.dto.station.StationResponseDto;
-import com.energytracker.devicecatalog.application.service.StationService;
+import com.energytracker.devicecatalog.application.port.inbound.station.*;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StationController {
 
-    private final StationService stationService;
+    private final CreateStationUseCase createStationUseCase;
+    private final UpdateStationByStationIdUseCase updateStationByStationIdUseCase;
+    private final GetAllStationsUseCase getAllStationsUseCase;
+    private final GetStationByIdUseCase getStationByIdUseCase;
+    private final GetLonActiveChannelsByStationIdUseCase getLonActiveChannelsByStationIdUseCase;
+    private final GetChannelsByStationIdUseCase getChannelsByStationIdUseCase;
+    private final DeleteStationByIdUseCase deleteStationByIdUseCase;
+    private final DeactivateStationByIdUseCase deactivateStationByIdUseCase;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -27,7 +34,7 @@ public class StationController {
             @RequestBody CreateStationRequestDto createStationRequestDto) {
         StationResponseDto createdStation = null;
         if (createStationRequestDto != null) {
-            createdStation = stationService.createStation(createStationRequestDto);
+            createdStation = createStationUseCase.createStation(createStationRequestDto);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -41,7 +48,7 @@ public class StationController {
             @RequestBody CreateStationRequestDto createStationRequestDto) {
         StationResponseDto updatedStation = null;
         if (createStationRequestDto != null) {
-            updatedStation = stationService.updateStation(stationId, createStationRequestDto);
+            updatedStation = updateStationByStationIdUseCase.updateStation(stationId, createStationRequestDto);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -51,7 +58,7 @@ public class StationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<StationResponseDto>> getAllStations() {
-        List<StationResponseDto> stations = stationService.getAllStations();
+        List<StationResponseDto> stations = getAllStationsUseCase.getAllStations();
         if (stations.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -62,7 +69,7 @@ public class StationController {
     @GetMapping("/{stationId}")
     public ResponseEntity<StationResponseDto> getStationById(@PathVariable Long stationId) {
         try {
-            StationResponseDto station = stationService.getStationById(stationId);
+            StationResponseDto station = getStationByIdUseCase.getStationById(stationId);
             return new ResponseEntity<>(station, HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -74,14 +81,14 @@ public class StationController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{stationId}")
     public ResponseEntity<Void> deleteStationById(@PathVariable Long stationId) {
-        stationService.deleteStationById(stationId);
+        deleteStationByIdUseCase.deleteStationById(stationId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{stationId}/deactivate")
     public ResponseEntity<StationResponseDto> deactivateStation(@PathVariable Long stationId) {
-        StationResponseDto station = stationService.deactivateStationById(stationId);
+        StationResponseDto station = deactivateStationByIdUseCase.deactivateStationById(stationId);
         if (station == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -91,7 +98,7 @@ public class StationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{stationId}/channels")
     public ResponseEntity<List<ChannelResponseDto>> getChannelsByStationId(@PathVariable Long stationId) {
-        List<ChannelResponseDto> channels = stationService.getChannelsByStationId(stationId);
+        List<ChannelResponseDto> channels = getChannelsByStationIdUseCase.getChannelsByStationId(stationId);
         if (channels == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -101,7 +108,7 @@ public class StationController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{stationId}/channels/lon-is-active")
     public ResponseEntity<List<ChannelResponseDto>> getLonActiveChannelsByStationId(@PathVariable Long stationId) {
-        List<ChannelResponseDto> channels = stationService.getLonActiveChannelsByStationId(stationId);
+        List<ChannelResponseDto> channels = getLonActiveChannelsByStationIdUseCase.getLonActiveChannelsByStationId(stationId);
         if (channels == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

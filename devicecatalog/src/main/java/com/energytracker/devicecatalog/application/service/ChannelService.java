@@ -2,7 +2,7 @@ package com.energytracker.devicecatalog.application.service;
 
 import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.mapper.ChannelMapper;
-import com.energytracker.devicecatalog.application.mapper.StationMapper;
+import com.energytracker.devicecatalog.application.port.inbound.channel.GetAllChannelsUseCase;
 import com.energytracker.devicecatalog.application.port.inbound.channel.GetChannelByIdUseCase;
 import com.energytracker.devicecatalog.application.port.inbound.channel.UpdateChannelUseCase;
 import com.energytracker.devicecatalog.application.port.outbound.ChannelRepositoryPort;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ChannelService implements UpdateChannelUseCase, GetChannelByIdUseCase {
+public class ChannelService implements UpdateChannelUseCase, GetChannelByIdUseCase, GetAllChannelsUseCase {
 
     private final ChannelRepositoryPort channelRepositoryPort;
 
@@ -27,6 +27,7 @@ public class ChannelService implements UpdateChannelUseCase, GetChannelByIdUseCa
         return ChannelMapper.channelDomainToDto(channel);
     }
 
+    @Override
     public List<ChannelResponseDto> getAllChannels() {
         List<Channel> channels = channelRepositoryPort.getAllChannels();
         List<ChannelResponseDto> channelResponseDtos = new ArrayList<>();

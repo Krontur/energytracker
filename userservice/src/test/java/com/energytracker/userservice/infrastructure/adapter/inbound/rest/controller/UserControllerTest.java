@@ -1,6 +1,7 @@
 package com.energytracker.userservice.infrastructure.adapter.inbound.rest.controller;
 
 import com.energytracker.userservice.application.dto.UserResponseDto;
+import com.energytracker.userservice.application.port.inbound.JwtManageUseCase;
 import com.energytracker.userservice.application.service.UserService;
 import com.energytracker.userservice.infrastructure.adapter.inbound.rest.dto.CreateUserRequestRestDto;
 import com.energytracker.userservice.config.TestSecurityConfig;
@@ -40,6 +41,9 @@ public class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
 
     @Mock
     private PasswordEncoder passwordEncoder;

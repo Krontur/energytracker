@@ -2,8 +2,10 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 
 import com.energytracker.devicecatalog.application.dto.meteringpoint.CreateMeteringPointRequestDto;
 import com.energytracker.devicecatalog.application.dto.meteringpoint.MeteringPointResponseDto;
-import com.energytracker.devicecatalog.application.mapper.MeteringPointMapper;
-import com.energytracker.devicecatalog.application.service.MeteringPointService;
+import com.energytracker.devicecatalog.application.port.inbound.meteringpoint.CreateMeteringPointUseCase;
+import com.energytracker.devicecatalog.application.port.inbound.meteringpoint.GetAllMeteringPointsUseCase;
+import com.energytracker.devicecatalog.application.port.inbound.meteringpoint.GetMeteringPointByIdUseCase;
+import com.energytracker.devicecatalog.application.port.inbound.meteringpoint.UpdateMeteringPointByIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +20,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MeteringPointController {
 
-    private final MeteringPointService meteringPointService;
+    private final GetAllMeteringPointsUseCase getAllMeteringPointsUseCase;
+    private final GetMeteringPointByIdUseCase getMeteringPointByIdUseCase;
+    private final CreateMeteringPointUseCase createMeteringPointUseCase;
+    private final UpdateMeteringPointByIdUseCase updateMeteringPointByIdUseCase;
+
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<MeteringPointResponseDto>> getMeteringPoints() {
-        List<MeteringPointResponseDto> meteringPoints = meteringPointService.getAllMeteringPoints();
+        List<MeteringPointResponseDto> meteringPoints = getAllMeteringPointsUseCase.getAllMeteringPoints();
         if(meteringPoints.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -33,7 +39,7 @@ public class MeteringPointController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{meteringPointId}")
     public ResponseEntity<MeteringPointResponseDto> getMeteringPointById(@PathVariable Long meteringPointId) {
-        MeteringPointResponseDto meteringPoint = meteringPointService.getMeteringPointById(meteringPointId);
+        MeteringPointResponseDto meteringPoint = getMeteringPointByIdUseCase.getMeteringPointById(meteringPointId);
         if(meteringPoint == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -45,7 +51,7 @@ public class MeteringPointController {
     @PostMapping
     public ResponseEntity<MeteringPointResponseDto> createMeteringPoint(@RequestBody CreateMeteringPointRequestDto createMeteringPointRequestDto) {
         try {
-            MeteringPointResponseDto meteringPoint = meteringPointService.createMeteringPoint(createMeteringPointRequestDto);
+            MeteringPointResponseDto meteringPoint = createMeteringPointUseCase.createMeteringPoint(createMeteringPointRequestDto);
             return new ResponseEntity<>(meteringPoint, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -56,7 +62,7 @@ public class MeteringPointController {
     @PatchMapping("/{meteringPointId}")
     public ResponseEntity<MeteringPointResponseDto> updateMeteringPoint(@PathVariable Long meteringPointId, @RequestBody CreateMeteringPointRequestDto createMeteringPointRequestDto) {
         try {
-            MeteringPointResponseDto meteringPoint = meteringPointService.updateMeteringPointById(meteringPointId, createMeteringPointRequestDto);
+            MeteringPointResponseDto meteringPoint = updateMeteringPointByIdUseCase.updateMeteringPointById(meteringPointId, createMeteringPointRequestDto);
             return new ResponseEntity<>(meteringPoint, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

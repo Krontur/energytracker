@@ -2,7 +2,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 
 import com.energytracker.devicecatalog.application.dto.energymeter.CreateEnergyMeterRequestDto;
 import com.energytracker.devicecatalog.application.dto.energymeter.EnergyMeterResponseDto;
-import com.energytracker.devicecatalog.application.service.EnergyMeterService;
+import com.energytracker.devicecatalog.application.port.inbound.energymeter.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EnergyMeterController {
 
-    private final EnergyMeterService energyMeterService;
+    private final CreateEnergyMeterUseCase createEnergyMeterUseCase;
+    private final GetAllEnergyMetersUseCase getAllEnergyMetersUseCase;
+    private final GetEnergyMeterByIdUseCase getEnergyMeterByIdUseCase;
+    private final DeleteEnergyMeterByIdUseCase deleteEnergyMeterByIdUseCase;
+    private final DeactivateEnergyMeterByIdUseCase deactivateEnergyMeterByIdUseCase;
+    private final GetInStockEnergyMetersUseCase getInStockEnergyMetersUseCase;
+    private final UpdateEnergyMeterUseCase updateEnergyMeterUseCase;
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -28,7 +34,7 @@ public class EnergyMeterController {
 
         EnergyMeterResponseDto createdEnergyMeter;
         if (createEnergyMeterRequestDto != null) {
-            createdEnergyMeter = energyMeterService.createEnergyMeter(createEnergyMeterRequestDto);
+            createdEnergyMeter = createEnergyMeterUseCase.createEnergyMeter(createEnergyMeterRequestDto);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -39,7 +45,7 @@ public class EnergyMeterController {
     @GetMapping
     public ResponseEntity<List<EnergyMeterResponseDto>> getAllEnergyMeters() {
         log.info("Getting all energy meters");
-        List<EnergyMeterResponseDto> energyMeters = energyMeterService.getAllEnergyMeters();
+        List<EnergyMeterResponseDto> energyMeters = getAllEnergyMetersUseCase.getAllEnergyMeters();
         if (energyMeters == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -49,7 +55,7 @@ public class EnergyMeterController {
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/{energyMeterId}")
     public ResponseEntity<EnergyMeterResponseDto> getEnergyMeterById(@PathVariable Long energyMeterId) {
-        EnergyMeterResponseDto energyMeter = energyMeterService.getEnergyMeterById(energyMeterId);
+        EnergyMeterResponseDto energyMeter = getEnergyMeterByIdUseCase.getEnergyMeterById(energyMeterId);
         if (energyMeter == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -59,24 +65,24 @@ public class EnergyMeterController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{energyMeterId}")
     public ResponseEntity<Void> deleteEnergyMeterById(@PathVariable Long energyMeterId) {
-        energyMeterService.deleteEnergyMeterById(energyMeterId);
+        deleteEnergyMeterByIdUseCase.deleteEnergyMeterById(energyMeterId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{energyMeterId}/deactivate")
     public ResponseEntity<EnergyMeterResponseDto> deactivateEnergyMeter(@PathVariable Long energyMeterId) {
-        EnergyMeterResponseDto energyMeter = energyMeterService.getEnergyMeterById(energyMeterId);
+        EnergyMeterResponseDto energyMeter = getEnergyMeterByIdUseCase.getEnergyMeterById(energyMeterId);
         if (energyMeter == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(energyMeterService.deactivateEnergyMeterById(energyMeterId), HttpStatus.OK);
+        return new ResponseEntity<>(deactivateEnergyMeterByIdUseCase.deactivateEnergyMeterById(energyMeterId), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping("/in-stock")
     public ResponseEntity<List<EnergyMeterResponseDto>> getInStockEnergyMeters() {
-        List<EnergyMeterResponseDto> energyMeters = energyMeterService.getInStockEnergyMeters();
+        List<EnergyMeterResponseDto> energyMeters = getInStockEnergyMetersUseCase.getInStockEnergyMeters();
         if (energyMeters == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -90,7 +96,7 @@ public class EnergyMeterController {
             @RequestBody CreateEnergyMeterRequestDto createEnergyMeterRequestDto) {
         EnergyMeterResponseDto updatedEnergyMeter;
         if (createEnergyMeterRequestDto != null) {
-            updatedEnergyMeter = energyMeterService.updateEnergyMeter(energyMeterId, createEnergyMeterRequestDto);
+            updatedEnergyMeter = updateEnergyMeterUseCase.updateEnergyMeter(energyMeterId, createEnergyMeterRequestDto);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

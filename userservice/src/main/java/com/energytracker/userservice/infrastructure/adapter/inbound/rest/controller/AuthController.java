@@ -3,7 +3,7 @@ package com.energytracker.userservice.infrastructure.adapter.inbound.rest.contro
 import com.energytracker.userservice.application.dto.LoginRequestDto;
 import com.energytracker.userservice.application.dto.RegisterRequestDto;
 import com.energytracker.userservice.application.dto.TokenResponseDto;
-import com.energytracker.userservice.application.service.AuthService;
+import com.energytracker.userservice.application.port.inbound.AuthenticateUserUseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "${cors.origin.url}")
 public class AuthController {
 
-    private final AuthService authService;
+    private final AuthenticateUserUseCase authenticateUserUseCase;
 
     @PostMapping("/register")
     public ResponseEntity<TokenResponseDto> register(@RequestBody RegisterRequestDto registerRequestDto) {
-        TokenResponseDto tokenResponseDto = authService.register(registerRequestDto);
+        TokenResponseDto tokenResponseDto = authenticateUserUseCase.register(registerRequestDto);
         if (tokenResponseDto == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
@@ -31,7 +31,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenResponseDto> authenticate(@RequestBody LoginRequestDto loginRequestDto) {
-        TokenResponseDto tokenResponseDto = authService.login(loginRequestDto);
+        TokenResponseDto tokenResponseDto = authenticateUserUseCase.login(loginRequestDto);
         log.info("Token response: {}", tokenResponseDto);
         if (tokenResponseDto == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -41,7 +41,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public ResponseEntity<TokenResponseDto> refresh(@RequestHeader(HttpHeaders.AUTHORIZATION) String authorizationHeader) {
-        TokenResponseDto refreshedToken = authService.refreshToken(authorizationHeader);
+        TokenResponseDto refreshedToken = authenticateUserUseCase.refreshToken(authorizationHeader);
         if (refreshedToken == null) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }

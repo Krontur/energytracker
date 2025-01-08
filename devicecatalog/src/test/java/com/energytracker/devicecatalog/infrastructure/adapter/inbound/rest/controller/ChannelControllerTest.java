@@ -3,6 +3,7 @@ package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.cont
 import com.energytracker.devicecatalog.application.config.TestSecurityConfig;
 import com.energytracker.devicecatalog.application.dto.station.ChannelResponseDto;
 import com.energytracker.devicecatalog.application.service.ChannelService;
+import com.energytracker.devicecatalog.application.port.inbound.JwtManageUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,6 +35,9 @@ public class ChannelControllerTest {
 
     @MockBean
     private ChannelService channelService;
+
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
 
     @Autowired
     private ObjectMapper objectMapper;

@@ -1,6 +1,7 @@
 package com.energytracker.devicecatalog.infrastructure.adapter.inbound.rest.controller;
 
 import com.energytracker.devicecatalog.application.dto.energymeter.*;
+import com.energytracker.devicecatalog.application.port.inbound.JwtManageUseCase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.core.MediaType;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,9 @@ public class EnergyMeterControllerTest {
 
     @MockBean
     private EnergyMeterService energyMeterService;
+
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
 
     @Autowired
     private ObjectMapper objectMapper;

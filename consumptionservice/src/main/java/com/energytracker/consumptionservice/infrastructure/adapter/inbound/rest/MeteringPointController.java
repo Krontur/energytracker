@@ -1,7 +1,7 @@
 package com.energytracker.consumptionservice.infrastructure.adapter.inbound.rest;
 
 import com.energytracker.consumptionservice.application.dto.MeteringPointDto;
-import com.energytracker.consumptionservice.application.service.MeteringPointService;
+import com.energytracker.consumptionservice.application.port.inbound.GetAllMeteringPointsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,12 +18,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MeteringPointController {
 
-    private final MeteringPointService meteringPointService;
+    private final GetAllMeteringPointsUseCase getAllMeteringPointsUseCase;
 
     @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     @GetMapping
     public ResponseEntity<List<MeteringPointDto>> getMeteringPoints() {
-        List<MeteringPointDto> meteringPointDtos = meteringPointService.getAllMeteringPoints();
+        List<MeteringPointDto> meteringPointDtos = getAllMeteringPointsUseCase.getAllMeteringPoints();
         if (meteringPointDtos == null || meteringPointDtos.isEmpty()) {
             return ResponseEntity.noContent().build();
         }

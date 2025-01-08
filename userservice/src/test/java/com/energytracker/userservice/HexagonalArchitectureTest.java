@@ -4,6 +4,7 @@ import com.energytracker.userservice.application.port.inbound.CreateUserUseCase;
 import com.energytracker.userservice.application.port.outbound.UserRepositoryPort;
 import com.energytracker.userservice.infrastructure.config.AppConfig;
 import com.energytracker.userservice.infrastructure.config.DatabaseInitializer;
+import com.energytracker.userservice.infrastructure.config.SecurityConfig;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
@@ -27,5 +28,6 @@ public class HexagonalArchitectureTest {
             .adapter("rest", "..infrastructure.adapter.inbound..")
             .ignoreDependency(belongToAnyOf(DatabaseInitializer.class), DescribedPredicate.alwaysTrue())
             .ignoreDependency(belongToAnyOf(AppConfig.class), DescribedPredicate.alwaysTrue())
+            .ignoreDependency(belongToAnyOf(SecurityConfig.class), DescribedPredicate.alwaysTrue())
             .allowEmptyShould(true);
 }

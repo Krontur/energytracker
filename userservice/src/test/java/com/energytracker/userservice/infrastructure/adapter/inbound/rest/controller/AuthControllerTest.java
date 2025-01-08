@@ -2,6 +2,8 @@ package com.energytracker.userservice.infrastructure.adapter.inbound.rest.contro
 
 import com.energytracker.userservice.application.dto.RegisterRequestDto;
 import com.energytracker.userservice.application.dto.TokenResponseDto;
+import com.energytracker.userservice.application.port.inbound.GetUserByEmailUseCase;
+import com.energytracker.userservice.application.port.inbound.JwtManageUseCase;
 import com.energytracker.userservice.application.service.AuthService;
 import com.energytracker.userservice.config.TestSecurityConfig;
 
@@ -37,6 +39,15 @@ public class AuthControllerTest {
     @MockBean
     private AuthService authService;
 
+    @MockBean
+    private JwtManageUseCase jwtManageUseCase;
+
+    @MockBean
+    private PasswordEncoder passwordEncoder;
+
+    @MockBean
+    private GetUserByEmailUseCase getUserByEmailUseCase;
+    
     @MockBean
     private UserDetailsService userDetailsService;
 
