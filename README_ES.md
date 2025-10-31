@@ -72,3 +72,12 @@ La plataforma está basada en una **arquitectura de microservicios** y un modelo
 git clone https://github.com/Krontur/energytracker.git
 cd energytracker
 ./build_and_run.sh
+```
+
+---
+
+## 📜 Licencia
+
+Este trabajo está protegido bajo la licencia **[Creative Commons BY-NC-ND 3.0 España](http://creativecommons.org/licenses/by-nc-nd/3.0/es/)**.  
+© 2025 **Óscar González Tur**
+
