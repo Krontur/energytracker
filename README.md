@@ -70,3 +70,10 @@ The platform is built on a **microservice architecture** with a **Hexagonal (Por
 git clone https://github.com/Krontur/energytracker.git
 cd energytracker
 ./build_and_run.sh
+```
+
+## 📜 License
+
+This work is licensed under the **[Creative Commons BY-NC-ND 3.0 Spain](http://creativecommons.org/licenses/by-nc-nd/3.0/es/)** license.  
+© 2025 **Óscar González Tur**
+
