@@ -1,22 +1,72 @@
-# Energy Tracker
+# ⚙️ Energy Tracker – Backend
 
-The purpose of this project is to develop a web application for querying and analysing the 15-minute load profiles of
-electric meters at Leipzig Airport. This project arises from the airport's need to modernize its energy management system,
-which faces limitations in data collection and analysis due to outdated technologies and a lack of suitable tools.
+**Energy Tracker** is the backend of a complete energy data management platform developed as the **Final Degree Project (TFG)** of **Óscar González Tur** (BSc. in Computer Engineering).  
+The system was designed for **Leipzig Airport**, addressing the need to modernize its energy monitoring infrastructure and enable efficient, reliable, and sustainable energy management.
 
-The methodology employed includes the design and implementation of new software that communicates with summation stations 
-via Ethernet connections and RS232 ports, utilizing specific protocols such as the Energy Control Language (ECL).
+---
 
-The backend is developed using Java and Spring Boot, while the frontend is built with React.js and Material-UI, 
-ensuring a robust and scalable architecture. A PostgreSQL database is implemented to store load profiles, incorporating 
-validation and data correction algorithms to ensure data integrity. As a result, an intuitive and functional web 
-application is created, enabling energy managers at the airport to efficiently visualize and analyse electricity consumption.
+## 🌍 Project Overview
 
-The developed API facilitates data access and integration with other systems. This solution significantly improves the 
-quality and reliability of information, allowing for the identification of consumption patterns, detection of inefficiencies, 
-and informed decision-making to optimize energy efficiency.
+The purpose of this project is to develop a **web application and RESTful API** for querying and analysing the 15-minute load profiles of electric meters at Leipzig Airport.  
+This solution improves data quality, facilitates detailed analysis, and helps energy managers identify consumption patterns, inefficiencies, and opportunities for optimization — in full alignment with **ISO 50001** standards.
 
-In conclusion, the project contributes to the enhancement of 
-energy management at Leipzig Airport, aligning with international standards of the ISO 50001. The developed application 
-not only addresses the limitations of the previous system but also establishes a solid foundation for future improvements 
-and expansions, promoting sustainability and operational efficiency at the airport.
+The backend was developed with **Java and Spring Boot**, while the frontend was built with **React.js and Material-UI**, ensuring a **robust, scalable, and modular architecture**.  
+A **PostgreSQL** database stores validated load profiles, ensuring integrity and reliability through automatic validation and correction mechanisms.
+
+---
+
+## 🧠 Architecture
+
+The platform is built on a **microservice architecture** with a **Hexagonal (Ports and Adapters) design**, promoting independence between the business logic and external interfaces.
+
+### 🔧 Main Microservices
+- **AuthService** → Authentication and role-based access using JWT.
+- **UserService** → User management and role assignment.
+- **DeviceCatalog** → Registration and configuration of energy meters, stations, and metering points.
+- **DataCollector** → Real-time data collection via Ethernet/RS232 using the proprietary **ECL (Energy Control Language)** protocol.
+- **ConsumptionService** → Storage, analysis, and CSV export of consumption data.
+- **RabbitMQ** → Asynchronous messaging for decoupled service communication.
+
+---
+
+## 🧱 Technologies & Tools
+
+| Category | Technologies |
+|-----------|---------------|
+| Language | Java 17 |
+| Framework | Spring Boot, Spring Data JPA, Spring Security |
+| Architecture | Hexagonal, Clean Architecture, Microservices |
+| Database | PostgreSQL, JSON persistence (DataCollector) |
+| Messaging | RabbitMQ |
+| CI/CD | GitHub Actions, Docker |
+| Testing | JUnit 5, Mockito |
+| Documentation | Swagger / OpenAPI |
+| Version Control | Git + GitHub |
+
+---
+
+## 📈 Key Features
+
+- RESTful API documented with Swagger  
+- Secure authentication with JWT  
+- Asynchronous communication with RabbitMQ  
+- Data validation and correction logic  
+- CSV export for energy consumption reports  
+- Modular and extensible clean architecture  
+- Continuous Integration/Deployment with GitHub Actions  
+- Deployed demo environment on Hostinger (Docker)
+
+---
+
+## ⚙️ Local Setup
+
+### Requirements
+- Java 17  
+- Docker & Docker Compose  
+- Running instances of RabbitMQ and PostgreSQL  
+
+### Installation
+```bash
+git clone https://github.com/Krontur/energytracker.git
+cd energytracker
+./build_and_run.sh
